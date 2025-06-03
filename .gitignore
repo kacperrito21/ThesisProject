@@ -1,11 +1,32 @@
-/tmp
-/out-tsc
+node_modules
 
-/node_modules
+
+frontend
+
+dist/
+frontend/dist/
+backend/dist/
+build/
+frontend/build/
+backend/build/
+
+out-tsc/
+*.tsbuildinfo
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/.pnp
+
+.env
+.env.*.local
+
+.pnp/
 .pnp.js
 
-.vscode/*
+.vscode/
+.idea/
+*.sw?
+
+tmp/
+temp/
+*.tmp
