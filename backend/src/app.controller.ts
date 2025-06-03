@@ -12,6 +12,6 @@ export class AppController {
 
   @Get('api/test')
   getTest(): string {
-    return 'Backend connection successful!';
+    return 'Backend connection has been estabilished!';
   }
 }
