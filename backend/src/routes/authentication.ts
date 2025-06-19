@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { Request, Response } from 'express';
 import { Secret, sign, SignOptions } from 'jsonwebtoken';
+import { AuthenticatedRequest, verifyToken } from '../utils/verifyToken';
 
 const authRoutes = express.Router();
 
@@ -29,7 +30,7 @@ authRoutes.post(
     // TODO: Przetwarzanie danych i hashowanie
     if (email && password) {
       const jwtPayload = { email };
-      const jwtOptions: SignOptions = { expiresIn: '1m' };
+      const jwtOptions: SignOptions = { expiresIn: '1h' };
 
       const secret: Secret = process.env.JWT_SECRET!;
       if (!secret) {
@@ -46,5 +47,11 @@ authRoutes.post(
     return;
   },
 );
+
+authRoutes.get('/verify', verifyToken, (req, res) => {
+  res
+    .status(200)
+    .json({ valid: true, user: (req as AuthenticatedRequest).user });
+});
 
 export default authRoutes;

@@ -24,7 +24,6 @@ export const verifyToken = (
   const token = authHeader.split(' ')[1];
 
   jwt.verify(token, process.env.JWT_SECRET!, (err, decoded) => {
-    console.log('i verify token', decoded);
     if (err) {
       res.status(403).json({ message: 'Token nieważny' });
       return;

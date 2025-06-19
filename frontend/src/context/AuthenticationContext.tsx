@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 interface AuthenticationContextType {
   token: string | null;
@@ -15,6 +15,33 @@ const AuthenticationContext = createContext<AuthenticationContextType | null>(nu
 
 export const AuthenticationProvider = ({ children }: AuthenticationProviderProps) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        setToken(null);
+        return new Error('Sesja wygasła proszę zalogować się ponownie');
+      }
+      try {
+        const response = await fetch('/api/auth/verify', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+        } else {
+          localStorage.removeItem('token');
+          setToken(null);
+        }
+      } catch (error) {
+        localStorage.removeItem('token');
+        setToken(null);
+      }
+    };
+
+    checkToken();
+  }, []);
 
   const login = (jwtToken: string) => {
     localStorage.setItem('token', jwtToken);
