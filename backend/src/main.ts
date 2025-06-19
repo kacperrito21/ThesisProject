@@ -1,18 +1,17 @@
+import * as express from 'express';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const server = express();
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
-  app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'http://localhost:3001',
-    ],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+  app.enableCors();
+  await app.init();
+
+  server.listen(5000, () => {
+    console.log('Server running on port: 5000.');
   });
-
-  await app.listen(3001);
 }
 bootstrap();

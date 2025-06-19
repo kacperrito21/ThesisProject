@@ -1,15 +1,15 @@
 import React from 'react';
 import './App.css';
-import TestConnection from './components/TestConnection';
+import { AuthenticationProvider } from './context/AuthenticationContext';
+import { AppRouter } from './routes/Router';
 
 function App() {
   return (
-      <div className="App">
-        <header className="App-header">
-          <h1>Thesis Project Frontend</h1>
-          <TestConnection />
-        </header>
-      </div>
+    <div className="App">
+      <AuthenticationProvider>
+        <AppRouter />
+      </AuthenticationProvider>
+    </div>
   );
 }
 

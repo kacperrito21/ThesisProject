@@ -4,10 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nest start --watch",
-    "build": "nest build",
-    "start:prod": "node dist/main",
-    "start:debug": "nest start --debug --watch"
+    "start:all": "cd backend && npm start && cd ../frontend && npm start"
   },
   "dependencies": {
     "@nestjs/config": "^4.0.2",
