@@ -19,7 +19,7 @@ export const LoginPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-
+      console.log(response);
       if (!response.ok) {
         throw new Error('Błędne dane logowania');
       }

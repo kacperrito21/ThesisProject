@@ -28,7 +28,6 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderProps
         const response = await fetch('/api/auth/verify', {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         if (response.ok) {
         } else {
           localStorage.removeItem('token');
