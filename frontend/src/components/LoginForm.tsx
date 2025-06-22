@@ -20,6 +20,7 @@ export function LoginForm({ onSubmit, error }: LoginFormProps) {
     navigate('/register');
   };
 
+  // @ts-ignore
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -48,12 +49,12 @@ export function LoginForm({ onSubmit, error }: LoginFormProps) {
         <button
           type="button"
           onClick={goToRegister}
-          style={{
+          className="
             background: 'transparent',
             border: '1px solid #ccc',
             padding: '0.5rem 1rem',
             cursor: 'pointer',
-          }}
+          "
         >
           Zarejestruj się
         </button>
