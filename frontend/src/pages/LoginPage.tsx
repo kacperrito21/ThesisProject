@@ -14,14 +14,14 @@ export const LoginPage = () => {
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const response = await fetch(`/api/auth/login`, {
+      const response = await fetch(`/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      console.log(response);
       if (!response.ok) {
-        throw new Error('Błędne dane logowania');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Błędne dane logowania');
       }
 
       const data = await response.json();

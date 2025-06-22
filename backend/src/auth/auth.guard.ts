@@ -23,7 +23,6 @@ export class AuthGuard implements CanActivate {
       (req as any).user = decoded;
       return true;
     } catch (err) {
-      console.error(err);
       throw new UnauthorizedException('Token nieważny');
     }
   }

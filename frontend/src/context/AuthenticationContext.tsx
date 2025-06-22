@@ -14,21 +14,26 @@ interface AuthenticationProviderProps {
 const AuthenticationContext = createContext<AuthenticationContextType | null>(null);
 
 export const AuthenticationProvider = ({ children }: AuthenticationProviderProps) => {
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkToken = async () => {
-      const token = localStorage.getItem('token');
+      const savedToken = localStorage.getItem('token');
 
-      if (!token) {
+      if (!savedToken) {
         setToken(null);
-        return new Error('Sesja wygasła proszę zalogować się ponownie');
+        setIsLoading(false);
+        return;
       }
+
       try {
-        const response = await fetch('/api/auth/verify', {
-          headers: { Authorization: `Bearer ${token}` },
+        const response = await fetch('/auth/verify', {
+          headers: { Authorization: `Bearer ${savedToken}` },
         });
+
         if (response.ok) {
+          setToken(savedToken);
         } else {
           localStorage.removeItem('token');
           setToken(null);
@@ -37,11 +42,12 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderProps
         localStorage.removeItem('token');
         setToken(null);
       }
+
+      setIsLoading(false);
     };
 
     checkToken();
   }, []);
-
   const login = (jwtToken: string) => {
     localStorage.setItem('token', jwtToken);
     setToken(jwtToken);
@@ -51,6 +57,9 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderProps
     localStorage.removeItem('token');
     setToken(null);
   };
+  if (isLoading) {
+    return <div>Ładowanie...</div>;
+  }
 
   return (
     <AuthenticationContext.Provider value={{ token, login, logout, isAuthenticated: !!token }}>

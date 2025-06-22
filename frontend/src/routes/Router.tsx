@@ -4,6 +4,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { CalendarPage } from '../pages/CalendarPage';
 import { SettingsPage } from '../pages/SettingsPage';
+import { RegisterPage } from '../pages/RegisterPage';
 
 export const AppRouter = () => (
   <BrowserRouter>
@@ -33,6 +34,7 @@ export const AppRouter = () => (
           </ProtectedRoute>
         }
       />
+      <Route path="/register" element={<RegisterPage />} />
       <Route path="/*" element={<Navigate to="/dashboard" />} />
     </Routes>
   </BrowserRouter>
