@@ -34,7 +34,7 @@ export const RegisterPage = () => {
 
   return (
     <div style={{ maxWidth: 400, margin: 'auto', paddingTop: '2rem' }}>
-      <h2>Zarejestruj się</h2>
+      <h2 className="text-3xl font-bold underline">Zarejestruj się</h2>
       <RegisterForm onSubmit={handleRegister} error={error} />
     </div>
   );
