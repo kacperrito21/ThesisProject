@@ -1,19 +1,11 @@
 'use client'
-import { useAuthentication } from '@/context/AuthenticationContext';
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { LoginForm } from '@/components/LoginForm';
 
 export default function LoginPage() {
   const [error, setError] = useState('');
-  const router = useRouter()
-  const auth = useAuthentication();
-
-  useEffect(() => {
-    if (auth?.isAuthenticated) {
-      router.push('/dashboard')
-    }
-  }, [auth?.isAuthenticated, router])
+  const router = useRouter();
 
   const handleLogin = async (email: string, password: string) => {
     try {
@@ -23,11 +15,12 @@ export default function LoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Błędne dane logowania');
+      if (response.ok) {
+        router.push('/dashboard');
+      } else {
+        const data = await response.json()
+        setError(data.message || 'Błąd logowania')
       }
-      router.push('/dashboard');
     } catch (error) {
       setError((error as Error).message);
     }

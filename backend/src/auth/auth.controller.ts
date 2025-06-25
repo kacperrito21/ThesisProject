@@ -91,7 +91,13 @@ export class AuthController {
     if (!secret) throw new InternalServerErrorException('Missing JWT secret');
 
     const token = jwt.sign(payload, secret, jwtOptions);
-    return res.status(200).json({ token });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({ success: true });
   }
   @Post('logout')
   logout(@Res() res: Response) {
