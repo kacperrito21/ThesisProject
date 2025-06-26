@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import { ReactNode } from 'react'
-import { AuthenticationProvider } from '@/context/AuthenticationContext'
+import { SideBar } from '@/components/SideBar'
 
 export const metadata = {
   title: 'Nazwa Aplikacji',
@@ -11,9 +11,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pl">
     <body>
-    <AuthenticationProvider>
+    <SideBar />
       {children}
-    </AuthenticationProvider>
     </body>
     </html>
   )
