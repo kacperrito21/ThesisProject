@@ -99,6 +99,7 @@ export class AuthController {
     });
     res.status(200).json({ success: true });
   }
+
   @Post('logout')
   logout(@Res() res: Response) {
     res.clearCookie('token');

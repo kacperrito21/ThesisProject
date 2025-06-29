@@ -1,6 +1,5 @@
 import '../styles/globals.css'
 import { ReactNode } from 'react'
-import { SideBar } from '@/components/SideBar'
 
 export const metadata = {
   title: 'Nazwa Aplikacji',
@@ -10,10 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pl">
-    <body>
-    <SideBar />
-      {children}
-    </body>
+      <body className="bg-neutral-100">{children}</body>
     </html>
   )
 }
