@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import { ReactNode } from 'react'
+import { ThemeProvider } from '@/providers/ThemeProvider'
 
 export const metadata = {
   title: 'Nazwa Aplikacji',
@@ -9,7 +10,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pl">
-      <body className="bg-neutral-100">{children}</body>
+      <body className="bg-[var(--color-background)]">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   )
 }
