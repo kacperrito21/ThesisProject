@@ -10,7 +10,7 @@ export function ThemeToggle() {
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       className="relative flex items-center justify-between w-[90px] h-[40px] px-2 py-1
-        rounded-full bg-[#3a4453] dark:bg-[#2b313d] transition-colors duration-500 shadow-md"
+        rounded-full bg-[var(--color-button)] transition-colors duration-500 shadow-md"
       title={isDark ? 'Ciemny motyw' : 'Jasny motyw'}
     >
       <span
