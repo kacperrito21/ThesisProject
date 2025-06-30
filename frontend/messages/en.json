@@ -1,0 +1,48 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "tasks": "Tasks",
+    "calendar": "Calendar",
+    "settings": "Settings"
+  },
+  "auth": {
+    "login": "Log in",
+    "register": "Register",
+    "email": "E-mail address",
+    "password": "Password",
+    "repeatPassword": "Repeat Password",
+    "firstName": "First name",
+    "noAccount": "You don't have an account?",
+    "hasAccount": "Already have an account?",
+    "differentPasswords": "Passwords are not identical"
+  },
+  "tasks": {
+    "title": "My tasks",
+    "addTask": "Add task",
+    "editTask": "Edit task",
+    "deleteTask": "Delete task",
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "status": {
+      "todo": "To do",
+      "inProgress": "In progress",
+      "completed": "Completed"
+    },
+    "noTasks": "No tasks to display",
+    "dueDate": "Due date",
+    "category": "Category"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Operation completed successfully",
+    "main": "Main page"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "navigation": {
+    "dashboard": "Strona Główna",
+    "calendar": "Kalendarz",
+    "settings": "Ustawienia"
+  },
+  "auth": {
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "email": "E-mail",
+    "password": "Hasło",
+    "repeatPassword": "Powtórz hasło",
+    "firstName": "Imię",
+    "noAccount": "Nie masz jeszcze konta?",
+    "hasAccount": "Masz już konto?",
+    "differentPasswords": "Hasła nie są identyczne"
+  },
+  "tasks": {
+    "title": "Moje zadania",
+    "addTask": "Dodaj zadanie",
+    "editTask": "Edytuj zadanie",
+    "deleteTask": "Usuń zadanie",
+    "priority": {
+      "low": "Niski",
+      "medium": "Średni",
+      "high": "Wysoki"
+    },
+    "status": {
+      "todo": "Do zrobienia",
+      "inProgress": "W trakcie",
+      "completed": "Ukończone"
+    },
+    "noTasks": "Brak zadań do wyświetlenia",
+    "dueDate": "Termin",
+    "category": "Kategoria"
+  },
+  "common": {
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd",
+    "success": "Operacja zakończona pomyślnie",
+    "main": "Strona główna"
+  }
+}
