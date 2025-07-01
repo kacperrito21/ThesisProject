@@ -7,6 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -16,6 +29,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   categories Category[]
+  tasks      Task[]
 
   @@map("users")
 }
@@ -28,7 +42,27 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks Task[]
 
   @@map("categories")
+}
+
+model Task {
+  id           String       @id @default(uuid())
+  userId       String
+  categoryId   String?
+  title        String       @db.VarChar(255)
+  description  String?      @db.Text
+  status       TaskStatus
+  priority     TaskPriority
+  dueDate      DateTime?
+  finishedDate DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@map("tasks")
 }
