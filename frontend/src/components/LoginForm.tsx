@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => void;
@@ -20,10 +21,12 @@ export function LoginForm({ onSubmit, error }: LoginFormProps) {
     router.push('/register');
   };
 
+  const t = useTranslations('auth')
+
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Email</label>
+        <label>{t('email')}</label>
         <input
           type="email"
           value={email}
@@ -31,7 +34,7 @@ export function LoginForm({ onSubmit, error }: LoginFormProps) {
           required
           style={{ width: '100%', marginBottom: '1rem' }}
         />
-        <label>Hasło</label>
+        <label>{t('password')}</label>
         <input
           type="password"
           value={password}
@@ -40,11 +43,11 @@ export function LoginForm({ onSubmit, error }: LoginFormProps) {
           style={{ width: '100%', marginBottom: '1rem' }}
         />
       </div>
-      <button type="submit">Zaloguj</button>
+      <button type="submit">{t('login')}</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-        <p>Nie masz konta?</p>
+        <p>{t('noAccount')}</p>
         <button
           type="button"
           onClick={goToRegister}
@@ -55,7 +58,7 @@ export function LoginForm({ onSubmit, error }: LoginFormProps) {
             cursor: 'pointer',
           "
         >
-          Zarejestruj się
+          {t('register')}
         </button>
       </div>
     </form>

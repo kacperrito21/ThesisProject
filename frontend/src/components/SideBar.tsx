@@ -3,14 +3,16 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CalendarDaysIcon, Cog6ToothIcon, HomeIcon } from '@heroicons/react/16/solid'
+import { useTranslations } from 'next-intl'
 
 export const SideBar = () => {
   const pathname = usePathname()
+  const t = useTranslations('navigation')
 
   const menuItems = [
-    { href: '/dashboard', icon: HomeIcon, label: 'Strona Główna' },
-    { href: '/calendar', icon: CalendarDaysIcon, label: 'Kalendarz' },
-    { href: '/settings', icon: Cog6ToothIcon, label: 'Ustawienia' },
+    { href: '/dashboard', icon: HomeIcon, label: `${t('dashboard')}` },
+    { href: '/calendar', icon: CalendarDaysIcon, label: `${t('calendar')}` },
+    { href: '/settings', icon: Cog6ToothIcon, label: `${t('settings')}` },
   ]
 
   return (

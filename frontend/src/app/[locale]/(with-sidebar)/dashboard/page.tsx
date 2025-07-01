@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import {useTranslations} from 'next-intl';
 
 export default function Page() {
   const router = useRouter()
@@ -16,10 +17,11 @@ export default function Page() {
       console.error('Logout failed', error)
     }
   }
+  const t = useTranslations('common');
 
   return (
     <div className="bg-[var(--color-primary)] w-full h-full rounded-r-lg">
-      <div>Strona główna</div>
+      <div>{t('main')}</div>
       <button onClick={handleLogout} style={{ marginTop: '1rem' }}>
         Wyloguj się
       </button>

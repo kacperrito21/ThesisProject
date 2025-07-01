@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 interface RegisterFormProps {
   onSubmit: (email: string, password: string, firstName: string) => void
@@ -15,11 +16,13 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
 
   const router = useRouter();
 
+  const t = useTranslations('auth');
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     if (password !== confirmPassword) {
-      alert('Hasła nie są identyczne')
+      alert(t('differentPassword'))
       return
     }
     onSubmit(email, password, firstName)
@@ -32,7 +35,7 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Imię</label>
+        <label>{t('firstName')}</label>
         <input
           type="text"
           value={firstName}
@@ -40,7 +43,7 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
           required
           style={{ width: '100%', marginBottom: '1rem' }}
         />
-        <label>Adres E-mail</label>
+        <label>{t('email')}</label>
         <input
           type="text"
           value={email}
@@ -48,7 +51,7 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
           required
           style={{ width: '100%', marginBottom: '1rem' }}
         />
-        <label>Hasło</label>
+        <label>{t('password')}</label>
         <input
           type="password"
           value={password}
@@ -56,7 +59,7 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
           required
           style={{ width: '100%', marginBottom: '1rem' }}
         />
-        <label>Powtórz hasło</label>
+        <label>{t('repeatPassword')}</label>
         <input
           type="password"
           value={confirmPassword}
@@ -65,9 +68,9 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
           style={{ width: '100%', marginBottom: '1rem' }}
         />
       </div>
-      <button type="submit">Zarejestruj się</button>
+      <button type="submit">{t('register')}</button>
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-        <p>Masz już konto?</p>
+        <p>{t('hasAccount')}</p>
         <button
           type="button"
           onClick={goToLogin}
@@ -78,7 +81,7 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
             cursor: 'pointer',
           }}
         >
-          Zaloguj się
+          {t('login')}
         </button>
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>

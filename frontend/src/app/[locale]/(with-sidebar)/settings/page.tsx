@@ -1,5 +1,6 @@
 'use client'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { LanguageSwitch } from '@/components/LanguageSwitch'
 
 export default function Page() {
   return (
@@ -7,6 +8,7 @@ export default function Page() {
       Ustawienia
       <div>
         <ThemeToggle />
+        <LanguageSwitch />
       </div>
     </div>
   )

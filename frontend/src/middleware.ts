@@ -1,29 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
+import createIntlMiddleware from 'next-intl/middleware';
+const intlMiddleware = createIntlMiddleware({
+  locales: ['pl', 'en'],
+  defaultLocale: 'pl'
+});
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('token')?.value
-  const path = request.nextUrl.pathname
-  const isPublicPath = ['/login', '/register', '/'].includes(path)
-
-  if (path === '/' && token) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
+  const { pathname } = request.nextUrl;
+  const pathnameHasLocale = ['pl', 'en'].some(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  );
+  if (!pathnameHasLocale) {
+    return intlMiddleware(request);
   }
-
+  const locale = pathname.split('/')[1];
+  const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
+  const publicPaths = ['/login', '/register', '/'];
+  const isPublicPath = publicPaths.includes(pathWithoutLocale);
+  const token = request.cookies.get('token')?.value;
   if (!token && !isPublicPath) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}/login`;
+    return NextResponse.redirect(url);
   }
 
   if (token && isPublicPath) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}/dashboard`;
+    return NextResponse.redirect(url);
   }
-
-  return NextResponse.next()
+  return intlMiddleware(request);
 }
 
 export const config = {
