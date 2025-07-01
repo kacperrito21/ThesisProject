@@ -1,9 +1,10 @@
 {
   "navigation": {
     "dashboard": "Dashboard",
-    "tasks": "Tasks",
     "calendar": "Calendar",
-    "settings": "Settings"
+    "settings": "Settings",
+    "categories": "Categories",
+    "tasks": "Tasks"
   },
   "auth": {
     "login": "Log in",

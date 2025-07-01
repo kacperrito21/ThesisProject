@@ -2,7 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { CalendarDaysIcon, Cog6ToothIcon, HomeIcon } from '@heroicons/react/16/solid'
+import {
+  CalendarDaysIcon,
+  Cog6ToothIcon,
+  HomeIcon,
+  RectangleStackIcon,
+  ArchiveBoxIcon,
+} from '@heroicons/react/16/solid'
 import { useTranslations } from 'next-intl'
 
 export const SideBar = () => {
@@ -11,6 +17,8 @@ export const SideBar = () => {
 
   const menuItems = [
     { href: '/dashboard', icon: HomeIcon, label: `${t('dashboard')}` },
+    { href: '/categories', icon: ArchiveBoxIcon, label: `${t('categories')}` },
+    { href: '/tasks', icon: RectangleStackIcon, label: `${t('tasks')}` },
     { href: '/calendar', icon: CalendarDaysIcon, label: `${t('calendar')}` },
     { href: '/settings', icon: Cog6ToothIcon, label: `${t('settings')}` },
   ]
@@ -22,7 +30,7 @@ export const SideBar = () => {
         <nav className="space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon
-            const isActive = pathname === item.href
+            const isActive = pathname.includes(item.href)
 
             return (
               <Link

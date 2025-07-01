@@ -2,7 +2,9 @@
   "navigation": {
     "dashboard": "Strona Główna",
     "calendar": "Kalendarz",
-    "settings": "Ustawienia"
+    "settings": "Ustawienia",
+    "categories": "Kategorie",
+    "tasks": "Zadania"
   },
   "auth": {
     "login": "Zaloguj się",
