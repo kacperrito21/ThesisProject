@@ -1,4 +1,3 @@
-// category.dto.ts
 import { IsString, IsNotEmpty, IsOptional, Matches } from 'class-validator';
 
 export class CreateCategoryDto {
