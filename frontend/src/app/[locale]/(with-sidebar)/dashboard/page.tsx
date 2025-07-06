@@ -1,7 +1,7 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
-import {useTranslations} from 'next-intl';
+import { useEffect, useState } from 'react'
+import DashboardComponent from '@/components/Dashboard/DashboardComponent'
 
 export default function Page() {
   const router = useRouter()
@@ -17,14 +17,31 @@ export default function Page() {
       console.error('Logout failed', error)
     }
   }
-  const t = useTranslations('common');
 
-  return (
-    <div className="bg-[var(--color-primary)] w-full h-full rounded-r-lg">
-      <div>{t('main')}</div>
-      <button onClick={handleLogout} style={{ marginTop: '1rem' }}>
-        Wyloguj się
-      </button>
-    </div>
-  )
+  interface User {
+    email: string
+    firstName: string
+  }
+
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        })
+        if (!res.ok) throw new Error('Unauthorized')
+        const data = await res.json()
+        setUser(data)
+      } catch (error) {
+        console.error('Błąd podczas pobierania użytkownika:', error)
+      }
+    }
+    fetchUser()
+  }, [])
+
+  return <DashboardComponent user={user} handleLogout={handleLogout} />
 }

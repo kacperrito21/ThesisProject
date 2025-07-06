@@ -2,13 +2,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { RegisterForm } from '@/components/RegisterForm'
+import { RegisterForm } from '@/components/Register/RegisterForm'
 import { useTranslations } from 'next-intl'
 
 export default function RegisterPage() {
   const [error, setError] = useState('')
   const router = useRouter()
-
 
   const handleRegister = async (email: string, password: string, firstName: string) => {
     try {
@@ -17,15 +16,15 @@ export default function RegisterPage() {
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, firstName }),
-      });
+      })
       if (response.ok) {
-        router.push('/dashboard');
+        router.push('/dashboard')
       } else {
         const data = await response.json()
         setError(data.message || 'Błąd logowania')
       }
     } catch (error) {
-      setError((error as Error).message);
+      setError((error as Error).message)
     }
   }
   const t = useTranslations('auth')

@@ -37,6 +37,8 @@
     "category": "Category"
   },
   "common": {
+    "greetings": "Hello",
+    "logout": "Log out",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",

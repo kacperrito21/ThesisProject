@@ -1,5 +1,5 @@
 'use client'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { ThemeToggle } from '@/components/Settings/ThemeToggle'
 import { LanguageSwitch } from '@/components/LanguageSwitch'
 
 export default function Page() {

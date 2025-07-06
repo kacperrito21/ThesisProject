@@ -4,7 +4,6 @@ import {
   Get,
   Body,
   Res,
-  Req,
   UnauthorizedException,
   InternalServerErrorException,
   UseGuards,
@@ -15,11 +14,8 @@ import { AuthGuard } from './auth.guard';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import * as process from 'node:process';
-
-interface JwtPayload {
-  sub: string;
-  email: string;
-}
+import { UserDecorator } from '../decorators/user.decorator';
+import { UserRequest } from '../interfaces/userRequest.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -27,8 +23,7 @@ export class AuthController {
 
   @Get('verify')
   @UseGuards(AuthGuard)
-  verify(@Req() req: Request) {
-    const user = (req as any).user as JwtPayload;
+  verify(@UserDecorator() user: UserRequest) {
     return { valid: true, user };
   }
 

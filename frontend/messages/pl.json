@@ -37,6 +37,8 @@
     "category": "Kategoria"
   },
   "common": {
+    "greetings": "Cześć",
+    "logout": "Wyloguj się",
     "save": "Zapisz",
     "cancel": "Anuluj",
     "delete": "Usuń",

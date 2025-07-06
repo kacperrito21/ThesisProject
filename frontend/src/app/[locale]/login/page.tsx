@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { LoginForm } from '@/components/LoginForm'
+import { LoginForm } from '@/components/Login/LoginForm'
 import { useTranslations } from 'next-intl'
 
 export default function LoginPage() {
