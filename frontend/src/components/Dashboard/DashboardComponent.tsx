@@ -11,12 +11,12 @@ export default function DashboardComponent({ user, handleLogout }: DashboardProp
   const t = useTranslations('common')
   const taskTranslation = useTranslations('tasks')
   return (
-    <div className="container py-10 bg-[var(--color-primary)] text-[var(--color-text)] w-full h-full rounded-r-lg">
+    <div className="container pl-10 py-10 bg-[var(--color-primary)] text-[var(--color-text)] w-full h-full rounded-r-lg">
       <div className="flex flex-row w-full">
         <div className="flex">
           {user ? (
             <p className="font-semibold text-[25px]">
-              {t('greetings')}, {user.firstName}
+              {t('greetings')} {user.firstName}
             </p>
           ) : null}
         </div>
