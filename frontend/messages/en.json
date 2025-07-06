@@ -14,7 +14,7 @@
     "repeatPassword": "Repeat Password",
     "firstName": "First name",
     "noAccount": "You don't have an account?",
-    "hasAccount": "Already have an account?",
+    "hasAccount": "Already have an account here?",
     "differentPasswords": "Passwords are not identical"
   },
   "tasks": {

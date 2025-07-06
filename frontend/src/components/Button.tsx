@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 
 type ButtonProps = {
   title: string
-  onClick: () => void
+  onClick?: () => void
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
   variant?: 'primary' | 'secondary' | 'danger'
@@ -27,7 +27,7 @@ export default function Button({
   if (variant === 'primary') {
     variantClasses = 'bg-[var(--color-chosen)] text-white hover:bg-[var(--color-hover)]'
   } else if (variant === 'secondary') {
-    variantClasses = 'bg-gray-200 text-gray-900 hover:bg-gray-300'
+    variantClasses = 'bg-gray-300 text-gray-900 hover:bg-gray-300'
   } else if (variant === 'danger') {
     variantClasses = 'bg-red-600 text-white hover:bg-red-700'
   }

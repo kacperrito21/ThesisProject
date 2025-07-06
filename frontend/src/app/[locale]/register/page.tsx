@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { RegisterForm } from '@/components/Register/RegisterForm'
-import { useTranslations } from 'next-intl'
+import { RegisterComponent } from '@/components/Register/RegisterComponent'
 
 export default function RegisterPage() {
   const [error, setError] = useState('')
@@ -27,12 +26,9 @@ export default function RegisterPage() {
       setError((error as Error).message)
     }
   }
-  const t = useTranslations('auth')
-
   return (
-    <div style={{ maxWidth: 400, margin: 'auto', paddingTop: '2rem' }}>
-      <h2>{t('register')}</h2>
-      <RegisterForm onSubmit={handleRegister} error={error} />
+    <div className="min-h-screen flex items-center justify-center">
+      <RegisterComponent handleRegister={handleRegister} error={error} />
     </div>
   )
 }

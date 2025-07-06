@@ -1,7 +1,9 @@
 'use client'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/16/solid'
+import Button from '@/components/Button'
 
 interface RegisterFormProps {
   onSubmit: (email: string, password: string, firstName: string) => void
@@ -13,10 +15,8 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
   const [password, setPassword] = useState('')
   const [firstName, setFirstName] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-
-  const router = useRouter();
-
-  const t = useTranslations('auth');
+  const router = useRouter()
+  const t = useTranslations('auth')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,62 +28,70 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
     onSubmit(email, password, firstName)
   }
 
-  const goToLogin = () => {
-    router.push('/login')
-  }
+  const goToLogin = () => router.push('/login')
+
+  const inputStyle = 'w-full bg-transparent focus:outline-none placeholder-gray-400 text-sm'
+
+  const wrapperStyle =
+    'flex items-center bg-white border border-[var(--color-chosen)] rounded-xl px-4 py-2 shadow-sm'
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>{t('firstName')}</label>
+    <form onSubmit={handleSubmit} className="text-[var(--color-text)] space-y-10">
+      <div className={wrapperStyle}>
+        <UserIcon className="fill-[var(--color-chosen)] h-5 w-5 mr-2" />
         <input
           type="text"
+          placeholder={t('firstName')}
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           required
-          style={{ width: '100%', marginBottom: '1rem' }}
+          className={inputStyle}
         />
-        <label>{t('email')}</label>
+      </div>
+
+      <div className={wrapperStyle}>
+        <EnvelopeIcon className="fill-[var(--color-chosen)] h-5 w-5 mr-2" />
         <input
-          type="text"
+          type="email"
+          placeholder={t('email')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={{ width: '100%', marginBottom: '1rem' }}
+          className={inputStyle}
         />
-        <label>{t('password')}</label>
+      </div>
+
+      <div className={wrapperStyle}>
+        <LockClosedIcon className="fill-[var(--color-chosen)] h-5 w-5 mr-2" />
         <input
           type="password"
+          placeholder={t('password')}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ width: '100%', marginBottom: '1rem' }}
+          className={inputStyle}
         />
-        <label>{t('repeatPassword')}</label>
+      </div>
+
+      <div className={wrapperStyle}>
+        <LockClosedIcon className="fill-[var(--color-chosen)] h-5 w-5 mr-2" />
         <input
           type="password"
+          placeholder={t('repeatPassword')}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
-          style={{ width: '100%', marginBottom: '1rem' }}
+          className={inputStyle}
         />
       </div>
-      <button type="submit">{t('register')}</button>
-      <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-        <p>{t('hasAccount')}</p>
-        <button
-          type="button"
-          onClick={goToLogin}
-          style={{
-            background: 'transparent',
-            border: '1px solid #ccc',
-            padding: '0.5rem 1rem',
-            cursor: 'pointer',
-          }}
-        >
-          {t('login')}
-        </button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+      <div className="pt-2">
+        <Button title={t('register')} type="submit" className="w-full h-12 text-[18px]" />
+      </div>
+      <div className="flex justify-center items-center p-2 gap-2">
+        <p className="text-[16px]">{t('hasAccount')}</p>
+        <Button title={t('login')} onClick={goToLogin} variant="secondary" />
       </div>
     </form>
   )

@@ -1,8 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { LoginForm } from '@/components/Login/LoginForm'
-import { useTranslations } from 'next-intl'
+import { LoginComponent } from '@/components/Login/LoginComponent'
 
 export default function LoginPage() {
   const [error, setError] = useState('')
@@ -26,12 +25,10 @@ export default function LoginPage() {
       setError((error as Error).message)
     }
   }
-  const t = useTranslations('auth')
 
   return (
-    <div style={{ maxWidth: 400, margin: 'auto', paddingTop: '2rem' }}>
-      <h2>{t('login')}</h2>
-      <LoginForm onSubmit={handleLogin} error={error} />
+    <div className="min-h-screen flex items-center justify-center">
+      <LoginComponent handleLogin={handleLogin} error={error} />
     </div>
   )
 }
