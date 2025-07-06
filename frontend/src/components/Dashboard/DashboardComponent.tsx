@@ -16,7 +16,7 @@ export default function DashboardComponent({ user, handleLogout }: DashboardProp
         <div className="flex">
           {user ? (
             <p className="font-semibold text-[25px]">
-              {t('greetings')} {user.firstName}
+              {t('greetings')}, {user.firstName}
             </p>
           ) : null}
         </div>
