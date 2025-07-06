@@ -1,6 +1,8 @@
 import { useTranslations } from 'next-intl'
 import Button from '@/components/Button'
 import { PlusIcon } from '@heroicons/react/16/solid'
+import { useState } from 'react'
+import TaskModal from '@/components/Tasks/TaskModal'
 
 type DashboardProps = {
   user: { email: string; firstName: string } | null
@@ -9,6 +11,7 @@ type DashboardProps = {
 
 export default function DashboardComponent({ user, handleLogout }: DashboardProps) {
   const t = useTranslations('common')
+  const [taskModalOpen, setTaskModalOpen] = useState(false)
   const taskTranslation = useTranslations('tasks')
   return (
     <div className="container pl-10 py-10 bg-[var(--color-primary)] text-[var(--color-text)] w-full h-full rounded-r-lg">
@@ -23,7 +26,7 @@ export default function DashboardComponent({ user, handleLogout }: DashboardProp
         <div className="flex ml-auto px-10">
           <Button
             title={taskTranslation('addTask')}
-            onClick={handleLogout}
+            onClick={() => setTaskModalOpen(true)}
             variant="primary"
             icon={<PlusIcon className="w-6 h-6" />}
           />
@@ -32,6 +35,13 @@ export default function DashboardComponent({ user, handleLogout }: DashboardProp
           <Button title={t('logout')} onClick={handleLogout} variant="primary" />
         </div>
       </div>
+      {taskModalOpen && (
+        <TaskModal
+          isOpen={taskModalOpen}
+          onClose={() => setTaskModalOpen(false)}
+          onSave={(formData, taskId) => console.log(formData, taskId)}
+        />
+      )}
     </div>
   )
 }
