@@ -6,7 +6,21 @@ const intlMiddleware = createIntlMiddleware({
   defaultLocale: 'pl',
 })
 
-export function middleware(request: NextRequest) {
+async function isTokenValid(token: string, apiUrl: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${apiUrl}/auth/verify`, {
+      method: 'GET',
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    })
+    return res.ok
+  } catch (error) {
+    throw new Error('Session expired, log in')
+  }
+}
+
+export async function middleware(request: NextRequest) {
   const response = intlMiddleware(request)
 
   const { pathname } = request.nextUrl
@@ -23,11 +37,30 @@ export function middleware(request: NextRequest) {
   const publicPaths = ['/login', '/register']
   const isPublicPath = publicPaths.includes(pathWithoutLocale)
   const token = request.cookies.get('token')?.value
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   if (pathWithoutLocale === '/') {
-    const url = request.nextUrl.clone()
-    url.pathname = token ? `/${locale}/dashboard` : `/${locale}/login`
-    return NextResponse.redirect(url)
+    if (token) {
+      const isValid = await isTokenValid(token, apiUrl)
+      const url = request.nextUrl.clone()
+      url.pathname = isValid ? `/${locale}/dashboard` : `/${locale}/login`
+      return NextResponse.redirect(url)
+    } else {
+      const url = request.nextUrl.clone()
+      url.pathname = `/${locale}/login`
+      url.searchParams.set('error', 'session-expired')
+      return NextResponse.redirect(url)
+    }
+  }
+
+  if (!isPublicPath && token) {
+    const isValid = await isTokenValid(token, apiUrl)
+    if (!isValid) {
+      const url = request.nextUrl.clone()
+      url.pathname = `/${locale}/login`
+      url.searchParams.set('error', 'session-expired')
+      return NextResponse.redirect(url)
+    }
   }
 
   if (!token && !isPublicPath) {
@@ -37,9 +70,12 @@ export function middleware(request: NextRequest) {
   }
 
   if (token && isPublicPath) {
-    const url = request.nextUrl.clone()
-    url.pathname = `/${locale}/dashboard`
-    return NextResponse.redirect(url)
+    const isValid = await isTokenValid(token, apiUrl)
+    if (isValid) {
+      const url = request.nextUrl.clone()
+      url.pathname = `/${locale}/dashboard`
+      return NextResponse.redirect(url)
+    }
   }
 
   return response

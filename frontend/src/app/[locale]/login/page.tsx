@@ -1,11 +1,35 @@
 'use client'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { LoginComponent } from '@/components/Login/LoginComponent'
+import { useTranslations } from 'next-intl'
+import ToastMessage from '@/components/ToasMessage'
 
 export default function LoginPage() {
   const [error, setError] = useState('')
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const errorParam = searchParams.get('error')
+  const t = useTranslations('auth')
+  const [searchError, setSearchError] = useState<string | null>(errorParam)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    if (errorParam === 'session-expired') {
+      setSearchError(errorParam)
+      setVisible(true)
+
+      const hideTimer = setTimeout(() => {
+        setVisible(false)
+        const cleanupTimer = setTimeout(() => {
+          setSearchError(null)
+        }, 300)
+        return () => clearTimeout(cleanupTimer)
+      }, 5000)
+
+      return () => clearTimeout(hideTimer)
+    }
+  }, [errorParam])
 
   const handleLogin = async (email: string, password: string) => {
     try {
@@ -28,6 +52,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
+      {searchError === 'session-expired' && <ToastMessage message={t('jwtExpired')} type="error" />}
       <LoginComponent handleLogin={handleLogin} error={error} />
     </div>
   )

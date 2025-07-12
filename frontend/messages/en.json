@@ -15,7 +15,8 @@
     "firstName": "First name",
     "noAccount": "You don't have an account?",
     "hasAccount": "Already have an account here?",
-    "differentPasswords": "Passwords are not identical"
+    "differentPasswords": "Passwords are not identical",
+    "jwtExpired": "Session expired, log in"
   },
   "tasks": {
     "title": "My tasks",
@@ -23,9 +24,9 @@
     "editTask": "Edit task",
     "deleteTask": "Delete task",
     "priority": {
-      "low": "Low",
-      "medium": "Medium",
-      "high": "High"
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High"
     },
     "status": {
       "todo": "To do",
@@ -34,7 +35,10 @@
     },
     "noTasks": "No tasks to display",
     "dueDate": "Due date",
-    "category": "Category"
+    "category": "Category",
+    "taskSaveSuccess": "Task saved!",
+    "taskEditedSuccess": "Task edited!",
+    "taskError": "Error occurred"
   },
   "common": {
     "greetings": "Hello",

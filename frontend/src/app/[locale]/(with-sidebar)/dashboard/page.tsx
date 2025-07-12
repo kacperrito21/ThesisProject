@@ -1,10 +1,20 @@
 'use client'
+
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import DashboardComponent from '@/components/Dashboard/DashboardComponent'
+import { Task } from '@/types/Task'
+import ToastMessage from '@/components/ToasMessage'
+import { useTranslations } from 'next-intl'
 
 export default function Page() {
   const router = useRouter()
+
+  const [user, setUser] = useState<{ email: string; firstName: string } | null>(null)
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [loading, setLoading] = useState(true)
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+  const t = useTranslations('tasks')
 
   const handleLogout = async () => {
     try {
@@ -14,34 +24,91 @@ export default function Page() {
       })
       router.push('/login')
     } catch (error) {
-      console.error('Logout failed', error)
+      console.error('Błąd wylogowywania', error)
     }
   }
 
-  interface User {
-    email: string
-    firstName: string
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
+        method: 'GET',
+        credentials: 'include',
+      })
+      if (!res.ok) throw new Error('Unauthorized')
+      const data = await res.json()
+      setUser(data)
+    } catch (err) {
+      console.error('Błąd użytkownika:', err)
+    }
   }
 
-  const [user, setUser] = useState<User | null>(null)
+  const fetchRecentTasks = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/recent?amount=5`, {
+        credentials: 'include',
+      })
+      if (!res.ok) throw new Error('Błąd pobierania zadań')
+      const data = await res.json()
+      setTasks(data)
+    } catch (err) {
+      console.error('Błąd zadań:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSaveTask = async (formData: Task, taskId?: string) => {
+    try {
+      const method = taskId ? 'PATCH' : 'POST'
+      const url = taskId
+        ? `${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/tasks`
+
+      const res = await fetch(url, {
+        method,
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, status: 'TODO' }),
+      })
+
+      if (!res.ok) {
+        const error = await res.text()
+        throw new Error(error)
+      }
+
+      await fetchRecentTasks()
+
+      setToast({
+        message: taskId ? t('taskEditedSuccess') : t('taskSaveSuccess'),
+        type: 'success',
+      })
+
+      setTimeout(() => setToast(null), 5000)
+    } catch (err) {
+      console.error('Błąd zapisu zadania:', err)
+      setToast({
+        message: t('taskError'),
+        type: 'error',
+      })
+      setTimeout(() => setToast(null), 5000)
+    }
+  }
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
-          method: 'GET',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-        })
-        if (!res.ok) throw new Error('Unauthorized')
-        const data = await res.json()
-        setUser(data)
-      } catch (error) {
-        console.error('Błąd podczas pobierania użytkownika:', error)
-      }
-    }
     fetchUser()
+    fetchRecentTasks()
   }, [])
 
-  return <DashboardComponent user={user} handleLogout={handleLogout} />
+  return (
+    <>
+      <DashboardComponent
+        user={user}
+        handleLogout={handleLogout}
+        tasks={tasks}
+        onSaveTask={handleSaveTask}
+        loading={loading}
+      />
+      {toast && <ToastMessage message={toast.message} type={toast.type} duration={5000} />}
+    </>
+  )
 }

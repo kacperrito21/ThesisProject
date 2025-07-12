@@ -1,52 +1,52 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Task, TaskStatus, TaskPriority } from '@prisma/client';
+import { CreateTaskDto, UpdateTaskDto } from './task.dto';
 
 @Injectable()
 export class TaskService {
   constructor(private prisma: PrismaService) {}
-  async create(
-    userId: string,
-    categoryId: string,
-    title: string,
-    description: string,
-    status: TaskStatus,
-    priority: TaskPriority,
-    dueDate: string | Date | null,
-  ): Promise<Task> {
-    const categoryExists = await this.prisma.category.findUnique({
-      where: {
-        id: categoryId,
-        userId,
-      },
+
+  async get(userId: string, limit: string): Promise<Task[]> {
+    return this.prisma.task.findMany({
+      where: { userId },
+      orderBy: { updatedAt: 'desc' },
+      take: parseInt(limit),
     });
-    if (!categoryExists) {
-      throw new NotFoundException('Category with this name does not exist');
+  }
+
+  async create(userId: string, dto: CreateTaskDto): Promise<Task> {
+    if (dto.categoryId) {
+      const categoryExists = await this.prisma.category.findFirst({
+        where: {
+          id: dto.categoryId,
+          userId,
+        },
+      });
+
+      if (!categoryExists) {
+        throw new NotFoundException('Category not found or access denied');
+      }
     }
     const dueDateParsed =
-      typeof dueDate === 'string' ? new Date(dueDate) : dueDate;
+      typeof dto.dueDate === 'string' ? new Date(dto.dueDate) : dto.dueDate;
     return this.prisma.task.create({
       data: {
         userId,
-        categoryId,
-        title,
-        description,
-        status,
-        priority,
+        ...(dto.categoryId && { categoryId: dto.categoryId }),
+        title: dto.title,
+        description: dto.description,
+        status: dto.status,
+        priority: dto.priority,
         dueDate: dueDateParsed,
       },
     });
   }
+
   async update(
     taskId: string,
     userId: string,
-    categoryId?: string,
-    title?: string,
-    description?: string,
-    status?: TaskStatus,
-    priority?: TaskPriority,
-    dueDate?: string | Date | null,
-    finishedDate?: string | Date,
+    dto: UpdateTaskDto,
   ): Promise<Task> {
     const existingTask = await this.userTask(taskId, userId);
     if (!existingTask) {
@@ -62,26 +62,27 @@ export class TaskService {
       finishedDate: Date;
     }> = {};
 
-    if (categoryId !== undefined) updateData.categoryId = categoryId;
-    if (title !== undefined) updateData.title = title;
-    if (description !== undefined) updateData.description = description;
-    if (status !== undefined) updateData.status = status;
-    if (priority !== undefined) updateData.priority = priority;
-    if (dueDate !== undefined) {
+    if (dto.categoryId !== undefined) updateData.categoryId = dto.categoryId;
+    if (dto.title !== undefined) updateData.title = dto.title;
+    if (dto.description !== undefined) updateData.description = dto.description;
+    if (dto.status !== undefined) updateData.status = dto.status;
+    if (dto.priority !== undefined) updateData.priority = dto.priority;
+    if (dto.dueDate !== undefined) {
       updateData.dueDate =
-        typeof dueDate === 'string' ? new Date(dueDate) : dueDate;
+        typeof dto.dueDate === 'string' ? new Date(dto.dueDate) : dto.dueDate;
     }
-    if (finishedDate !== undefined) {
+    if (dto.finishedDate !== undefined) {
       updateData.finishedDate =
-        typeof finishedDate === 'string'
-          ? new Date(finishedDate)
-          : finishedDate;
+        typeof dto.finishedDate === 'string'
+          ? new Date(dto.finishedDate)
+          : dto.finishedDate;
     }
     return this.prisma.task.update({
       where: { id: taskId },
       data: updateData,
     });
   }
+
   async delete(taskId: string, userId: string): Promise<Task> {
     const existingTask = await this.userTask(taskId, userId);
     if (!existingTask) {
@@ -91,6 +92,7 @@ export class TaskService {
       where: { id: taskId },
     });
   }
+
   async userTask(taskId: string, userId: string): Promise<Task | null> {
     return this.prisma.task.findFirst({
       where: {

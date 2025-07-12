@@ -4,9 +4,8 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-import * as process from 'node:process';
 
 interface JwtPayload {
   id: string;
@@ -25,6 +24,7 @@ declare module 'express' {
 export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest<Request>();
+    const res = context.switchToHttp().getResponse<Response>();
     const token = req.cookies?.token;
     if (!token) {
       throw new UnauthorizedException('Token not found');
@@ -35,8 +35,18 @@ export class AuthGuard implements CanActivate {
       return true;
     } catch (err) {
       if (err instanceof jwt.TokenExpiredError) {
+        res.clearCookie('token', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+        });
         throw new UnauthorizedException('Token expired');
       } else if (err instanceof jwt.JsonWebTokenError) {
+        res.clearCookie('token', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+        });
         throw new UnauthorizedException('Invalid token');
       } else {
         throw new UnauthorizedException('Token verification failed');

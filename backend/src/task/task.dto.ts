@@ -37,13 +37,8 @@ export class CreateTaskDto {
   @IsNotEmpty()
   dueDate: Date;
 }
+
 export class UpdateTaskDto {
-  @IsNotEmpty()
-  id: string;
-
-  @IsNotEmpty()
-  userId: string;
-
   @IsOptional()
   @IsString()
   @IsNotEmpty()

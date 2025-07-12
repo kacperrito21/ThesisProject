@@ -2,45 +2,44 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
+  Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { TaskService } from './task.service';
 import { CreateTaskDto, DeleteTaskDto, UpdateTaskDto } from './task.dto';
+import { UserDecorator } from '../decorators/user.decorator';
+import { UserRequest } from '../interfaces/userRequest.interface';
 
 @Controller('tasks')
 @UseGuards(AuthGuard)
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  @Post()
-  async create(@Body() dto: CreateTaskDto) {
-    return await this.taskService.create(
-      dto.userId,
-      dto.categoryId,
-      dto.title,
-      dto.description,
-      dto.status,
-      dto.priority,
-      dto.dueDate,
-    );
+  @Get('recent')
+  getRecentTasks(
+    @UserDecorator() user: UserRequest,
+    @Query('amount') amount: string,
+  ) {
+    return this.taskService.get(user.sub, amount);
   }
 
-  @Patch()
-  async update(@Body() dto: UpdateTaskDto) {
-    return await this.taskService.update(
-      dto.id,
-      dto.userId,
-      dto.categoryId,
-      dto.title,
-      dto.description,
-      dto.status,
-      dto.priority,
-      dto.dueDate,
-      dto.finishedDate,
-    );
+  @Post()
+  async create(@UserDecorator() user: UserRequest, @Body() dto: CreateTaskDto) {
+    return await this.taskService.create(user.sub, dto);
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @UserDecorator() user: UserRequest,
+    @Body() dto: UpdateTaskDto,
+  ) {
+    return await this.taskService.update(id, user.sub, dto);
   }
 
   @Delete()

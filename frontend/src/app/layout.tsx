@@ -4,7 +4,7 @@ import { ThemeProvider } from '@/providers/ThemeProvider'
 
 export const metadata = {
   title: 'Nazwa Aplikacji',
-  description: 'Zarządzanie zadaniami',
+  description: 'Task Manager',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

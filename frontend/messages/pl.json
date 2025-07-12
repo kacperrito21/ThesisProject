@@ -15,7 +15,8 @@
     "firstName": "Imię",
     "noAccount": "Nie masz jeszcze konta?",
     "hasAccount": "Masz już konto w aplikacji?",
-    "differentPasswords": "Hasła nie są identyczne"
+    "differentPasswords": "Hasła nie są identyczne",
+    "jwtExpired": "Sesja wygasła, zaloguj się ponownie"
   },
   "tasks": {
     "title": "Moje zadania",
@@ -23,9 +24,9 @@
     "editTask": "Edytuj zadanie",
     "deleteTask": "Usuń zadanie",
     "priority": {
-      "low": "Niski",
-      "medium": "Średni",
-      "high": "Wysoki"
+      "LOW": "Niski",
+      "MEDIUM": "Średni",
+      "HIGH": "Wysoki"
     },
     "status": {
       "todo": "Do zrobienia",
@@ -34,7 +35,10 @@
     },
     "noTasks": "Brak zadań do wyświetlenia",
     "dueDate": "Termin",
-    "category": "Kategoria"
+    "category": "Kategoria",
+    "taskSaveSuccess": "Task saved!",
+    "taskEditedSuccess": "Task edited!",
+    "taskError": "Error occurred"
   },
   "common": {
     "greetings": "Cześć",

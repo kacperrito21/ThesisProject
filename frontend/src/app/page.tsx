@@ -1,10 +1,12 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 export default function HomePage() {
+  const t = useTranslations('common')
   return (
     <div>
-      <h1 className="text-2xl font-bold">Witaj w Task Managerze!</h1>
-      <p>Ładuję dane użytkownika...</p>
+      <p>{t('loading')}</p>
     </div>
   )
 }

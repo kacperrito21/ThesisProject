@@ -6,11 +6,11 @@ import { UserDecorator } from 'src/decorators/user.decorator';
 import { UserRequest } from '../interfaces/userRequest.interface';
 
 @Controller('users')
-@UseGuards(AuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('me')
+  @UseGuards(AuthGuard)
   getLoggedInUser(@UserDecorator() user: UserRequest) {
     return this.userService.findById(user.sub);
   }

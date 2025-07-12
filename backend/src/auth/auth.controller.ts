@@ -43,7 +43,7 @@ export class AuthController {
       throw new UnauthorizedException('Hasło niepoprawne, spróbuj ponownie');
 
     const payload = { email, sub: user.id };
-    const jwtOptions: jwt.SignOptions = { expiresIn: '1h' };
+    const jwtOptions: jwt.SignOptions = { expiresIn: '7d' };
 
     const secret = process.env.JWT_SECRET;
     if (!secret) throw new InternalServerErrorException('Missing JWT secret');
