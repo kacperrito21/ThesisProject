@@ -36,9 +36,9 @@
     "noTasks": "Brak zadań do wyświetlenia",
     "dueDate": "Termin",
     "category": "Kategoria",
-    "taskSaveSuccess": "Task saved!",
-    "taskEditedSuccess": "Task edited!",
-    "taskError": "Error occurred"
+    "taskSaveSuccess": "Zadanie zapisane!",
+    "taskEditedSuccess": "Zadanie edytowane!",
+    "taskError": "Błąd!"
   },
   "common": {
     "greetings": "Cześć",
