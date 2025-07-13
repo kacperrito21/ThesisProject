@@ -5,8 +5,8 @@ export type Task = {
   categoryId?: UUID | null
   title: string
   description?: string
-  status?: 'TODO' | 'IN_PROGRESS' | 'COMPLETED' | 'OVERDUE'
+  status?: 'TODO' | 'COMPLETED' | 'OVERDUE'
   priority: 'LOW' | 'HIGH' | 'MEDIUM'
   dueDate: string
-  finishDate?: string
+  finishedDate?: string | null
 }

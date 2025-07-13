@@ -6,6 +6,7 @@ import TaskModal from '@/components/Tasks/TaskModal'
 import { Task } from '@/types/Task'
 import TaskCard from '@/components/Tasks/TaskCard'
 import DeleteTaskModal from '@/components/Tasks/DeleteTaskModal'
+import SmallCalendar from '@/components/Calendar/SmallCalendar'
 
 type DashboardProps = {
   user: { email: string; firstName: string } | null
@@ -69,17 +70,21 @@ export default function DashboardComponent({
   const handleCompletedTask = async (task: Task) => {
     const now = new Date().toISOString().split('T')[0]
     let updatedStatus: Task['status']
+    let finishedDate: Task['finishedDate']
     if (task.status === 'COMPLETED') {
       if (task.dueDate && new Date(task.dueDate).toISOString().split('T')[0] < now) {
         updatedStatus = 'OVERDUE'
+        finishedDate = null
       } else {
         updatedStatus = 'TODO'
+        finishedDate = null
       }
     } else {
       updatedStatus = 'COMPLETED'
+      finishedDate = new Date().toISOString().split('T')[0]
     }
 
-    const updatedTask = { ...task, status: updatedStatus }
+    const updatedTask = { ...task, status: updatedStatus, finishedDate: finishedDate }
     onSaveTask(updatedTask, task.id)
   }
 
@@ -141,7 +146,9 @@ export default function DashboardComponent({
             ))
           )}
         </div>
-        <div className="w-1/2 px-10">Tutaj Kalendarz</div>
+        <div className="w-1/2 px-10">
+          <SmallCalendar tasks={tasks} />
+        </div>
       </div>
       {taskModalOpen && (
         <TaskModal

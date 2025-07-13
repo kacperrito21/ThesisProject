@@ -12,11 +12,9 @@ export class TaskService {
     limit: string,
     includeCompleted?: boolean,
   ): Promise<Task[]> {
-    console.log(includeCompleted);
     const statusFilter = includeCompleted
       ? undefined
       : { not: 'COMPLETED' as Task['status'] };
-    console.log(statusFilter);
     return this.prisma.task.findMany({
       where: { userId, status: statusFilter },
       orderBy: { createdAt: 'desc' },

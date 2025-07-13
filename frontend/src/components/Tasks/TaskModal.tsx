@@ -3,6 +3,7 @@ import { XMarkIcon, CalendarIcon, ChevronDownIcon } from '@heroicons/react/24/ou
 import { Task } from '@/types/Task'
 import { UUID } from 'node:crypto'
 import { ExclamationCircleIcon } from '@heroicons/react/16/solid'
+import DatePickerDropdown from '@/components/Calendar/DatePickerDropdown'
 
 type Category = {
   id: UUID
@@ -19,6 +20,7 @@ type TaskModalProps = {
       dueDate: string
       categoryId?: UUID | null
       priority: 'LOW' | 'MEDIUM' | 'HIGH'
+      status?: 'TODO' | 'OVERDUE' | 'COMPLETED'
     },
     taskId?: UUID
   ) => void
@@ -41,19 +43,29 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
     dueDate: new Date().toISOString().split('T')[0],
     priority: 'MEDIUM' as 'LOW' | 'MEDIUM' | 'HIGH',
     categoryId: null as UUID | null,
+    status: 'TODO' as 'TODO' | 'OVERDUE' | 'COMPLETED',
   })
 
   const [activeDropdown, setActiveDropdown] = useState<DropdownType>(null)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const [shouldRender, setShouldRender] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
+      setShouldRender(true)
+      setTimeout(() => setIsAnimating(true), 10)
+
       setFormData({
         title: task?.title || '',
         description: task?.description || '',
         dueDate: task?.dueDate || new Date().toISOString().split('T')[0],
         priority: task?.priority || 'MEDIUM',
         categoryId: task?.categoryId || null,
+        status: task?.status || 'TODO',
       })
+    } else {
+      setIsAnimating(false)
+      setTimeout(() => setShouldRender(false), 500)
     }
   }, [isOpen, task])
 
@@ -68,11 +80,21 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
     setActiveDropdown((prev) => (prev === name ? null : name))
   }
 
+  const handleClose = () => {
+    setIsAnimating(false)
+    setTimeout(() => {
+      onClose()
+    }, 500)
+  }
+
   const handleSave = () => {
     if (formData.title.trim()) {
-      onSave(formData, task?.id)
-      setActiveDropdown(null)
-      onClose()
+      setIsAnimating(false)
+      setTimeout(() => {
+        onSave(formData, task?.id)
+        setActiveDropdown(null)
+        onClose()
+      }, 500)
     }
   }
 
@@ -85,28 +107,34 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
     })
   }
 
-  if (!isOpen) return null
+  if (!shouldRender) return null
 
   const isEditMode = !!task
-
   return (
-    <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-[var(--color-background)] rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl">
+    <div
+      className={`fixed inset-0 bg bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-500 ${
+        isAnimating ? 'opacity-100' : 'opacity-50'
+      }`}
+      onClick={handleClose}
+    >
+      <div
+        className={`bg-[var(--color-background)] rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl transition-all duration-500 ease-out ${
+          isAnimating ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-8 opacity-0'
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-semibold text-[var(--color-text)]">
             {isEditMode ? 'Edytuj zadanie' : 'Dodaj zadanie'}
           </h2>
           <button
-            onClick={() => {
-              setActiveDropdown(null)
-              onClose()
-            }}
+            onClick={handleClose}
             className="p-2 hover:bg-[var(--color-hover)] rounded-full transition-colors"
           >
             <XMarkIcon className="w-6 h-6 text-[var(--color-text)]" />
           </button>
         </div>
-        <div className="space-y-6">
+        <div className="space-y-5">
           <input
             type="text"
             placeholder="Tytuł zadania"
@@ -121,7 +149,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
             rows={6}
             className="w-full px-4 py-3 border border-[var(--color-secondary)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-hover)] bg-[var(--color-primary)] text-[var(--color-text)] resize-none"
           />
-          <div className="relative pt-8">
+          <div className="relative">
             <button
               onClick={() => toggleDropdown('date')}
               className="w-full px-4 py-3 border border-[var(--color-secondary)] rounded-xl flex justify-between items-center bg-[var(--color-primary)] text-[var(--color-text)]"
@@ -133,17 +161,11 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
               <ChevronDownIcon className="w-5 h-5 text-[var(--color-text)]" />
             </button>
             {activeDropdown === 'date' && (
-              <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10">
-                <input
-                  type="date"
-                  value={formData.dueDate}
-                  onChange={(e) => {
-                    handleInputChange('dueDate', e.target.value)
-                    setActiveDropdown(null)
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-[var(--color-primary)] text-[var(--color-text)]"
-                />
-              </div>
+              <DatePickerDropdown
+                selectedDate={formData.dueDate}
+                onDateSelect={(date) => handleInputChange('dueDate', date)}
+                closeDropdown={() => setActiveDropdown(null)}
+              />
             )}
           </div>
           <div className="relative pt-8">
@@ -158,7 +180,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
               <ChevronDownIcon className="w-5 h-5 text-[var(--color-text)]" />
             </button>
             {activeDropdown === 'priority' && (
-              <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10">
+              <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10 animate-in slide-in-from-top-2 duration-200">
                 {Object.entries(priorities).map(([key, label]) => (
                   <button
                     key={key}
@@ -189,7 +211,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
                 <ChevronDownIcon className="w-5 h-5 text-[var(--color-text)]" />
               </button>
               {activeDropdown === 'category' && (
-                <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10">
+                <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10 animate-in slide-in-from-top-2 duration-200">
                   {categories.map((category) => (
                     <button
                       key={category.id}

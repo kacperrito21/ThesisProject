@@ -20,7 +20,6 @@ export default function Page() {
   const handleChangeShowCompleted = async () => {
     const newValue = !showCompleted
     setShowCompleted(newValue)
-    console.log('i posted new value', newValue)
     await fetchRecentTasks(newValue)
   }
 
@@ -53,7 +52,6 @@ export default function Page() {
   const fetchRecentTasks = async (includeCompleted = showCompleted) => {
     try {
       let res: Response
-      console.log('i took new value', showCompleted)
       if (includeCompleted) {
         res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/tasks/recent?amount=5&includeCompleted=${showCompleted}`,
