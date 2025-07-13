@@ -25,6 +25,7 @@
     "deleteTask": "Usuń zadanie",
     "delete": "Usuń",
     "cancel": "Anuluj",
+    "showCompleted": "Pokaż ukończone",
     "priority": {
       "LOW": "Niski",
       "MEDIUM": "Średni",

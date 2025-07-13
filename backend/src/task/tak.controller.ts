@@ -24,8 +24,9 @@ export class TaskController {
   getRecentTasks(
     @UserDecorator() user: UserRequest,
     @Query('amount') amount: string,
+    @Query('includeCompleted') includeCompleted?: boolean,
   ) {
-    return this.taskService.get(user.sub, amount);
+    return this.taskService.get(user.sub, amount, includeCompleted);
   }
 
   @Post()

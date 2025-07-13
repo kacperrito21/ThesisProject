@@ -7,9 +7,16 @@ import { CreateTaskDto, UpdateTaskDto } from './task.dto';
 export class TaskService {
   constructor(private prisma: PrismaService) {}
 
-  async get(userId: string, limit: string): Promise<Task[]> {
+  async get(
+    userId: string,
+    limit: string,
+    includeCompleted?: boolean,
+  ): Promise<Task[]> {
+    const statusFilter = includeCompleted
+      ? undefined
+      : { not: 'COMPLETED' as Task['status'] };
     return this.prisma.task.findMany({
-      where: { userId },
+      where: { userId, status: statusFilter },
       orderBy: { updatedAt: 'desc' },
       take: parseInt(limit),
     });

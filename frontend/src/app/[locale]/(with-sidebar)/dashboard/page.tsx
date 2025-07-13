@@ -42,11 +42,21 @@ export default function Page() {
     }
   }
 
-  const fetchRecentTasks = async () => {
+  const fetchRecentTasks = async (includeCompleted?: boolean) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/recent?amount=5`, {
-        credentials: 'include',
-      })
+      let res: Response
+      if (includeCompleted) {
+        res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/tasks/recent?amount=5&includeCompleted=${includeCompleted}`,
+          {
+            credentials: 'include',
+          }
+        )
+      } else {
+        res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/recent?amount=5`, {
+          credentials: 'include',
+        })
+      }
       if (!res.ok) throw new Error('Błąd pobierania zadań')
       const data = await res.json()
       setTasks(data)
@@ -139,6 +149,7 @@ export default function Page() {
         onSaveTask={handleSaveTask}
         onDeleteTask={handleDeleteTask}
         loading={loading}
+        fetchRecentTasks={fetchRecentTasks}
       />
       {toast && <ToastMessage message={toast.message} type={toast.type} duration={5000} />}
     </>

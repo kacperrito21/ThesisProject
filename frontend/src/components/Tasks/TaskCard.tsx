@@ -27,10 +27,18 @@ export default function TaskCard({ task, onEdit, onDelete, handleCompletedTask }
           onChange={handleCompletedTask}
           className="w-5 h-5 mt-1 appearance-none border-2 border-green-500 rounded-sm checked:bg-green-500 checked:border-green-500 checked:after:content-['✓'] checked:after:text-white checked:after:text-sm checked:after:block checked:after:translate-x-[2px] checked:after:translate-y-[-2px]"
         />
-        <h3 className="text-lg font-semibold w-5/11">{task.title}</h3>
-        <span className={`${baseClasses} ${priorityClass}`}>{t(`priority.${task.priority}`)}</span>
-        {task.status === 'OVERDUE' && (
-          <span className={`${baseClasses} ${priorityClass}`}>{t(`status.${task.status}`)}</span>
+        <h3 className="text-lg font-semibold w-5/12">{task.title}</h3>
+
+        {task.status === 'OVERDUE' ? (
+          <span
+            className={`${baseClasses} ${priorityClass} inline-flex flex-row whitespace-nowrap`}
+          >
+            {t(`priority.${task.priority}`) + ' ' + t(`status.${task.status}`)}
+          </span>
+        ) : (
+          <span className={`${baseClasses} ${priorityClass}`}>
+            {t(`priority.${task.priority}`)}
+          </span>
         )}
         <span className="text-sm text-[var(--color-text)] right-0 ml-auto">
           {' '}

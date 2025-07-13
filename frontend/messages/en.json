@@ -25,6 +25,7 @@
     "deleteTask": "Delete task",
     "cancel": "Cancel",
     "delete": "Delete",
+    "showCompleted": "Show completed",
     "priority": {
       "LOW": "Low",
       "MEDIUM": "Medium",

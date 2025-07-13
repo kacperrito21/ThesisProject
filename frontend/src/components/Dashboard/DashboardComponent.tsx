@@ -14,6 +14,7 @@ type DashboardProps = {
   loading: boolean
   onSaveTask: (formData: Task, taskId?: string) => void
   onDeleteTask: (id: string) => void
+  fetchRecentTasks: (status?: boolean) => void
 }
 
 export default function DashboardComponent({
@@ -23,12 +24,14 @@ export default function DashboardComponent({
   loading,
   onSaveTask,
   onDeleteTask,
+  fetchRecentTasks,
 }: DashboardProps) {
   const t = useTranslations('common')
   const [taskModalOpen, setTaskModalOpen] = useState(false)
   const [selectedTask, setSelectedTask] = useState<Task | undefined>(undefined)
   const taskTranslation = useTranslations('tasks')
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [showCompleted, setShowCompleted] = useState(true)
 
   const handleAddTask = () => {
     setSelectedTask(undefined)
@@ -50,9 +53,25 @@ export default function DashboardComponent({
     setSelectedTask(task)
   }
   const handleCompletedTask = async (task: Task) => {
-    const updatedStatus = task.status === 'COMPLETED' ? 'TODO' : 'COMPLETED'
-    const updatedTask = { ...task, status: updatedStatus as Task['status'] }
+    const now = new Date()
+    let updatedStatus: Task['status']
+    if (task.status === 'COMPLETED') {
+      if (task.dueDate && new Date(task.dueDate) < now) {
+        updatedStatus = 'OVERDUE'
+      } else {
+        updatedStatus = 'TODO'
+      }
+    } else {
+      updatedStatus = 'COMPLETED'
+    }
+
+    const updatedTask = { ...task, status: updatedStatus }
     onSaveTask(updatedTask, task.id)
+  }
+  const handleChangeShowCompleted = async () => {
+    const newValue = !showCompleted
+    setShowCompleted(newValue)
+    fetchRecentTasks(newValue)
   }
 
   return (
@@ -78,6 +97,15 @@ export default function DashboardComponent({
         </div>
       </div>
       <div className="py-5">Tutaj ProgressBar</div>
+      <div className="flex flex-row">
+        <input
+          type="checkbox"
+          checked={showCompleted}
+          onChange={handleChangeShowCompleted}
+          className="w-5 h-5 mt-1 appearance-none border-2 border-green-500 rounded-sm checked:bg-green-500 checked:border-green-500 checked:after:content-['✓'] checked:after:text-white checked:after:text-sm checked:after:block checked:after:translate-x-[2px] checked:after:translate-y-[-2px]"
+        />
+        <p className="pl-3">{taskTranslation('showCompleted')}</p>
+      </div>
       <div className="flex flex-row w-full py-5">
         <div className="w-1/2 max-h-[70vh] overflow-y-auto pr-3">
           {loading ? (
