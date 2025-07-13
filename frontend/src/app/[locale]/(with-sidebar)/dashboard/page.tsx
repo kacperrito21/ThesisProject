@@ -15,6 +15,14 @@ export default function Page() {
   const [loading, setLoading] = useState(true)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const t = useTranslations('tasks')
+  const [showCompleted, setShowCompleted] = useState(true)
+
+  const handleChangeShowCompleted = async () => {
+    const newValue = !showCompleted
+    setShowCompleted(newValue)
+    console.log('i posted new value', newValue)
+    await fetchRecentTasks(newValue)
+  }
 
   const handleLogout = async () => {
     try {
@@ -42,12 +50,13 @@ export default function Page() {
     }
   }
 
-  const fetchRecentTasks = async (includeCompleted?: boolean) => {
+  const fetchRecentTasks = async (includeCompleted = showCompleted) => {
     try {
       let res: Response
+      console.log('i took new value', showCompleted)
       if (includeCompleted) {
         res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/tasks/recent?amount=5&includeCompleted=${includeCompleted}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/tasks/recent?amount=5&includeCompleted=${showCompleted}`,
           {
             credentials: 'include',
           }
@@ -149,7 +158,8 @@ export default function Page() {
         onSaveTask={handleSaveTask}
         onDeleteTask={handleDeleteTask}
         loading={loading}
-        fetchRecentTasks={fetchRecentTasks}
+        showCompleted={showCompleted}
+        handleChangeShowCompleted={handleChangeShowCompleted}
       />
       {toast && <ToastMessage message={toast.message} type={toast.type} duration={5000} />}
     </>

@@ -26,6 +26,7 @@
     "delete": "Usuń",
     "cancel": "Anuluj",
     "showCompleted": "Pokaż ukończone",
+    "completed": "Ostatnich zadań ukończone!",
     "priority": {
       "LOW": "Niski",
       "MEDIUM": "Średni",

@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl'
 import Button from '@/components/Button'
 import { PlusIcon } from '@heroicons/react/16/solid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import TaskModal from '@/components/Tasks/TaskModal'
 import { Task } from '@/types/Task'
 import TaskCard from '@/components/Tasks/TaskCard'
@@ -14,7 +14,8 @@ type DashboardProps = {
   loading: boolean
   onSaveTask: (formData: Task, taskId?: string) => void
   onDeleteTask: (id: string) => void
-  fetchRecentTasks: (status?: boolean) => void
+  showCompleted: boolean
+  handleChangeShowCompleted: () => void
 }
 
 export default function DashboardComponent({
@@ -24,14 +25,27 @@ export default function DashboardComponent({
   loading,
   onSaveTask,
   onDeleteTask,
-  fetchRecentTasks,
+  showCompleted,
+  handleChangeShowCompleted,
 }: DashboardProps) {
   const t = useTranslations('common')
   const [taskModalOpen, setTaskModalOpen] = useState(false)
   const [selectedTask, setSelectedTask] = useState<Task | undefined>(undefined)
   const taskTranslation = useTranslations('tasks')
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [showCompleted, setShowCompleted] = useState(true)
+  const [completionProgress, setCompletionProgress] = useState(0)
+
+  useEffect(() => {
+    if (tasks.length === 0) {
+      setCompletionProgress(0)
+      return
+    }
+
+    const completedCount = tasks.filter((task) => task.status === 'COMPLETED').length
+    const percentage = Math.round((completedCount / tasks.length) * 100)
+
+    setCompletionProgress(percentage)
+  }, [tasks])
 
   const handleAddTask = () => {
     setSelectedTask(undefined)
@@ -53,10 +67,10 @@ export default function DashboardComponent({
     setSelectedTask(task)
   }
   const handleCompletedTask = async (task: Task) => {
-    const now = new Date()
+    const now = new Date().toISOString().split('T')[0]
     let updatedStatus: Task['status']
     if (task.status === 'COMPLETED') {
-      if (task.dueDate && new Date(task.dueDate) < now) {
+      if (task.dueDate && new Date(task.dueDate).toISOString().split('T')[0] < now) {
         updatedStatus = 'OVERDUE'
       } else {
         updatedStatus = 'TODO'
@@ -67,11 +81,6 @@ export default function DashboardComponent({
 
     const updatedTask = { ...task, status: updatedStatus }
     onSaveTask(updatedTask, task.id)
-  }
-  const handleChangeShowCompleted = async () => {
-    const newValue = !showCompleted
-    setShowCompleted(newValue)
-    fetchRecentTasks(newValue)
   }
 
   return (
@@ -96,7 +105,15 @@ export default function DashboardComponent({
           <Button title={t('logout')} onClick={handleLogout} variant="primary" />
         </div>
       </div>
-      <div className="py-5">Tutaj ProgressBar</div>
+      <div className="w-3/5 h-6 bg-gray-200 rounded-lg overflow-hidden">
+        <div
+          className="h-full bg-green-500 transition-all duration-500 ease-in-out"
+          style={{ width: `${completionProgress}%` }}
+        ></div>
+      </div>
+      <p className="text-sm mt-1">
+        {completionProgress}% {taskTranslation('completed')}
+      </p>
       <div className="flex flex-row">
         <input
           type="checkbox"
