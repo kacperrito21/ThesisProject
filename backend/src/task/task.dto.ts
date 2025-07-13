@@ -84,11 +84,3 @@ export class UpdateTaskDto {
   )
   finishedDate?: string;
 }
-
-export class DeleteTaskDto {
-  @IsNotEmpty()
-  id: string;
-
-  @IsNotEmpty()
-  userId: string;
-}

@@ -57,7 +57,7 @@ export default function Page() {
     }
   }
 
-  const handleSaveTask = async (formData: Task, taskId?: string) => {
+  async function handleSaveTask(formData: Task, taskId?: string) {
     try {
       const method = taskId ? 'PATCH' : 'POST'
       const url = taskId
@@ -68,7 +68,7 @@ export default function Page() {
         method,
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, status: 'TODO' }),
+        body: JSON.stringify({ ...formData, status: formData.status ? formData.status : 'TODO' }),
       })
 
       if (!res.ok) {
@@ -94,6 +94,37 @@ export default function Page() {
     }
   }
 
+  async function handleDeleteTask(taskId: string) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+      })
+
+      if (!res.ok) {
+        const error = await res.text()
+        throw new Error(error)
+      }
+
+      await fetchRecentTasks()
+
+      setToast({
+        message: t('taskDeletedSuccess'),
+        type: 'success',
+      })
+
+      setTimeout(() => setToast(null), 5000)
+    } catch (err) {
+      console.error('Błąd usuwania zadania:', err)
+      setToast({
+        message: t('taskError'),
+        type: 'error',
+      })
+      setTimeout(() => setToast(null), 5000)
+    }
+  }
+
   useEffect(() => {
     fetchUser()
     fetchRecentTasks()
@@ -106,6 +137,7 @@ export default function Page() {
         handleLogout={handleLogout}
         tasks={tasks}
         onSaveTask={handleSaveTask}
+        onDeleteTask={handleDeleteTask}
         loading={loading}
       />
       {toast && <ToastMessage message={toast.message} type={toast.type} duration={5000} />}

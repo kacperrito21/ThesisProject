@@ -16,7 +16,7 @@ export default function ToastMessage({ message, type, duration = 5000 }: ToastMe
     const hideTimer = setTimeout(() => {
       setVisible(false)
 
-      const cleanupTimer = setTimeout(() => {}, 300)
+      const cleanupTimer = setTimeout(() => {}, 500)
       return () => clearTimeout(cleanupTimer)
     }, duration)
 
@@ -27,7 +27,7 @@ export default function ToastMessage({ message, type, duration = 5000 }: ToastMe
 
   return (
     <div
-      className={`fixed top-4 right-4 text-white px-4 py-2 rounded shadow-lg z-50 transform transition-all duration-300 ease-in-out
+      className={`fixed top-4 right-4 text-white px-4 py-2 rounded shadow-lg z-50 transform transition-all duration-500 ease-in-out
         ${backgroundClass}
         ${visible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
     >

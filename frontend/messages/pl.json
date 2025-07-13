@@ -23,21 +23,25 @@
     "addTask": "Dodaj zadanie",
     "editTask": "Edytuj zadanie",
     "deleteTask": "Usuń zadanie",
+    "delete": "Usuń",
+    "cancel": "Anuluj",
     "priority": {
       "LOW": "Niski",
       "MEDIUM": "Średni",
       "HIGH": "Wysoki"
     },
     "status": {
-      "todo": "Do zrobienia",
-      "inProgress": "W trakcie",
-      "completed": "Ukończone"
+      "TODO": "Do zrobienia",
+      "OVERDUE": "Spóźnione",
+      "COMPLETED": "Ukończone"
     },
     "noTasks": "Brak zadań do wyświetlenia",
     "dueDate": "Termin",
     "category": "Kategoria",
     "taskSaveSuccess": "Zadanie zapisane!",
     "taskEditedSuccess": "Zadanie edytowane!",
+    "taskDeletedSuccess": "Zadanie usuniętę!",
+    "deleteTaskInfo": "Wciśnięcie przycisku usuń będzie skutkować nieodwracalnym usunięciem zadania, czy na pewno chcesz kontynuować?",
     "taskError": "Błąd!"
   },
   "common": {

@@ -23,21 +23,25 @@
     "addTask": "Add task",
     "editTask": "Edit task",
     "deleteTask": "Delete task",
+    "cancel": "Cancel",
+    "delete": "Delete",
     "priority": {
       "LOW": "Low",
       "MEDIUM": "Medium",
       "HIGH": "High"
     },
     "status": {
-      "todo": "To do",
-      "inProgress": "In progress",
-      "completed": "Completed"
+      "TODO": "To do",
+      "OVERDUE": "Overdue",
+      "COMPLETED": "Completed"
     },
     "noTasks": "No tasks to display",
     "dueDate": "Due date",
     "category": "Category",
     "taskSaveSuccess": "Task saved!",
     "taskEditedSuccess": "Task edited!",
+    "taskDeletedSuccess": "Task deleted!",
+    "deleteTaskInfo": "Pressing the button delete will result in irreversible disposal of a task, are you sure you want to continue?",
     "taskError": "Error occurred"
   },
   "common": {

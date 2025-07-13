@@ -5,6 +5,7 @@ import { useState } from 'react'
 import TaskModal from '@/components/Tasks/TaskModal'
 import { Task } from '@/types/Task'
 import TaskCard from '@/components/Tasks/TaskCard'
+import DeleteTaskModal from '@/components/Tasks/DeleteTaskModal'
 
 type DashboardProps = {
   user: { email: string; firstName: string } | null
@@ -12,6 +13,7 @@ type DashboardProps = {
   tasks: Task[]
   loading: boolean
   onSaveTask: (formData: Task, taskId?: string) => void
+  onDeleteTask: (id: string) => void
 }
 
 export default function DashboardComponent({
@@ -20,11 +22,13 @@ export default function DashboardComponent({
   tasks,
   loading,
   onSaveTask,
+  onDeleteTask,
 }: DashboardProps) {
   const t = useTranslations('common')
   const [taskModalOpen, setTaskModalOpen] = useState(false)
   const [selectedTask, setSelectedTask] = useState<Task | undefined>(undefined)
   const taskTranslation = useTranslations('tasks')
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
   const handleAddTask = () => {
     setSelectedTask(undefined)
@@ -38,7 +42,17 @@ export default function DashboardComponent({
 
   const handleCloseModal = () => {
     setTaskModalOpen(false)
+    setDeleteModalOpen(false)
     setSelectedTask(undefined)
+  }
+  const handleDeleteTask = (task: Task) => {
+    setDeleteModalOpen(true)
+    setSelectedTask(task)
+  }
+  const handleCompletedTask = async (task: Task) => {
+    const updatedStatus = task.status === 'COMPLETED' ? 'TODO' : 'COMPLETED'
+    const updatedTask = { ...task, status: updatedStatus as Task['status'] }
+    onSaveTask(updatedTask, task.id)
   }
 
   return (
@@ -76,9 +90,8 @@ export default function DashboardComponent({
                 key={task.id}
                 task={task}
                 onEdit={() => handleEditTask(task)}
-                onDelete={() => {
-                  console.log('Usuń', task.id)
-                }}
+                onDelete={() => handleDeleteTask(task)}
+                handleCompletedTask={() => handleCompletedTask(task)}
               />
             ))
           )}
@@ -91,6 +104,17 @@ export default function DashboardComponent({
           onClose={handleCloseModal}
           onSave={(formData, taskId) => onSaveTask(formData, taskId)}
           task={selectedTask}
+        />
+      )}
+      {deleteModalOpen && selectedTask && (
+        <DeleteTaskModal
+          isOpen={deleteModalOpen}
+          onClose={handleCloseModal}
+          onDelete={(taskId) => {
+            onDeleteTask(taskId)
+            handleCloseModal()
+          }}
+          selectedTaskId={selectedTask.id!}
         />
       )}
     </div>

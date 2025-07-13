@@ -6,9 +6,10 @@ type Props = {
   task: Task
   onEdit: () => void
   onDelete: () => void
+  handleCompletedTask: () => void
 }
 
-export default function TaskCard({ task, onEdit, onDelete }: Props) {
+export default function TaskCard({ task, onEdit, onDelete, handleCompletedTask }: Props) {
   const t = useTranslations('tasks')
   const baseClasses = 'px-8 py-1 rounded-xl text-xs font-semibold'
   const priorityClass =
@@ -23,11 +24,14 @@ export default function TaskCard({ task, onEdit, onDelete }: Props) {
         <input
           type="checkbox"
           checked={task.status === 'COMPLETED'}
-          readOnly
-          className="accent-green-500 w-5 h-5 mt-1"
+          onChange={handleCompletedTask}
+          className="w-5 h-5 mt-1 appearance-none border-2 border-green-500 rounded-sm checked:bg-green-500 checked:border-green-500 checked:after:content-['✓'] checked:after:text-white checked:after:text-sm checked:after:block checked:after:translate-x-[2px] checked:after:translate-y-[-2px]"
         />
         <h3 className="text-lg font-semibold w-5/11">{task.title}</h3>
         <span className={`${baseClasses} ${priorityClass}`}>{t(`priority.${task.priority}`)}</span>
+        {task.status === 'OVERDUE' && (
+          <span className={`${baseClasses} ${priorityClass}`}>{t(`status.${task.status}`)}</span>
+        )}
         <span className="text-sm text-[var(--color-text)] right-0 ml-auto">
           {' '}
           {task.dueDate.split('T')[0]}

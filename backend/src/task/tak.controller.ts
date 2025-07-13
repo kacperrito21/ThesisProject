@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { TaskService } from './task.service';
-import { CreateTaskDto, DeleteTaskDto, UpdateTaskDto } from './task.dto';
+import { CreateTaskDto, UpdateTaskDto } from './task.dto';
 import { UserDecorator } from '../decorators/user.decorator';
 import { UserRequest } from '../interfaces/userRequest.interface';
 
@@ -42,8 +42,8 @@ export class TaskController {
     return await this.taskService.update(id, user.sub, dto);
   }
 
-  @Delete()
-  async delete(@Body() dto: DeleteTaskDto) {
-    return await this.taskService.delete(dto.id, dto.userId);
+  @Delete(':id')
+  async delete(@Param('id') id: string, @UserDecorator() user: UserRequest) {
+    return await this.taskService.delete(id, user.sub);
   }
 }
