@@ -52,6 +52,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
   const [isAnimating, setIsAnimating] = useState(false)
   const [shouldRender, setShouldRender] = useState(false)
   const t = useTranslations('common')
+  const tTasks = useTranslations('tasks')
 
   useEffect(() => {
     if (isOpen) {
@@ -139,7 +140,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
       >
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-semibold text-[var(--color-text)]">
-            {isEditMode ? 'Edytuj zadanie' : 'Dodaj zadanie'}
+            {isEditMode ? tTasks('editTask') : tTasks('addTask')}
           </h2>
           <button
             onClick={handleClose}
