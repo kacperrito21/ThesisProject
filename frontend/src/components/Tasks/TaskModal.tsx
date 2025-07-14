@@ -5,6 +5,7 @@ import { UUID } from 'node:crypto'
 import { ExclamationCircleIcon } from '@heroicons/react/16/solid'
 import DatePickerDropdown from '@/components/Calendar/DatePickerDropdown'
 import parseDateFromText from '@/helpers/parseDateFromText'
+import { useTranslations } from 'next-intl'
 
 type Category = {
   id: UUID
@@ -50,6 +51,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
   const [activeDropdown, setActiveDropdown] = useState<DropdownType>(null)
   const [isAnimating, setIsAnimating] = useState(false)
   const [shouldRender, setShouldRender] = useState(false)
+  const t = useTranslations('common')
 
   useEffect(() => {
     if (isOpen) {
@@ -245,7 +247,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
             disabled={!formData.title.trim()}
             className="w-full bg-[var(--color-chosen)] text-white py-3 px-6 rounded-xl font-medium hover:bg-[var(--color-hover)] disabled:bg-gray-300 transition-colors"
           >
-            {isEditMode ? 'Zapisz zmiany' : 'Zapisz'}
+            {isEditMode ? t('saveChanges') : t('save')}
           </button>
         </div>
       </div>

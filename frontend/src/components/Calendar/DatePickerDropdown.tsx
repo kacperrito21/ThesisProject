@@ -1,5 +1,6 @@
 import { DayPicker } from 'react-day-picker'
 import 'react-day-picker/dist/style.css'
+import { useTranslations } from 'next-intl'
 
 type DatePickerDropdownProps = {
   selectedDate: string
@@ -13,7 +14,7 @@ export default function DatePickerDropdown({
   closeDropdown,
 }: DatePickerDropdownProps) {
   const selected = selectedDate ? new Date(selectedDate) : undefined
-
+  const t = useTranslations('weekdays')
   const handleSelect = (date: Date | undefined) => {
     if (date) {
       const formatToLocalISODate = (date: Date) => {
@@ -38,6 +39,14 @@ export default function DatePickerDropdown({
           day: `rounded-full text-[var(--color-text)] hover:bg-[var(--color-hover)] transition duration-300 ease-in-out`,
           today: `text-[var(--color-chosen)]`,
           selected: `rounded-full bg-[var(--color-chosen)]`,
+          weekday: ``
+        }}
+        formatters={{
+          formatWeekdayName: (date) => {
+            const weekdayKeys = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+            const key = weekdayKeys[date.getDay()]
+            return t(key)
+          },
         }}
       />
     </div>

@@ -50,6 +50,7 @@
     "greetings": "Cześć",
     "logout": "Wyloguj się",
     "save": "Zapisz",
+    "saveChanges": "Zapisz zmiany",
     "cancel": "Anuluj",
     "delete": "Usuń",
     "edit": "Edytuj",
@@ -57,5 +58,14 @@
     "error": "Wystąpił błąd",
     "success": "Operacja zakończona pomyślnie",
     "main": "Strona główna"
+  },
+  "weekdays": {
+    "Mon": "Pn",
+    "Tue": "Wt",
+    "Wed": "Śr",
+    "Thu": "Czw",
+    "Fri": "Pt",
+    "Sat": "Sob",
+    "Sun": "Nd"
   }
 }

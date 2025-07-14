@@ -50,6 +50,7 @@
     "greetings": "Hello",
     "logout": "Log out",
     "save": "Save",
+    "saveChanges": "Save changes",
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
@@ -57,5 +58,14 @@
     "error": "An error occurred",
     "success": "Operation completed successfully",
     "main": "Main page"
+  },
+  "weekdays": {
+    "Mon": "Mo",
+    "Tue": "Tu",
+    "Wed": "We",
+    "Thu": "Th",
+    "Fri": "Fr",
+    "Sat": "Sa",
+    "Sun": "Su"
   }
 }
