@@ -4,6 +4,7 @@ import { Task } from '@/types/Task'
 import { UUID } from 'node:crypto'
 import { ExclamationCircleIcon } from '@heroicons/react/16/solid'
 import DatePickerDropdown from '@/components/Calendar/DatePickerDropdown'
+import parseDateFromText from '@/helpers/parseDateFromText'
 
 type Category = {
   id: UUID
@@ -73,7 +74,18 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
     field: T,
     value: (typeof formData)[T]
   ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+    setFormData((prev) => {
+      const newFormData = { ...prev, [field]: value }
+
+      if (field === 'description' && typeof value === 'string') {
+        const parsedDate = parseDateFromText(value)
+        if (parsedDate) {
+          newFormData.dueDate = parsedDate
+        }
+      }
+
+      return newFormData
+    })
   }
 
   const toggleDropdown = (name: DropdownType) => {

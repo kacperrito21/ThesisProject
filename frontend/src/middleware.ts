@@ -16,7 +16,7 @@ async function isTokenValid(token: string, apiUrl: string): Promise<boolean> {
     })
     return res.ok
   } catch (error) {
-    throw new Error('Session expired, log in')
+    return false
   }
 }
 
