@@ -6,10 +6,11 @@ import DashboardComponent from '@/components/Dashboard/DashboardComponent'
 import { Task } from '@/types/Task'
 import { useTranslations } from 'next-intl'
 import { useToast } from '@/contexts/ToastContext'
+import { useUser } from '@/contexts/UserContext'
 
 export default function Page() {
   const router = useRouter()
-  const [user, setUser] = useState<{ email: string; firstName: string } | null>(null)
+  const { user } = useUser()
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
   const [showCompleted, setShowCompleted] = useState(true)
@@ -31,20 +32,6 @@ export default function Page() {
       router.push('/login')
     } catch (error) {
       console.error('Błąd wylogowywania', error)
-    }
-  }
-
-  const fetchUser = async () => {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
-        method: 'GET',
-        credentials: 'include',
-      })
-      if (!res.ok) throw new Error('Unauthorized')
-      const data = await res.json()
-      setUser(data)
-    } catch (err) {
-      console.error('Błąd użytkownika:', err)
     }
   }
 
@@ -136,7 +123,6 @@ export default function Page() {
   }
 
   useEffect(() => {
-    fetchUser()
     fetchRecentTasks()
   }, [])
 

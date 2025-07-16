@@ -12,3 +12,9 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Name is required' })
   firstName: string;
 }
+
+export class UpdateUserDto {
+  @IsString()
+  @IsNotEmpty({ message: 'Name is required' })
+  firstName: string;
+}

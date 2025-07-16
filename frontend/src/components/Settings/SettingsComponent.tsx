@@ -6,7 +6,7 @@ import { LanguageSwitch } from '@/components/LanguageSwitch'
 import Button from '@/components/Button'
 
 type SettingsProps = {
-  userName: string
+  userName: string | undefined
   setUser: (value: string) => void
   locale: string
   setLocale: (locale: string) => void

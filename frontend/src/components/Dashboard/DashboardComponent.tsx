@@ -9,7 +9,7 @@ import DeleteTaskModal from '@/components/Tasks/DeleteTaskModal'
 import SmallCalendar from '@/components/Calendar/SmallCalendar'
 
 type DashboardProps = {
-  user: { email: string; firstName: string } | null
+  user: string
   handleLogout: () => void
   tasks: Task[]
   loading: boolean
@@ -94,7 +94,7 @@ export default function DashboardComponent({
         <div className="flex">
           {user ? (
             <p className="font-semibold text-[25px]">
-              {t('greetings')}, {user.firstName}
+              {t('greetings')}, {user}
             </p>
           ) : null}
         </div>
