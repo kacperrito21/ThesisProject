@@ -26,7 +26,7 @@ export function LoginForm({ onSubmit, error }: LoginFormProps) {
   const t = useTranslations('auth')
 
   return (
-    <form onSubmit={handleSubmit} className="text-[var(--color-text)] space-y-10">
+    <form onSubmit={handleSubmit} className="text-black space-y-10">
       <div className="flex items-center bg-white border border-[var(--color-chosen)] rounded-xl px-4 py-2 shadow-sm">
         <EnvelopeIcon className="fill-[var(--color-chosen)] h-5 w-5 mr-2" />
         <input
