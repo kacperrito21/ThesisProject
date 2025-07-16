@@ -57,7 +57,7 @@ export function LoginForm({ onSubmit, error }: LoginFormProps) {
         <Button title={t('login')} type="submit" className="w-full h-12 text-[18px]" />
       </div>
       <div className="flex justify-center items-center p-2 gap-2">
-        <p className="text-[16px]">{t('noAccount')}</p>
+        <p className="text-[16px] text-[var(--color-text)]">{t('noAccount')}</p>
         <Button title={t('register')} onClick={goToRegister} variant="secondary" />
       </div>
     </form>

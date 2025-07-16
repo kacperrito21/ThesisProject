@@ -90,7 +90,7 @@ export function RegisterForm({ onSubmit, error }: RegisterFormProps) {
         <Button title={t('register')} type="submit" className="w-full h-12 text-[18px]" />
       </div>
       <div className="flex justify-center items-center p-2 gap-2">
-        <p className="text-[16px]">{t('hasAccount')}</p>
+        <p className="text-[16px] text-[var(--color-text)]">{t('hasAccount')}</p>
         <Button title={t('login')} onClick={goToLogin} variant="secondary" />
       </div>
     </form>
