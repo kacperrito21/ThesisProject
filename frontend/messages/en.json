@@ -46,6 +46,10 @@
     "deleteTaskInfo": "Pressing the button delete will result in irreversible disposal of a task, are you sure you want to continue?",
     "taskError": "Error occurred"
   },
+  "settings": {
+    "updateSuccess": "Settings saved!",
+    "updateError": "Error saving settings!"
+  },
   "common": {
     "greetings": "Hello",
     "logout": "Log out",

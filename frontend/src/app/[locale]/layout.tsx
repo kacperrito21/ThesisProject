@@ -1,6 +1,8 @@
 import {NextIntlClientProvider, hasLocale} from 'next-intl';
 import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
+import { UserProvider } from '@/contexts/UserContext';
+import { ToastProvider } from '@/contexts/ToastContext' // dodaj import
 
 export default async function LocaleLayout({ children, params }: {
   children: React.ReactNode;
@@ -11,6 +13,12 @@ export default async function LocaleLayout({ children, params }: {
     notFound();
   }
   return (
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+    <NextIntlClientProvider>
+      <UserProvider>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
+      </UserProvider>
+    </NextIntlClientProvider>
   );
 }

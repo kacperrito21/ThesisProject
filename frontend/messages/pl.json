@@ -46,6 +46,10 @@
     "deleteTaskInfo": "Wciśnięcie przycisku usuń będzie skutkować nieodwracalnym usunięciem zadania, czy na pewno chcesz kontynuować?",
     "taskError": "Błąd!"
   },
+  "settings": {
+    "updateSuccess": "Ustawienia zapisane!",
+    "updateError": "Błąd w zapisie ustawień!"
+  },
   "common": {
     "greetings": "Cześć",
     "logout": "Wyloguj się",

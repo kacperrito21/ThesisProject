@@ -4,18 +4,17 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import DashboardComponent from '@/components/Dashboard/DashboardComponent'
 import { Task } from '@/types/Task'
-import ToastMessage from '@/components/ToasMessage'
 import { useTranslations } from 'next-intl'
+import { useToast } from '@/contexts/ToastContext'
 
 export default function Page() {
   const router = useRouter()
-
   const [user, setUser] = useState<{ email: string; firstName: string } | null>(null)
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
-  const t = useTranslations('tasks')
   const [showCompleted, setShowCompleted] = useState(true)
+  const t = useTranslations('tasks')
+  const { showToast } = useToast()
 
   const handleChangeShowCompleted = async () => {
     const newValue = !showCompleted
@@ -95,19 +94,16 @@ export default function Page() {
 
       await fetchRecentTasks()
 
-      setToast({
+      showToast({
         message: taskId ? t('taskEditedSuccess') : t('taskSaveSuccess'),
         type: 'success',
       })
-
-      setTimeout(() => setToast(null), 5000)
     } catch (err) {
       console.error('Błąd zapisu zadania:', err)
-      setToast({
+      showToast({
         message: t('taskError'),
         type: 'error',
       })
-      setTimeout(() => setToast(null), 5000)
     }
   }
 
@@ -126,19 +122,16 @@ export default function Page() {
 
       await fetchRecentTasks()
 
-      setToast({
+      showToast({
         message: t('taskDeletedSuccess'),
         type: 'success',
       })
-
-      setTimeout(() => setToast(null), 5000)
     } catch (err) {
       console.error('Błąd usuwania zadania:', err)
-      setToast({
+      showToast({
         message: t('taskError'),
         type: 'error',
       })
-      setTimeout(() => setToast(null), 5000)
     }
   }
 
@@ -147,8 +140,7 @@ export default function Page() {
     fetchRecentTasks()
   }, [])
 
-  return (
-    <>
+    return (
       <DashboardComponent
         user={user}
         handleLogout={handleLogout}
@@ -159,7 +151,5 @@ export default function Page() {
         showCompleted={showCompleted}
         handleChangeShowCompleted={handleChangeShowCompleted}
       />
-      {toast && <ToastMessage message={toast.message} type={toast.type} duration={5000} />}
-    </>
-  )
+    )
 }
