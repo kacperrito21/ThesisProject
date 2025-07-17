@@ -58,7 +58,6 @@ export default function SettingsPage() {
         })
       }
       if (user !== localUser) {
-        console.log('sending patch')
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
           method: 'PATCH',
           credentials: 'include',
