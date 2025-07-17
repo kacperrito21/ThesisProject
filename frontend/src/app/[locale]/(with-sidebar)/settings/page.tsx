@@ -1,7 +1,7 @@
 'use client'
 
 import SettingsComponent from '@/components/Settings/SettingsComponent'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useUser } from '@/contexts/UserContext'
 import { useLocale } from 'use-intl'
@@ -10,13 +10,17 @@ import { useToast } from '@/contexts/ToastContext'
 
 export default function SettingsPage() {
   const { user, setUser, loading } = useUser()
+  const [localUser, setLocalUser] = useState<string>(user)
   const router = useRouter()
   const pathname = usePathname()
   const currentLocale = useLocale()
   const [locale, setLocale] = useState(currentLocale)
   const t = useTranslations('settings')
   const { showToast } = useToast()
-  const initialUserRef = useRef(user)
+
+  useEffect(() => {
+    setLocalUser(user)
+  }, [user])
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -53,13 +57,13 @@ export default function SettingsPage() {
           type: 'success',
         })
       }
-      if (initialUserRef.current !== user) {
+      if (user !== localUser) {
         console.log('sending patch')
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
           method: 'PATCH',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ firstName: user }),
+          body: JSON.stringify({ firstName: localUser }),
         })
 
         if (!res.ok) {
@@ -72,8 +76,9 @@ export default function SettingsPage() {
           type: 'success',
         })
       }
+      setUser(localUser)
     } catch (error: unknown) {
-      setUser(initialUserRef.current)
+      setUser(user)
       if (locale !== currentLocale) {
         const segments = pathname.split('/')
         segments[1] = locale
@@ -93,8 +98,8 @@ export default function SettingsPage() {
           <div></div>
         ) :
           <SettingsComponent
-            userName={user}
-            setUser={(userName) => setUser(userName)}
+            userName={localUser}
+            setUser={(userName) => setLocalUser(userName)}
             locale={locale}
             setLocale={setLocale}
             handleSave={handleSave} />

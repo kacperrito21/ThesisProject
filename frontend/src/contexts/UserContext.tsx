@@ -11,8 +11,13 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<string>('')
+  const [user, setUserState] = useState<string>('')
   const [loading, setLoading] = useState(true)
+
+  const setUser = (firstName: string) => {
+    setUserState(firstName)
+    sessionStorage.setItem('user', firstName)
+  }
 
   const fetchUser = async () => {
     try {
@@ -33,11 +38,16 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    const savedUser = sessionStorage.getItem('user')
+    if (savedUser) {
+      setUserState(savedUser)
+      setLoading(false)
+    }
     fetchUser()
   }, [])
 
   return (
-    <UserContext.Provider value={{ user, setUser, fetchUser, loading }}>
+    <UserContext.Provider value={{ user, setUser: setUserState, fetchUser, loading }}>
       {children}
     </UserContext.Provider>
   )
