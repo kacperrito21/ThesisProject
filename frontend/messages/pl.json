@@ -18,6 +18,23 @@
     "differentPasswords": "Hasła nie są identyczne",
     "jwtExpired": "Sesja wygasła, zaloguj się ponownie"
   },
+  "categories": {
+    "searchPlaceholder": "Wyszukaj kategorię",
+    "emptyState": "Nie znaleziono kategorii",
+    "addCategory": "Dodaj kategorię",
+    "editCategory": "Edytuj kategorię",
+    "namePlaceholder": "Nazwa kategorii",
+    "loading": "Ładowanie...",
+    "color": "Kolor: ",
+    "add": "Dodaj",
+    "saveChanges": "Zapisz",
+    "deleteCategory": "Usuń kategorię",
+    "deleteCategoryConfirm": "Czy na pewno chcesz usunąć tę kategorię?",
+    "delete": "Usuń",
+    "cancel": "Anuluj",
+    "addSuccess": "Dodano kategorię!",
+    "deleteSuccess": "Usunięto kategorię!"
+  },
   "tasks": {
     "title": "Moje zadania",
     "addTask": "Dodaj zadanie",
@@ -47,8 +64,12 @@
     "taskError": "Błąd!"
   },
   "settings": {
+    "settings": "Ustawienia",
     "updateSuccess": "Ustawienia zapisane!",
-    "updateError": "Błąd w zapisie ustawień!"
+    "updateError": "Błąd w zapisie ustawień!",
+    "userName": "Imię",
+    "language": "Język",
+    "theme": "Motyw aplikacji"
   },
   "common": {
     "greetings": "Cześć",

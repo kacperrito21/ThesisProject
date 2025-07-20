@@ -2,38 +2,51 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
+  Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
-import { CategoryService } from './category.service';
-import {
-  CreateCategoryDto,
-  DeleteCategoryDto,
-  UpdateCategoryDto,
-} from './category.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { CategoryService } from './category.service';
+import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
+import { UserDecorator } from '../decorators/user.decorator';
+import { UserRequest } from '../interfaces/userRequest.interface';
 
 @Controller('categories')
 @UseGuards(AuthGuard)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @Get()
+  async findAll(
+    @UserDecorator() user: UserRequest,
+    @Query('name') name?: string,
+  ) {
+    return await this.categoryService.findAll(user.sub, name);
+  }
+
   @Post()
-  async create(@Body() dto: CreateCategoryDto) {
-    return await this.categoryService.create(dto.userId, dto.name, dto.color);
+  async create(
+    @UserDecorator() user: UserRequest,
+    @Body() dto: CreateCategoryDto,
+  ) {
+    return this.categoryService.create(user.sub, dto.name, dto.color);
   }
-  @Patch()
-  async update(@Body() dto: UpdateCategoryDto) {
-    return await this.categoryService.update(
-      dto.userId,
-      dto.currentName,
-      dto.newName,
-      dto.newColor,
-    );
+
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @UserDecorator() user: UserRequest,
+    @Body() dto: UpdateCategoryDto,
+  ) {
+    return this.categoryService.update(id, user.sub, dto);
   }
-  @Delete()
-  async delete(@Body() dto: DeleteCategoryDto) {
-    return await this.categoryService.delete(dto.userId, dto.name);
+
+  @Delete(':id')
+  async delete(@Param('id') id: string, @UserDecorator() user: UserRequest) {
+    return this.categoryService.delete(id, user.sub);
   }
 }

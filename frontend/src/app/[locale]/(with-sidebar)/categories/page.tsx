@@ -1,4 +1,98 @@
 'use client'
+import { useEffect, useState, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
+import { useToast } from '@/contexts/ToastContext'
+import CategoriesComponent from '@/components/Categories/CategoriesComponent'
+
+export type Category = { id: string; name: string; color: string }
+
 export default function Page() {
-  return <div className="bg-[var(--color-primary)] w-full h-full rounded-r-lg">Kategorie</div>
+  const t = useTranslations('categories')
+  const { showToast } = useToast()
+
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
+  const [filterName, setFilterName] = useState('')
+  const [isPending, startTransition] = useTransition()
+
+  const fetchCategories = async (name = '') => {
+    setLoading(true)
+    try {
+      const url = name
+        ? `${process.env.NEXT_PUBLIC_API_URL}/categories?name=${encodeURIComponent(name)}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/categories`
+
+      const res = await fetch(url, { credentials: 'include' })
+      if (!res.ok) throw new Error('Błąd pobierania kategorii')
+      const data: Category[] = await res.json()
+      setCategories(data)
+    } catch (err) {
+      console.error(err)
+      showToast({ message: t('loadError'), type: 'error' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleFilter = (name: string) => {
+    setFilterName(name)
+    startTransition(() => fetchCategories(name))
+  }
+
+  const handleSave = async (cat: { name: string; color: string }, id?: string) => {
+    try {
+      const method = id ? 'PATCH' : 'POST'
+      const url = id
+        ? `${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/categories`
+
+      const res = await fetch(url, {
+        method,
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: cat.name, color: cat.color }),
+      })
+      if (!res.ok) throw new Error('Błąd zapisu kategorii')
+
+      await fetchCategories(filterName)
+      showToast({
+        message: id ? t('editSuccess') : t('addSuccess'),
+        type: 'success',
+      })
+    } catch (err) {
+      console.error(err)
+      showToast({ message: t('saveError'), type: 'error' })
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+      if (!res.ok) throw new Error('Błąd usuwania kategorii')
+      await fetchCategories(filterName)
+      showToast({ message: t('deleteSuccess'), type: 'success' })
+    } catch (err) {
+      console.error(err)
+      showToast({ message: t('deleteError'), type: 'error' })
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  return (
+    <CategoriesComponent
+      categories={categories}
+      loading={loading}
+      isPending={isPending}
+      filterName={filterName}
+      onFilter={handleFilter}
+      onSave={handleSave}
+      onDelete={handleDelete}
+    />
+  )
 }

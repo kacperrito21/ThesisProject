@@ -23,18 +23,14 @@ export class UpdateCategoryDto {
 
   @IsString()
   @IsNotEmpty()
-  currentName: string;
-
-  @IsOptional()
-  @IsString()
-  newName?: string;
+  name: string;
 
   @IsOptional()
   @IsString()
   @Matches(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/, {
     message: 'Color must be a valid hex code (e.g. #fff or #ffffff)',
   })
-  newColor?: string;
+  color?: string;
 }
 
 export class DeleteCategoryDto {

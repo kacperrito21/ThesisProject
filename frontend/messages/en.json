@@ -18,6 +18,23 @@
     "differentPasswords": "Passwords are not identical",
     "jwtExpired": "Session expired, log in"
   },
+  "categories": {
+    "searchPlaceholder": "Search category",
+    "emptyState": "No categories found",
+    "addCategory": "Add new category",
+    "editCategory": "Edit category",
+    "namePlaceholder": "Category name",
+    "loading": "Loading...",
+    "color": "Color: ",
+    "add": "Add",
+    "saveChanges": "Zapisz",
+    "deleteCategory": "Delete category",
+    "deleteCategoryConfirm": "Are you sure you want to delete this category?",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "addSuccess": "Category has been added!",
+    "deleteSuccess": "Category has been deleted!"
+  },
   "tasks": {
     "title": "My tasks",
     "addTask": "Add task",
@@ -47,8 +64,12 @@
     "taskError": "Error occurred"
   },
   "settings": {
+    "settings": "Settings",
     "updateSuccess": "Settings saved!",
-    "updateError": "Error saving settings!"
+    "updateError": "Error saving settings!",
+    "userName": "Name",
+    "language": "Language",
+    "theme": "Theme"
   },
   "common": {
     "greetings": "Hello",

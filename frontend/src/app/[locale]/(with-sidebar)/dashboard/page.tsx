@@ -25,7 +25,7 @@ export default function Page() {
 
   const handleLogout = async () => {
     try {
-      await fetch('http://localhost:5000/auth/logout', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       })
@@ -126,16 +126,16 @@ export default function Page() {
     fetchRecentTasks()
   }, [])
 
-    return (
-      <DashboardComponent
-        user={user}
-        handleLogout={handleLogout}
-        tasks={tasks}
-        onSaveTask={handleSaveTask}
-        onDeleteTask={handleDeleteTask}
-        loading={loading}
-        showCompleted={showCompleted}
-        handleChangeShowCompleted={handleChangeShowCompleted}
-      />
-    )
+  return (
+    <DashboardComponent
+      user={user}
+      handleLogout={handleLogout}
+      tasks={tasks}
+      onSaveTask={handleSaveTask}
+      onDeleteTask={handleDeleteTask}
+      loading={loading}
+      showCompleted={showCompleted}
+      handleChangeShowCompleted={handleChangeShowCompleted}
+    />
+  )
 }
