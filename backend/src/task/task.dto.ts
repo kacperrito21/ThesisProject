@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUUID,
 } from 'class-validator';
 import { TaskPriority, TaskStatus } from '@prisma/client';
 
@@ -36,6 +37,28 @@ export class CreateTaskDto {
 
   @IsNotEmpty()
   dueDate: Date;
+}
+
+export class FindTasksDto {
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @IsOptional()
+  @IsUUID()
+  categoryId?: string;
+
+  @IsOptional()
+  @IsEnum(TaskPriority)
+  priority?: TaskPriority;
+
+  @IsOptional()
+  @IsEnum(TaskStatus)
+  status?: TaskStatus;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
 }
 
 export class UpdateTaskDto {

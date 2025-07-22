@@ -27,7 +27,7 @@ export default function TaskCard({ task, onEdit, onDelete, handleCompletedTask }
           onChange={handleCompletedTask}
           className="w-5 h-5 mt-1 appearance-none border-2 border-green-500 rounded-sm checked:bg-green-500 checked:border-green-500 checked:after:content-['✓'] checked:after:text-white checked:after:text-sm checked:after:block checked:after:translate-x-[2px] checked:after:translate-y-[-2px]"
         />
-        <h3 className="text-lg font-semibold w-5/12">{task.title}</h3>
+        <h3 className="text-lg font-semibold w-5/12 text-[var(--color-text)]">{task.title}</h3>
 
         {task.status === 'OVERDUE' ? (
           <span

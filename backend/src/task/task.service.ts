@@ -1,7 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Task, TaskStatus, TaskPriority } from '@prisma/client';
-import { CreateTaskDto, UpdateTaskDto } from './task.dto';
+import { Task, TaskStatus, TaskPriority, Prisma } from '@prisma/client';
+import { CreateTaskDto, FindTasksDto, UpdateTaskDto } from './task.dto';
 
 @Injectable()
 export class TaskService {
@@ -20,6 +24,31 @@ export class TaskService {
       orderBy: { createdAt: 'desc' },
       take: parseInt(limit),
     });
+  }
+
+  async findAll(userId: string, filters: FindTasksDto): Promise<Task[]> {
+    const where: Prisma.TaskWhereInput = {
+      userId,
+      ...(filters.title && {
+        title: { contains: filters.title },
+      }),
+      ...(filters.categoryId && { categoryId: filters.categoryId }),
+      ...(filters.priority && { priority: filters.priority }),
+      ...(filters.status && { status: filters.status }),
+      ...(filters.description && {
+        description: { contains: filters.description },
+      }),
+    };
+
+    try {
+      return await this.prisma.task.findMany({
+        where,
+        orderBy: { dueDate: 'asc' },
+      });
+    } catch (err) {
+      console.error(err);
+      throw new BadRequestException('Błąd podczas pobierania zadań');
+    }
   }
 
   async create(userId: string, dto: CreateTaskDto): Promise<Task> {

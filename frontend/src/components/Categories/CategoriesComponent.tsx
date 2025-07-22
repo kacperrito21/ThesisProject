@@ -74,17 +74,16 @@ export default function CategoriesComponent({
         )}
       </div>
 
-      {modalMode && (
-        <CategoryModal
-          mode={modalMode}
-          initial={editedCat ?? undefined}
-          onClose={() => setModalMode(null)}
-          onSave={async (cat) => {
-            await onSave(cat, editedCat?.id)
-            setModalMode(null)
-          }}
-        />
-      )}
+      <CategoryModal
+        isOpen={modalMode !== null}
+        mode={modalMode!}
+        initial={editedCat ?? undefined}
+        onClose={() => setModalMode(null)}
+        onSave={async (cat) => {
+          await onSave(cat, editedCat?.id)
+          setModalMode(null)
+        }}
+      />
 
       <DeleteCategoryModal
         isOpen={deleteModalOpen}

@@ -1,7 +1,6 @@
 'use client'
 
-import { EllipsisVerticalIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { useTranslations } from 'next-intl'
+import { PencilIcon, TrashIcon } from '@heroicons/react/16/solid'
 
 type Category = { id: string; name: string; color: string }
 
@@ -12,20 +11,25 @@ interface Props {
 }
 
 export default function CategoryCard({ category, onEdit, onDelete }: Props) {
-  const t = useTranslations('categories')
 
   return (
-    <div className="flex justify-between items-center bg-white rounded-xl p-4 shadow-sm">
+    <div className="flex justify-between items-center bg-[var(--color-background)] rounded-xl p-4 shadow-sm">
       <div className="flex items-center gap-3">
         <span className="w-4 h-4 rounded-full" style={{ backgroundColor: category.color }} />
         <span className="text-[var(--color-text)] font-medium">{category.name}</span>
       </div>
       <div className="flex items-center gap-2">
-        <button onClick={onEdit} className="p-1 hover:bg-[var(--color-secondary)] rounded">
-          <EllipsisVerticalIcon className="w-5 h-5 text-[var(--color-text)]" />
+        <button
+          onClick={onEdit}
+          className="p-1 text-[var(--color-text)] hover:text-gray-500"
+        >
+          <PencilIcon className="w-6 h-6" />
         </button>
-        <button onClick={onDelete} className="p-1 hover:bg-red-100 rounded">
-          <TrashIcon className="w-5 h-5 text-red-600" />
+        <button
+          onClick={onDelete}
+          className="p-1 text-[var(--color-text)] hover:text-gray-500"
+        >
+          <TrashIcon className="w-6 h-6" />
         </button>
       </div>
     </div>

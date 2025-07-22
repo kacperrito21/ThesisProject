@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { TaskService } from './task.service';
-import { CreateTaskDto, UpdateTaskDto } from './task.dto';
+import { CreateTaskDto, FindTasksDto, UpdateTaskDto } from './task.dto';
 import { UserDecorator } from '../decorators/user.decorator';
 import { UserRequest } from '../interfaces/userRequest.interface';
 
@@ -27,6 +27,14 @@ export class TaskController {
     @Query('includeCompleted') includeCompleted?: boolean,
   ) {
     return this.taskService.get(user.sub, amount, includeCompleted);
+  }
+
+  @Get()
+  async findAll(
+    @UserDecorator() user: UserRequest,
+    @Query() filters: FindTasksDto,
+  ) {
+    return this.taskService.findAll(user.sub, filters);
   }
 
   @Post()

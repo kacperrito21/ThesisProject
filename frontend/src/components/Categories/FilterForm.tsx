@@ -26,10 +26,10 @@ export default function FilterForm({ initialValue = '', onFilter }: Props) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={t('searchPlaceholder')}
-        className="flex-1 bg-transparent focus:outline-none text-[var(--color-text)] placeholder-gray-400"
+        className="flex-1 bg-transparent focus:outline-none text-black placeholder-gray-400"
       />
       <button type="submit" className="ml-2">
-        <MagnifyingGlassIcon className="w-5 h-5 text-[var(--color-text)]" />
+        <MagnifyingGlassIcon className="w-5 h-5 text-black" />
       </button>
     </form>
   )

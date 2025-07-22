@@ -33,7 +33,8 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "addSuccess": "Category has been added!",
-    "deleteSuccess": "Category has been deleted!"
+    "deleteSuccess": "Category has been deleted!",
+    "editSuccess": "Category has been changed!"
   },
   "tasks": {
     "title": "My tasks",
@@ -54,6 +55,15 @@
       "OVERDUE": "Overdue",
       "COMPLETED": "Completed"
     },
+    "filters": {
+      "title": "Title",
+      "category": "Category",
+      "priority": "Priority",
+      "status": "Status",
+      "description": "Description",
+      "apply": "Filter"
+    },
+    "loading": "Loading",
     "noTasks": "No tasks to display",
     "dueDate": "Due date",
     "category": "Category",
@@ -61,7 +71,8 @@
     "taskEditedSuccess": "Task edited!",
     "taskDeletedSuccess": "Task deleted!",
     "deleteTaskInfo": "Pressing the button delete will result in irreversible disposal of a task, are you sure you want to continue?",
-    "taskError": "Error occurred"
+    "taskError": "Error occurred",
+    "emptyState": "No tasks found"
   },
   "settings": {
     "settings": "Settings",

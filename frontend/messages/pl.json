@@ -33,7 +33,8 @@
     "delete": "Usuń",
     "cancel": "Anuluj",
     "addSuccess": "Dodano kategorię!",
-    "deleteSuccess": "Usunięto kategorię!"
+    "deleteSuccess": "Usunięto kategorię!",
+    "editSuccess": "Zmieniono kategorię!"
   },
   "tasks": {
     "title": "Moje zadania",
@@ -54,6 +55,15 @@
       "OVERDUE": "Spóźnione",
       "COMPLETED": "Ukończone"
     },
+    "filters": {
+      "title": "Tytuł",
+      "category": "Kategoria",
+      "priority": "Priorytet",
+      "status": "Status",
+      "description": "Opis",
+      "apply": "Filtruj"
+    },
+    "loading": "Ładowanie",
     "noTasks": "Brak zadań do wyświetlenia",
     "dueDate": "Termin",
     "category": "Kategoria",
@@ -61,7 +71,8 @@
     "taskEditedSuccess": "Zadanie edytowane!",
     "taskDeletedSuccess": "Zadanie usuniętę!",
     "deleteTaskInfo": "Wciśnięcie przycisku usuń będzie skutkować nieodwracalnym usunięciem zadania, czy na pewno chcesz kontynuować?",
-    "taskError": "Błąd!"
+    "taskError": "Błąd!",
+    "emptyState": "Nie znaleziono zadań"
   },
   "settings": {
     "settings": "Ustawienia",
