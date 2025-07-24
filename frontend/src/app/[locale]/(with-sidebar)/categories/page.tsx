@@ -3,6 +3,7 @@ import { useEffect, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { useToast } from '@/contexts/ToastContext'
 import CategoriesComponent from '@/components/Categories/CategoriesComponent'
+import { useLoading } from '@/contexts/LoadingContext'
 
 export type Category = { id: string; name: string; color: string }
 
@@ -11,13 +12,14 @@ export default function Page() {
   const { showToast } = useToast()
 
   const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
   const [filterName, setFilterName] = useState('')
   const [isPending, startTransition] = useTransition()
+  const { showLoading, hideLoading, isLoading } = useLoading()
+
 
   const fetchCategories = async (name = '') => {
-    setLoading(true)
     try {
+      showLoading()
       const url = name
         ? `${process.env.NEXT_PUBLIC_API_URL}/categories?name=${encodeURIComponent(name)}`
         : `${process.env.NEXT_PUBLIC_API_URL}/categories`
@@ -30,7 +32,7 @@ export default function Page() {
       console.error(err)
       showToast({ message: t('loadError'), type: 'error' })
     } finally {
-      setLoading(false)
+      hideLoading()
     }
   }
 
@@ -41,6 +43,7 @@ export default function Page() {
 
   const handleSave = async (cat: { name: string; color: string }, id?: string) => {
     try {
+      showLoading()
       const method = id ? 'PATCH' : 'POST'
       const url = id
         ? `${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`
@@ -62,11 +65,14 @@ export default function Page() {
     } catch (err) {
       console.error(err)
       showToast({ message: t('saveError'), type: 'error' })
+    } finally {
+      hideLoading()
     }
   }
 
   const handleDelete = async (id: string) => {
     try {
+      showLoading()
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`, {
         method: 'DELETE',
         credentials: 'include',
@@ -77,6 +83,8 @@ export default function Page() {
     } catch (err) {
       console.error(err)
       showToast({ message: t('deleteError'), type: 'error' })
+    } finally {
+      hideLoading()
     }
   }
 
@@ -87,7 +95,7 @@ export default function Page() {
   return (
     <CategoriesComponent
       categories={categories}
-      loading={loading}
+      loading={isLoading}
       isPending={isPending}
       filterName={filterName}
       onFilter={handleFilter}

@@ -3,13 +3,17 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { RegisterComponent } from '@/components/Register/RegisterComponent'
+import { useLoading } from '@/contexts/LoadingContext'
 
 export default function RegisterPage() {
   const [error, setError] = useState('')
   const router = useRouter()
+  const { showLoading, hideLoading } = useLoading()
+
 
   const handleRegister = async (email: string, password: string, firstName: string) => {
     try {
+      showLoading()
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
         method: 'POST',
         credentials: 'include',
@@ -24,6 +28,8 @@ export default function RegisterPage() {
       }
     } catch (error) {
       setError((error as Error).message)
+    } finally {
+      hideLoading()
     }
   }
   return (

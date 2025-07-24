@@ -7,15 +7,16 @@ import { Task } from '@/types/Task'
 import { useTranslations } from 'next-intl'
 import { useToast } from '@/contexts/ToastContext'
 import { useUser } from '@/contexts/UserContext'
+import { useLoading } from '@/contexts/LoadingContext'
 
 export default function Page() {
   const router = useRouter()
   const { user } = useUser()
   const [tasks, setTasks] = useState<Task[]>([])
-  const [loading, setLoading] = useState(true)
   const [showCompleted, setShowCompleted] = useState(true)
   const t = useTranslations('tasks')
   const { showToast } = useToast()
+  const { showLoading, hideLoading, isLoading } = useLoading()
 
   const handleChangeShowCompleted = async () => {
     const newValue = !showCompleted
@@ -25,6 +26,7 @@ export default function Page() {
 
   const handleLogout = async () => {
     try {
+      showLoading()
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
@@ -32,11 +34,14 @@ export default function Page() {
       router.push('/login')
     } catch (error) {
       console.error('Błąd wylogowywania', error)
+    } finally {
+      hideLoading()
     }
   }
 
   const fetchRecentTasks = async (includeCompleted = showCompleted) => {
     try {
+      showLoading()
       let res: Response
       if (includeCompleted) {
         res = await fetch(
@@ -56,12 +61,13 @@ export default function Page() {
     } catch (err) {
       console.error('Błąd zadań:', err)
     } finally {
-      setLoading(false)
+      hideLoading()
     }
   }
 
   async function handleSaveTask(formData: Task, taskId?: string) {
     try {
+      showLoading()
       const method = taskId ? 'PATCH' : 'POST'
       const url = taskId
         ? `${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`
@@ -91,11 +97,14 @@ export default function Page() {
         message: t('taskError'),
         type: 'error',
       })
+    } finally {
+      hideLoading()
     }
   }
 
   async function handleDeleteTask(taskId: string) {
     try {
+      showLoading()
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`, {
         method: 'DELETE',
         credentials: 'include',
@@ -119,6 +128,8 @@ export default function Page() {
         message: t('taskError'),
         type: 'error',
       })
+    } finally {
+      hideLoading()
     }
   }
 
@@ -133,7 +144,7 @@ export default function Page() {
       tasks={tasks}
       onSaveTask={handleSaveTask}
       onDeleteTask={handleDeleteTask}
-      loading={loading}
+      loading={isLoading}
       showCompleted={showCompleted}
       handleChangeShowCompleted={handleChangeShowCompleted}
     />

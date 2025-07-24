@@ -3,6 +3,7 @@ import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
 import { UserProvider } from '@/contexts/UserContext';
 import { ToastProvider } from '@/contexts/ToastContext'
+import { LoadingProvider } from '@/contexts/LoadingContext'
 
 export default async function LocaleLayout({ children, params }: {
   children: React.ReactNode;
@@ -14,11 +15,13 @@ export default async function LocaleLayout({ children, params }: {
   }
   return (
     <NextIntlClientProvider>
-      <UserProvider>
-        <ToastProvider>
-          {children}
-        </ToastProvider>
-      </UserProvider>
+      <LoadingProvider>
+        <UserProvider>
+          <ToastProvider>
+            {children}
+          </ToastProvider>
+        </UserProvider>
+      </LoadingProvider>
     </NextIntlClientProvider>
   );
 }

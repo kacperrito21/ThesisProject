@@ -74,6 +74,10 @@
     "taskError": "Błąd!",
     "emptyState": "Nie znaleziono zadań"
   },
+  "calendar": {
+    "tasksFor": "Zadania na",
+    "noTasksForTheDay": "Brak zadań na ten dzień!"
+  },
   "settings": {
     "settings": "Ustawienia",
     "updateSuccess": "Ustawienia zapisane!",
@@ -103,5 +107,19 @@
     "Fri": "Pt",
     "Sat": "Sob",
     "Sun": "Nd"
+  },
+  "months": {
+    "January": "Styczeń",
+    "February": "Luty",
+    "March": "Marzec",
+    "April": "Kwiecień",
+    "May": "Maj",
+    "June": "Czerwiec",
+    "July": "Lipiec",
+    "August": "Sierpień",
+    "September": "Wrzesień",
+    "October": "Październik",
+    "November": "Listopad",
+    "December": "Grudzień"
   }
 }

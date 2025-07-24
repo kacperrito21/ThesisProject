@@ -7,6 +7,7 @@ import { useUser } from '@/contexts/UserContext'
 import { useLocale } from 'use-intl'
 import { useTranslations } from 'next-intl'
 import { useToast } from '@/contexts/ToastContext'
+import { useLoading } from '@/contexts/LoadingContext'
 
 export default function SettingsPage() {
   const { user, setUser, loading } = useUser()
@@ -17,6 +18,7 @@ export default function SettingsPage() {
   const [locale, setLocale] = useState(currentLocale)
   const t = useTranslations('settings')
   const { showToast } = useToast()
+  const { showLoading, hideLoading } = useLoading()
 
   useEffect(() => {
     setLocalUser(user)
@@ -47,6 +49,7 @@ export default function SettingsPage() {
 
   async function handleSave() {
     try {
+      showLoading()
       if (locale !== currentLocale) {
         const segments = pathname.split('/')
         segments[1] = locale
@@ -88,6 +91,8 @@ export default function SettingsPage() {
           type: 'error',
         })
       }
+    } finally {
+      hideLoading()
     }
   }
 

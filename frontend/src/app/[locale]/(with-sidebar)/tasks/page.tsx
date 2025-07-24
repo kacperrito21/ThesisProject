@@ -9,6 +9,7 @@ import DeleteTaskModal from '@/components/Tasks/DeleteTaskModal'
 import { Task } from '@/types/Task'
 import { TaskFilters } from '@/components/Tasks/FilterForm'
 import { UUID } from 'node:crypto'
+import { useLoading } from '@/contexts/LoadingContext'
 
 type Category = { id: string; name: string; color: string }
 
@@ -18,7 +19,7 @@ export default function Page() {
 
   const [tasks, setTasks] = useState<Task[]>([])
   const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
+  const { showLoading, hideLoading, isLoading } = useLoading()
 
   const [filters, setFilters] = useState<TaskFilters>({
     title: '',
@@ -51,6 +52,7 @@ export default function Page() {
 
   const fetchCategories = async () => {
     try {
+      showLoading()
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/categories`,
         { credentials: 'include' }
@@ -61,18 +63,20 @@ export default function Page() {
     } catch (err) {
       console.error(err)
       showToast({ message: t('loadCategoriesError'), type: 'error' })
+    } finally {
+      hideLoading()
     }
   }
 
   const loadTasks = async () => {
-    setLoading(true)
     try {
+      showLoading()
       const data = await fetchTasksWithFilters(filters)
       setTasks(data)
     } catch {
       showToast({ message: t('taskError'), type: 'error' })
     } finally {
-      setLoading(false)
+      hideLoading()
     }
   }
 
@@ -111,6 +115,7 @@ export default function Page() {
 
   const handleSaveTask = async (formData: Task, taskId?: string) => {
     try {
+      showLoading()
       const method = taskId ? 'PATCH' : 'POST'
       const url = taskId
         ? `${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`
@@ -130,11 +135,14 @@ export default function Page() {
     } catch (err) {
       console.error(err)
       showToast({ message: t('saveError'), type: 'error' })
+    } finally {
+      hideLoading()
     }
   }
 
   const handleDeleteTask = async (taskId: string) => {
     try {
+      showLoading()
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`,
         {
@@ -144,10 +152,12 @@ export default function Page() {
       )
       if (!res.ok) throw new Error('Błąd usuwania zadania')
       await loadTasks()
-      showToast({ message: t('deleteSuccess'), type: 'success' })
+      showToast({ message: t('taskDeletedSuccess'), type: 'success' })
     } catch (err) {
       console.error(err)
-      showToast({ message: t('deleteError'), type: 'error' })
+      showToast({ message: t('taskError'), type: 'error' })
+    } finally {
+      hideLoading()
     }
   }
 
@@ -156,7 +166,7 @@ export default function Page() {
       <TaskComponent
         tasks={tasks}
         categories={categories.map(c => ({ id: c.id, name: c.name, color: c.color }))}
-        loading={loading}
+        loading={isLoading}
         onFilter={handleFilter}
         onEdit={task => {
           setSelectedTask(task)

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { LoginComponent } from '@/components/Login/LoginComponent'
 import { useTranslations } from 'next-intl'
 import ToastMessage from '@/components/ToasMessage'
+import { useLoading } from '@/contexts/LoadingContext'
 
 export default function LoginPage() {
   const [error, setError] = useState('')
@@ -13,6 +14,7 @@ export default function LoginPage() {
   const t = useTranslations('auth')
   const [searchError, setSearchError] = useState<string | null>(errorParam)
   const [visible, setVisible] = useState(false)
+  const { showLoading, hideLoading } = useLoading()
 
   useEffect(() => {
     if (errorParam === 'session-expired') {
@@ -33,6 +35,7 @@ export default function LoginPage() {
 
   const handleLogin = async (email: string, password: string) => {
     try {
+      showLoading()
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
         credentials: 'include',
@@ -47,6 +50,8 @@ export default function LoginPage() {
       }
     } catch (error) {
       setError((error as Error).message)
+    } finally {
+      hideLoading()
     }
   }
 
