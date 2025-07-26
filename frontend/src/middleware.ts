@@ -16,6 +16,7 @@ async function isTokenValid(token: string, apiUrl: string): Promise<boolean> {
     })
     return res.ok
   } catch (error) {
+    console.error(error)
     return false
   }
 }

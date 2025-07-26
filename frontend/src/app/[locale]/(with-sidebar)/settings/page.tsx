@@ -90,6 +90,7 @@ export default function SettingsPage() {
           message: t('updateError'),
           type: 'error',
         })
+        console.error(error)
       }
     } finally {
       hideLoading()

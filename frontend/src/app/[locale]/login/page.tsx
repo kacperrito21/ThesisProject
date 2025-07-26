@@ -13,7 +13,7 @@ export default function LoginPage() {
   const errorParam = searchParams.get('error')
   const t = useTranslations('auth')
   const [searchError, setSearchError] = useState<string | null>(errorParam)
-  const [visible, setVisible] = useState(false)
+  const [, setVisible] = useState(false)
   const { showLoading, hideLoading } = useLoading()
 
   useEffect(() => {
