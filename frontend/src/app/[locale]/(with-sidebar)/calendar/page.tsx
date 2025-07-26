@@ -1,29 +1,42 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import CalendarComponent from '@/components/Calendar/CalendarComponent'
 import { Task } from '@/types/Task'
 import { useToast } from '@/contexts/ToastContext'
 import { useTranslations } from 'next-intl'
 import { useLoading } from '@/contexts/LoadingContext'
+import { Category } from '@/app/[locale]/(with-sidebar)/categories/page'
+import { addMonths, subMonths } from 'date-fns'
 
 export default function Page() {
-  const [tasks, setTasks] = useState<Task[]>([])
+  const [tasksCache, setTasksCache] = useState<Record<string, Task[]>>({})
+  const [categories, setCategories] = useState<Category[]>([])
   const { showToast } = useToast()
   const t = useTranslations('tasks')
   const { showLoading, hideLoading, isLoading } = useLoading()
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+
+  const monthKey = useMemo(
+    () => `${currentMonth.getFullYear()}-${currentMonth.getMonth() + 1}`,
+    [currentMonth]
+  )
 
 
-  const loadTasks = async () => {
+  const loadTasks = async (date: Date) => {
+    const key = `${date.getFullYear()}-${date.getMonth() + 1}`
+    if (tasksCache[key]) return
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
     try {
       showLoading()
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks?includeCompleted=true`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks?month=${month}&year=${year}&includeCompleted=true`,
         { credentials: 'include' }
       )
       if (!res.ok) throw new Error('Błąd pobierania zadań')
       const data: Task[] = await res.json()
-      setTasks(data)
+      setTasksCache(prev => ({ ...prev, [key]: data }))
     } catch (err) {
       console.error(err)
       showToast({ message: 'Nie udało się pobrać zadań', type: 'error' })
@@ -32,9 +45,30 @@ export default function Page() {
     }
   }
 
+  const fetchCategories = async () => {
+    try {
+      showLoading()
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/categories`,
+        { credentials: 'include' }
+      )
+      if (!res.ok) throw new Error('Błąd pobierania kategorii')
+      const data: Category[] = await res.json()
+      setCategories(data)
+    } catch (err) {
+      console.error(err)
+      showToast({ message: t('loadCategoriesError'), type: 'error' })
+    } finally {
+      hideLoading()
+    }
+  }
   useEffect(() => {
-    loadTasks()
+    fetchCategories()
   }, [])
+
+  useEffect(() => {
+    loadTasks(currentMonth)
+  }, [currentMonth])
 
   const handleCompletedTask = async (task: Task) => {
     const now = new Date().toISOString().split('T')[0]
@@ -71,7 +105,7 @@ export default function Page() {
         body: JSON.stringify(formData),
       })
       if (!res.ok) throw new Error('Błąd zapisu zadania')
-      await loadTasks()
+      await loadTasks(currentMonth)
       showToast({
         message: taskId ? t('taskEditedSuccess') : t('taskAddSuccess'),
         type: 'success',
@@ -95,7 +129,7 @@ export default function Page() {
         }
       )
       if (!res.ok) throw new Error('Błąd usuwania zadania')
-      await loadTasks()
+      await loadTasks(currentMonth)
       showToast({ message: t('taskDeletedSuccess'), type: 'success' })
     } catch (err) {
       console.error(err)
@@ -104,6 +138,11 @@ export default function Page() {
       hideLoading()
     }
   }
+
+  const tasksForMonth = useMemo(
+    () => tasksCache[monthKey] ?? [],
+    [tasksCache, monthKey]
+  )
 
   if (isLoading) {
     return (
@@ -116,10 +155,14 @@ export default function Page() {
   return (
     <div className="bg-[var(--color-primary)] w-full h-full rounded-r-lg py-20 px-10">
       <CalendarComponent
-        tasks={tasks}
+        tasks={tasksForMonth}
         handleEditTask={handleSaveTask}
         handleDeleteTask={handleDeleteTask}
         handleCompletedTask={handleCompletedTask}
+        categories={categories}
+        currentMonth={currentMonth}
+        onPrevMonth={() => setCurrentMonth(subMonths(currentMonth, 1))}
+        onNextMonth={() => setCurrentMonth(addMonths(currentMonth, 1))}
       />
     </div>
   )

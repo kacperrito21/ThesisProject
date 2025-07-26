@@ -10,8 +10,8 @@ import { Task } from '@/types/Task'
 import { TaskFilters } from '@/components/Tasks/FilterForm'
 import { UUID } from 'node:crypto'
 import { useLoading } from '@/contexts/LoadingContext'
+import { Category } from '@/app/[locale]/(with-sidebar)/categories/page'
 
-type Category = { id: string; name: string; color: string }
 
 export default function Page() {
   const t = useTranslations('tasks')
@@ -165,14 +165,14 @@ export default function Page() {
     <div className="bg-[var(--color-primary)] w-full h-full rounded-r-lg">
       <TaskComponent
         tasks={tasks}
-        categories={categories.map(c => ({ id: c.id, name: c.name, color: c.color }))}
+        categories={categories.map((c) => ({ id: c.id, name: c.name, color: c.color }))}
         loading={isLoading}
         onFilter={handleFilter}
-        onEdit={task => {
+        onEdit={(task) => {
           setSelectedTask(task)
           setTaskModalOpen(true)
         }}
-        onDelete={task => {
+        onDelete={(task) => {
           setSelectedTask(task)
           setDeleteModalOpen(true)
         }}
@@ -192,6 +192,7 @@ export default function Page() {
             setSelectedTask(undefined)
           }}
           onSave={(formData, id) => handleSaveTask(formData as Task, id)}
+          categories={categories}
         />
       )}
 
@@ -203,7 +204,7 @@ export default function Page() {
             setDeleteModalOpen(false)
             setSelectedTask(undefined)
           }}
-          onDelete={id => {
+          onDelete={(id) => {
             handleDeleteTask(id)
             setDeleteModalOpen(false)
             setSelectedTask(undefined)

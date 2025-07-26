@@ -3,9 +3,7 @@ import {
   startOfMonth,
   endOfMonth,
   getDay,
-  format,
-  addMonths,
-  subMonths,
+  format
 } from 'date-fns'
 import { Task } from '@/types/Task'
 import TaskCard from '@/components/Tasks/TaskCard'
@@ -15,12 +13,18 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/16/solid'
 import { UUID } from 'node:crypto'
 import { useTranslations } from 'next-intl'
+import { Category } from '@/app/[locale]/(with-sidebar)/categories/page'
+import IconButton from '../IconButton'
 
 type Props = {
   tasks: Task[]
+  categories: Category[] | []
   handleEditTask: (formData: Task, taskId?: string) => void
   handleDeleteTask: (taskId: string) => void
   handleCompletedTask: (task: Task) => void
+  currentMonth: Date,
+  onPrevMonth: () => void,
+  onNextMonth: () => void,
 }
 
 const priorityColors: Record<Task['priority'], string> = {
@@ -34,9 +38,9 @@ export default function CalendarComponent({
                                             handleEditTask,
                                             handleDeleteTask,
                                             handleCompletedTask,
+                                            categories, currentMonth, onPrevMonth, onNextMonth,
                                           }: Props) {
 
-  const [currentMonth, setCurrentMonth] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const [taskModalOpen, setTaskModalOpen] = useState(false)
@@ -114,17 +118,17 @@ export default function CalendarComponent({
   ]
 
   return (
-    <div className="bg-[var(--color-background)] rounded-2xl h-full p-10 shadow-sm justify-center text-[var(--color-text)]">
+    <div className="bg-[var(--color-background)] rounded-2xl h-full p-10 shadow-sm text-[var(--color-text)]">
       <div className="flex items-center justify-between mb-20">
-        <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
-          <ChevronLeftIcon className="w-8 h-8 text-[var(--color-text)] hover:text-[var(--color-hover)]" />
-        </button>
+        <IconButton onClick={onPrevMonth}>
+          <ChevronLeftIcon className="w-8 h-8" />
+        </IconButton>
         <h2 className="text-2xl font-semibold">
           {tM(monthKeys[currentMonth.getMonth()])} {currentMonth.getFullYear()}
         </h2>
-        <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
-          <ChevronRightIcon className="w-8 h-8 text-[var(--color-text)] hover:text-[var(--color-hover)]" />
-        </button>
+        <IconButton onClick={onNextMonth}>
+          <ChevronRightIcon className="w-8 h-8" />
+        </IconButton>
       </div>
 
       <div className="grid grid-cols-7 gap-3 text-center mb-5">
@@ -192,9 +196,9 @@ export default function CalendarComponent({
               <h3 className="text-lg font-semibold">
                 {t('tasksFor')} {format(selectedDate!, 'dd/MM/yyyy')}
               </h3>
-              <button onClick={closeDayModal} className="p-1 hover:bg-[var(--color-hover)] rounded-full">
-                <XMarkIcon className="w-6 h-6 text-[var(--color-text)]" />
-              </button>
+              <IconButton onClick={closeDayModal}>
+                <XMarkIcon className="w-6 h-6" />
+              </IconButton>
             </div>
             {(tasksByDate[format(selectedDate!, 'yyyy-MM-dd')] || []).length === 0 ? (
               <p className="text-gray-600">{t('noTasksForTheDay')}</p>
@@ -219,6 +223,7 @@ export default function CalendarComponent({
           onClose={closeAllModals}
           onSave={(formData, id) => { handleEditTask(formData, id); closeAllModals() }}
           task={selectedTask}
+          categories={categories}
         />
       )}
 

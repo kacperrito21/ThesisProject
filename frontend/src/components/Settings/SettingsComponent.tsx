@@ -57,7 +57,7 @@ export default function SettingsComponent({
       </div>
 
       <div className="flex justify-end items-center pr-15 pb-15 mt-auto">
-        <Button title="Zapisz" className="px-10 py-2 text-[16px]" onClick={handleSave} />
+        <Button title={t('save')} className="px-10 py-2 text-[16px]" onClick={handleSave} />
       </div>
     </div>
   )

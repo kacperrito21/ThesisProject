@@ -22,28 +22,29 @@ interface Category {
 
 interface Props {
   initial: TaskFilters
-  categories: Category[]
+  categories: Category[] | []
   onFilter: (filters: TaskFilters) => void
   onAdd: () => void
 }
 
-const PRIORITY_OPTIONS = [
-  { value: '' as Task['priority'] | '', label: 'Priorytet' },
-  { value: 'LOW', label: 'Niski' },
-  { value: 'MEDIUM', label: 'Średni' },
-  { value: 'HIGH', label: 'Wysoki' },
-]
-
-const STATUS_OPTIONS = [
-  { value: '' as Task['status'] | '', label: 'Status' },
-  { value: 'TODO', label: 'Do zrobienia' },
-  { value: 'OVERDUE', label: 'Przeterminowane' },
-  { value: 'COMPLETED', label: 'Ukończone' },
-]
-
 export default function FilterForm({ initial, categories, onFilter, onAdd }: Props) {
   const t = useTranslations('tasks')
   const [filters, setFilters] = useState<TaskFilters>(initial)
+
+  const PRIORITY_OPTIONS = [
+    { value: '' as Task['priority'] | '', label: t('filters.priority') },
+    { value: 'LOW', label: t('priority.LOW') },
+    { value: 'MEDIUM', label: t('priority.MEDIUM') },
+    { value: 'HIGH', label: t('priority.HIGH') },
+  ]
+
+
+  const STATUS_OPTIONS = [
+    { value: '' as Task['status'], label: t('filters.status') },
+    { value: 'TODO', label: t('status.TODO') },
+    { value: 'OVERDUE', label: t('status.OVERDUE') },
+    { value: 'COMPLETED', label: t('status.COMPLETED') },
+  ]
 
   const handleChange = <K extends keyof TaskFilters>(field: K, value: TaskFilters[K]) => {
     setFilters(prev => ({ ...prev, [field]: value }))
@@ -82,32 +83,25 @@ export default function FilterForm({ initial, categories, onFilter, onAdd }: Pro
                 {categories.find(c => c.id === filters.categoryId)?.name}
               </>
             ) : (
-              <span className="text-gray-400">{t('filters.category') || 'Kategoria'}</span>
+              <span className="text-gray-400">{t('filters.category')}</span>
             )}
           </ListboxButton>
           <ListboxOptions className="absolute z-10 mt-1 w-full bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg max-h-60 overflow-auto">
             <ListboxOption value="">
               {({ focus, selected }) => (
-                <div
-                  className={`px-4 py-2 cursor-pointer ${focus ? 'bg-[var(--color-hover)]' : ''} ${
-                    selected ? 'font-medium' : ''
-                  }`}
-                >
-                  {t('filters.category') || 'Kategoria'}
-                </div>
-              )}
-            </ListboxOption>
-            <ListboxOption value="">
-              {({ focus, selected }) => (
-                <div
-                  className={`
+                  <div
+                    className={`
               px-4 py-2 cursor-pointer
               ${focus ? 'bg-[var(--color-hover)]' : ''}
               ${selected ? 'font-medium' : ''}
             `}
-                >
-                  Brak kategorii
-                </div>
+                  >
+                  <span
+                      className="inline-block w-3 h-3 mr-2 rounded-full"
+                      style={{ backgroundColor: 'rgba(128,128,128,0.5)' }}
+                  />
+                    Brak kategorii
+                  </div>
               )}
             </ListboxOption>
             {categories.map(cat => (
@@ -157,11 +151,11 @@ export default function FilterForm({ initial, categories, onFilter, onAdd }: Pro
       </Listbox>
 
       <button type="button" onClick={onAdd} className={`row-start-1 col-start-5 ${btnClasses}`}>
-        <PlusIcon className="w-5 h-5" /> {t('addTask') || 'Dodaj zadanie'}
+        <PlusIcon className="w-5 h-5" /> {t('addTask')}
       </button>
 
       <button type="submit" className={`row-start-1 row-span-2 col-start-5 ${btnClasses}`}>
-        <FunnelIcon className="w-5 h-5" /> {t('filters.apply') || 'Filtruj'}
+        <FunnelIcon className="w-5 h-5" /> {t('filters.apply')}
       </button>
 
       <Listbox value={filters.status} onChange={val => handleChange('status', val)}>

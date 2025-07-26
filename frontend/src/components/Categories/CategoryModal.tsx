@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { useTranslations } from 'next-intl'
+import IconButton from '@/components/IconButton'
 
 type Category = { id: string; name: string; color: string }
 
@@ -51,7 +52,7 @@ export default function CategoryModal({ isOpen, mode, initial, onClose, onSave }
   return (
     <div
       className={`
-        fixed inset-0 bg-black/50 flex items-center justify-center z-50
+        fixed inset-0 bg-black/20 flex items-center justify-center z-50
         transition-opacity duration-500
         ${isAnimating ? 'opacity-100' : 'opacity-0'}
       `}
@@ -71,9 +72,9 @@ export default function CategoryModal({ isOpen, mode, initial, onClose, onSave }
           <h2 className="text-xl font-semibold text-[var(--color-text)]">
             {mode === 'add' ? t('addCategory') : t('editCategory')}
           </h2>
-          <button onClick={handleClose} className="p-1 hover:bg-[var(--color-hover)] rounded-full">
-            <XMarkIcon className="w-5 h-5 text-[var(--color-text)]" />
-          </button>
+          <IconButton onClick={handleClose}>
+            <XMarkIcon className="w-5 h-5" />
+          </IconButton>
         </div>
         <div className="space-y-4">
           <input

@@ -40,16 +40,30 @@ export default function CategoriesComponent({
     setDeleteModalOpen(true)
   }
 
+  const handleAdd = () => {
+    setEditedCat(null)
+    setModalMode('add')
+  }
+
+  const handleEdit = (cat: Category) => {
+    setEditedCat(cat)
+    setModalMode('edit')
+  }
+
+  const handleSave = async (cat: { name: string; color: string }) => {
+    await onSave(cat, editedCat?.id)
+    setModalMode(null)
+  }
+
+  const handleCloseDelete = () => setDeleteModalOpen(false)
+
   return (
     <div className="container flex flex-col pl-10 py-10 bg-[var(--color-primary)] text-[var(--color-text)] w-full h-full rounded-r-lg overflow-hidden">
       <div className="flex justify-between items-center mb-6">
         <FilterForm initialValue={filterName} onFilter={onFilter} />
         <div className="pr-10">
           <button
-            onClick={() => {
-              setEditedCat(null)
-              setModalMode('add')
-            }}
+            onClick={handleAdd}
             className="bg-[var(--color-chosen)] hover:bg-[var(--color-hover)] text-white px-4 py-2 rounded-lg"
           >
             + {t('addCategory')}
@@ -65,10 +79,7 @@ export default function CategoriesComponent({
         ) : (
           <CategoriesGrid
             categories={categories}
-            onEdit={(cat) => {
-              setEditedCat(cat)
-              setModalMode('edit')
-            }}
+            onEdit={handleEdit}
             onDelete={(cat) => openDelete(cat.id)}
           />
         )}
@@ -79,15 +90,12 @@ export default function CategoriesComponent({
         mode={modalMode!}
         initial={editedCat ?? undefined}
         onClose={() => setModalMode(null)}
-        onSave={async (cat) => {
-          await onSave(cat, editedCat?.id)
-          setModalMode(null)
-        }}
+        onSave={handleSave}
       />
 
       <DeleteCategoryModal
         isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
+        onClose={handleCloseDelete}
         onDelete={onDelete}
         categoryId={toDeleteId}
       />

@@ -1,7 +1,9 @@
 import {
+  IsBooleanString,
   IsDateString,
   IsEnum,
   IsNotEmpty,
+  IsNumberString,
   IsOptional,
   IsString,
   IsUUID,
@@ -59,6 +61,18 @@ export class FindTasksDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  month?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  year?: string;
+
+  @IsOptional()
+  @IsBooleanString()
+  includeCompleted?: string;
 }
 
 export class UpdateTaskDto {

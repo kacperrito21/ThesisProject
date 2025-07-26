@@ -72,7 +72,8 @@
     "taskDeletedSuccess": "Task deleted!",
     "deleteTaskInfo": "Pressing the button delete will result in irreversible disposal of a task, are you sure you want to continue?",
     "taskError": "Error occurred",
-    "emptyState": "No tasks found"
+    "emptyState": "No tasks found",
+    "categoriesError": "Error occured while fetching categories"
   },
   "calendar": {
     "tasksFor": "Tasks for",
@@ -84,7 +85,8 @@
     "updateError": "Error saving settings!",
     "userName": "Name",
     "language": "Language",
-    "theme": "Theme"
+    "theme": "Theme",
+    "save": "Save"
   },
   "common": {
     "greetings": "Hello",
@@ -97,7 +99,8 @@
     "loading": "Loading...",
     "error": "An error occurred",
     "success": "Operation completed successfully",
-    "main": "Main page"
+    "main": "Main page",
+    "category": "Category"
   },
   "weekdays": {
     "Mon": "Mo",

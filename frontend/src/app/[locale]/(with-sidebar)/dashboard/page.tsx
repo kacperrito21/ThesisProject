@@ -8,11 +8,13 @@ import { useTranslations } from 'next-intl'
 import { useToast } from '@/contexts/ToastContext'
 import { useUser } from '@/contexts/UserContext'
 import { useLoading } from '@/contexts/LoadingContext'
+import { Category } from '@/app/[locale]/(with-sidebar)/categories/page'
 
 export default function Page() {
   const router = useRouter()
   const { user } = useUser()
   const [tasks, setTasks] = useState<Task[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [showCompleted, setShowCompleted] = useState(true)
   const t = useTranslations('tasks')
   const { showToast } = useToast()
@@ -133,8 +135,30 @@ export default function Page() {
     }
   }
 
+  async function fetchUserCategories() {
+    try {
+      showLoading()
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+      })
+      const categories = await res.json()
+      setCategories(categories)
+    } catch (err) {
+      console.error('Błąd przy pobieraniu zadań:', err)
+      showToast({
+        message: t('categoriesError'),
+        type: 'error',
+      })
+    } finally {
+      hideLoading()
+    }
+  }
+
   useEffect(() => {
     fetchRecentTasks()
+    fetchUserCategories()
   }, [])
 
   return (
@@ -147,6 +171,7 @@ export default function Page() {
       loading={isLoading}
       showCompleted={showCompleted}
       handleChangeShowCompleted={handleChangeShowCompleted}
+      userCategories={categories}
     />
   )
 }

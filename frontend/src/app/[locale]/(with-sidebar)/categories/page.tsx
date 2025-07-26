@@ -4,8 +4,9 @@ import { useTranslations } from 'next-intl'
 import { useToast } from '@/contexts/ToastContext'
 import CategoriesComponent from '@/components/Categories/CategoriesComponent'
 import { useLoading } from '@/contexts/LoadingContext'
+import { UUID } from 'node:crypto'
 
-export type Category = { id: string; name: string; color: string }
+export type Category = { id: UUID; name: string; color: string }
 
 export default function Page() {
   const t = useTranslations('categories')

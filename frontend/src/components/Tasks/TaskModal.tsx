@@ -6,11 +6,8 @@ import { ExclamationCircleIcon } from '@heroicons/react/16/solid'
 import DatePickerDropdown from '@/components/Calendar/DatePickerDropdown'
 import parseDateFromText from '@/helpers/parseDateFromText'
 import { useTranslations } from 'next-intl'
+import { Category } from '@/app/[locale]/(with-sidebar)/categories/page'
 
-type Category = {
-  id: UUID
-  name: string
-}
 
 type TaskModalProps = {
   isOpen: boolean
@@ -27,7 +24,7 @@ type TaskModalProps = {
     taskId?: UUID
   ) => void
   task?: Task
-  categories?: Category[]
+  categories: Category[] | []
 }
 
 type DropdownType = 'date' | 'priority' | 'category' | null
@@ -38,7 +35,7 @@ const priorities = {
   HIGH: 'Wysoki',
 }
 
-function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModalProps) {
+function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -53,6 +50,8 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
   const [shouldRender, setShouldRender] = useState(false)
   const t = useTranslations('common')
   const tTasks = useTranslations('tasks')
+  const selected = categories.find(c => c.id === formData.categoryId)
+
 
   useEffect(() => {
     if (isOpen) {
@@ -130,7 +129,8 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
       className={`fixed inset-0 bg bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-500 ${
         isAnimating ? 'opacity-100' : 'opacity-50'
       }`}
-      onClick={handleClose}
+      // nie wiem czy userzy chcą żeby modal się zamykał gdy się kliknie poza nim
+      // onClick={handleClose}
     >
       <div
         className={`bg-[var(--color-background)] rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl transition-all duration-500 ease-out ${
@@ -144,9 +144,9 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
           </h2>
           <button
             onClick={handleClose}
-            className="p-2 hover:bg-[var(--color-hover)] rounded-full transition-colors"
+            className="p-2 rounded-full transition-colors"
           >
-            <XMarkIcon className="w-6 h-6 text-[var(--color-text)]" />
+            <XMarkIcon className="w-6 h-6 text-[var(--color-text)] hover:text-[var(--color-chosen)]" />
           </button>
         </div>
         <div className="space-y-5">
@@ -164,6 +164,45 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
             rows={6}
             className="w-full px-4 py-3 border border-[var(--color-secondary)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-hover)] bg-[var(--color-primary)] text-[var(--color-text)] resize-none"
           />
+          {categories.length > 0 && (
+            <div className="relative py-3">
+              <button
+                onClick={() => toggleDropdown('category')}
+                className="w-full px-4 py-3 border border-[var(--color-secondary)] rounded-xl flex justify-between items-center bg-[var(--color-primary)] text-[var(--color-text)]"
+              >
+                <div className="flex items-center">
+                  <span
+                    className="w-4 h-4 rounded-full mr-3"
+                    style={{
+                      backgroundColor: selected?.color ?? 'rgba(128,128,128,0.5)'
+                    }}
+                  />
+                  <span>{selected?.name ?? t('category')}</span>
+                </div>
+                <ChevronDownIcon className="w-5 h-5 text-[var(--color-text)]" />
+              </button>
+              {activeDropdown === 'category' && (
+                <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10 animate-in slide-in-from-top-2 duration-200">
+                  {categories.map(category => (
+                    <button
+                      key={category.id}
+                      onClick={() => {
+                        handleInputChange('categoryId', category.id)
+                        setActiveDropdown(null)
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-[var(--color-hover)] hover:rounded-xl text-[var(--color-text)] flex items-center"
+                    >
+                      <span
+                        className="w-4 h-4 rounded-full mr-3"
+                        style={{ backgroundColor: category.color }}
+                      />
+                      {category.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           <div className="relative">
             <button
               onClick={() => toggleDropdown('date')}
@@ -183,7 +222,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
               />
             )}
           </div>
-          <div className="relative pt-8">
+          <div className="relative pt-3">
             <button
               onClick={() => toggleDropdown('priority')}
               className="w-full px-4 py-3 border border-[var(--color-secondary)] rounded-xl flex justify-between items-center bg-[var(--color-primary)] text-[var(--color-text)]"
@@ -195,7 +234,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
               <ChevronDownIcon className="w-5 h-5 text-[var(--color-text)]" />
             </button>
             {activeDropdown === 'priority' && (
-              <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10 animate-in slide-in-from-top-2 duration-200">
+              <div className="absolute w-full bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg animate-in slide-in-from-top-2 duration-200">
                 {Object.entries(priorities).map(([key, label]) => (
                   <button
                     key={key}
@@ -211,38 +250,6 @@ function TaskModal({ isOpen, onClose, onSave, task, categories = [] }: TaskModal
               </div>
             )}
           </div>
-          {categories.length > 0 && (
-            <div className="relative pt-8">
-              <button
-                onClick={() => toggleDropdown('category')}
-                className="w-full px-4 py-3 border border-[var(--color-secondary)] rounded-xl flex justify-between items-center bg-[var(--color-primary)] text-[var(--color-text)]"
-              >
-                <div className="flex items-center">
-                  <span className="mr-3">Kategoria</span>
-                  <span>
-                    {categories.find((c) => c.id === formData.categoryId)?.name || 'Brak'}
-                  </span>
-                </div>
-                <ChevronDownIcon className="w-5 h-5 text-[var(--color-text)]" />
-              </button>
-              {activeDropdown === 'category' && (
-                <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10 animate-in slide-in-from-top-2 duration-200">
-                  {categories.map((category) => (
-                    <button
-                      key={category.id}
-                      onClick={() => {
-                        handleInputChange('categoryId', category.id)
-                        setActiveDropdown(null)
-                      }}
-                      className="w-full px-4 py-3 text-left hover:bg-[var(--color-hover)] text-[var(--color-text)]"
-                    >
-                      {category.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
           <button
             onClick={handleSave}
             disabled={!formData.title.trim()}

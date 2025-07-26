@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Task, TaskStatus, TaskPriority, Prisma } from '@prisma/client';
 import { CreateTaskDto, FindTasksDto, UpdateTaskDto } from './task.dto';
@@ -40,15 +36,24 @@ export class TaskService {
       }),
     };
 
-    try {
-      return await this.prisma.task.findMany({
-        where,
-        orderBy: { dueDate: 'asc' },
-      });
-    } catch (err) {
-      console.error(err);
-      throw new BadRequestException('Błąd podczas pobierania zadań');
+    if (filters.month && filters.year) {
+      const month = parseInt(filters.month, 10) - 1;
+      const year = parseInt(filters.year, 10);
+      const start = new Date(year, month, 1);
+      const end = new Date(year, month + 1, 1);
+      where.dueDate = { gte: start, lt: end };
     }
+    if (
+      filters.includeCompleted !== undefined &&
+      filters.includeCompleted === 'false'
+    ) {
+      where.status = { not: 'COMPLETED' };
+    }
+
+    return this.prisma.task.findMany({
+      where,
+      orderBy: { dueDate: 'asc' },
+    });
   }
 
   async create(userId: string, dto: CreateTaskDto): Promise<Task> {

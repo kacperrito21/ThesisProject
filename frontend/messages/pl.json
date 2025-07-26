@@ -72,7 +72,8 @@
     "taskDeletedSuccess": "Zadanie usuniętę!",
     "deleteTaskInfo": "Wciśnięcie przycisku usuń będzie skutkować nieodwracalnym usunięciem zadania, czy na pewno chcesz kontynuować?",
     "taskError": "Błąd!",
-    "emptyState": "Nie znaleziono zadań"
+    "emptyState": "Nie znaleziono zadań",
+    "categoriesError": "Wystąpił błąd przy pobieraniu kategorii"
   },
   "calendar": {
     "tasksFor": "Zadania na",
@@ -84,7 +85,8 @@
     "updateError": "Błąd w zapisie ustawień!",
     "userName": "Imię",
     "language": "Język",
-    "theme": "Motyw aplikacji"
+    "theme": "Motyw aplikacji",
+    "save": "Zapisz"
   },
   "common": {
     "greetings": "Cześć",
@@ -97,7 +99,8 @@
     "loading": "Ładowanie...",
     "error": "Wystąpił błąd",
     "success": "Operacja zakończona pomyślnie",
-    "main": "Strona główna"
+    "main": "Strona główna",
+    "category": "Kategoria"
   },
   "weekdays": {
     "Mon": "Pn",

@@ -37,7 +37,7 @@ export default function DeleteCategoryModal({ isOpen, onClose, onDelete, categor
 
   return (
     <div
-      className={`fixed inset-0 flex items-center justify-center z-50 bg-black/50 transition-opacity duration-300 ${
+      className={`fixed inset-0 flex items-center justify-center z-50 bg-black/20 transition-opacity duration-300 ${
         isAnimating ? 'opacity-100' : 'opacity-0'
       }`}
     >

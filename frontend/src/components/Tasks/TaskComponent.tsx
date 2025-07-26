@@ -9,7 +9,7 @@ type Category = { id: string; name: string, color: string }
 
 interface Props {
   tasks: Task[]
-  categories: Category[]
+  categories: Category[] | []
   loading: boolean
   onFilter: (filters: TaskFilters) => void
   onEdit: (task: Task) => void
