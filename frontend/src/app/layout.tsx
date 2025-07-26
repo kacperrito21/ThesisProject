@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import { ThemeProvider } from '@/providers/ThemeProvider'
 
 export const metadata = {
-  title: 'Nazwa Aplikacji',
+  title: 'Tackly',
   description: 'Task Manager',
 }
 

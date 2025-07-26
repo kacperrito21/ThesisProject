@@ -97,7 +97,7 @@ export default function DashboardComponent({
         <div className="flex">
           {user ? (
             <p className="font-semibold text-[25px]">
-              {t('greetings')}, {user}
+              {t('greetings')} {user}
             </p>
           ) : null}
         </div>

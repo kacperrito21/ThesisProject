@@ -107,7 +107,7 @@ export default function Page() {
       if (!res.ok) throw new Error('Błąd zapisu zadania')
       await loadTasks(currentMonth)
       showToast({
-        message: taskId ? t('taskEditedSuccess') : t('taskAddSuccess'),
+        message: taskId ? t('taskEditedSuccess') : t('taskSaveSuccess'),
         type: 'success',
       })
     } catch (err) {

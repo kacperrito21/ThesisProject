@@ -26,7 +26,7 @@ export const SideBar = () => {
   return (
     <div className="flex h-screen pl-10 py-10">
       <aside className="h-full p-10 w-75 rounded-l-lg bg-[var(--color-sidebar)] transition-colors duration-500">
-        <h1 className="mb-8 font-semibold text-[30px] text-[var(--color-text)]">To-Do List</h1>
+        <h1 className="mb-8 font-semibold text-[30px] text-[var(--color-text)]">Tackly</h1>
         <nav className="space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon
