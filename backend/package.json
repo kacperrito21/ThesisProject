@@ -13,7 +13,7 @@
     "postinstall": "prisma generate",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "npm run migrate:deploy && node dist/main.js",
+    "start": "npm run migrate:deploy && node dist/src/main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "npm run migrate:deploy && node dist/main",
