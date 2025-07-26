@@ -5,6 +5,52 @@ export default function parseDateFromText(text: string): string | null {
   const patterns = [
     { regex: /jutro/, handler: () => addDays(now, 1) },
     { regex: /pojutrze/, handler: () => addDays(now, 2) },
+    //X miesiąc/miesięcy/miesiące spacja | i X tydzień/tygodnie/tygodni spacja | i dzień/dni
+    { regex: /za\s+(?:(\d+)?\s*(?:miesiąc(?:y|e)?))[\si]+(?:(\d+)\s*(?:ty(?:dzień|godnie|godni)))[\si]+(?:(\d+)\s*(?:d(?:zień|ni)))/,
+      handler: (match: RegExpMatchArray) => {
+        let result = new Date(now);
+        const months = parseInt(match[1], 10);
+        const weeks  = parseInt(match[2], 10);
+        const days   = parseInt(match[3], 10);
+        result = addMonths(result, months);
+        result = addDays(result, weeks * 7);
+        result = addDays(result, days);
+        return result;
+      }
+    },
+    //X miesiąc/miesięcy/miesiące spacja | i X tydzień/tygodnie/tygodni
+    { regex: /za\s+(?:(\d+)?\s*(?:miesiąc(?:y|e)?))[\si]+(?:(\d+)\s*(?:ty(?:dzień|godnie|godni)))/,
+      handler: (match: RegExpMatchArray) => {
+        let result = new Date(now);
+        const months = parseInt(match[1], 10);
+        const weeks  = parseInt(match[2], 10);
+        result = addMonths(result, months);
+        result = addDays(result, weeks * 7);
+        return result;
+      }
+    },
+    //X miesiąc/miesięcy/miesiące spacja | i dzień/dni
+    { regex: /za\s+(?:(\d+)?\s*(?:miesiąc(?:y|e)?))[\si]+(?:(\d+)\s*(?:d(?:zień|ni)))/,
+      handler: (match: RegExpMatchArray) => {
+        let result = new Date(now);
+        const months = parseInt(match[1], 10);
+        const days   = parseInt(match[2], 10);
+        result = addMonths(result, months);
+        result = addDays(result, days);
+        return result;
+      }
+    },
+    //X tydzień/tygodnie/tygodni spacja | i dzień/dni
+    { regex: /za\s+(?:(\d+)?\s*(?:ty(?:dzień|godnie|godni)))[\si]+(?:(\d+)\s*(?:d(?:zień|ni)))/,
+      handler: (match: RegExpMatchArray) => {
+        let result = new Date(now);
+        const weeks = parseInt(match[1], 10);
+        const days   = parseInt(match[2], 10);
+        result = addDays(result, weeks * 7);
+        result = addDays(result, days);
+        return result;
+      }
+    },
     {
       regex: /za\s+(\d+)\s+(dzień|dni)/,
       handler: (match: RegExpMatchArray) => addDays(now, parseInt(match[1]))
@@ -19,8 +65,56 @@ export default function parseDateFromText(text: string): string | null {
       regex: /za\s+(\d+)\s+(miesiąc|miesięcy)/,
       handler: (match: RegExpMatchArray) => addMonths(now, parseInt(match[1]))
     },
-
-
+    //X month/-s space | and X week/-s space | and day/-s
+    {
+      regex: /in\s+(?:(\d+)?\s*(?:month(?:s)?))[\s(and)]+(?:(\d+)\s*(?:week(?:s)?))[\s(and)]+(?:(\d+)\s*(?:day(?:s)?))/,
+      handler: (match: RegExpMatchArray) => {
+        let result = new Date(now);
+        const months = parseInt(match[1]);
+        const weeks  = parseInt(match[2]);
+        const days   = parseInt(match[3]);
+        result = addMonths(result, months);
+        result = addDays(result, weeks * 7);
+        result = addDays(result, days);
+        return result;
+      }
+    },
+    //X month/-s space | and X week/-s
+    {
+      regex: /in\s+(?:(\d+)?\s*(?:month(?:s)?))[\s(and)]+(?:(\d+)\s*(?:(week(?:s)?)))/,
+      handler: (match: RegExpMatchArray) => {
+        let result = new Date(now);
+        const months = parseInt(match[1]);
+        const weeks  = parseInt(match[2]);
+        result = addMonths(result, months);
+        result = addDays(result, weeks * 7);
+        return result;
+      }
+    },
+    //X month/-s space | and X day/-s
+    {
+      regex: /in\s+(?:(\d+)?\s*(?:month(?:s)?))[\s(and)]+(?:(\d+)\s*(?:(day(?:s)?)))/,
+      handler: (match: RegExpMatchArray) => {
+        let result = new Date(now);
+        const months = parseInt(match[1]);
+        const days = parseInt(match[2]);
+        result = addMonths(result, months);
+        result = addDays(result, days);
+        return result;
+      }
+    },
+    //X week/-s space | and day/-s
+    {
+      regex: /in\s+(?:(\d+)?\s*(?:week(?:s)?))[\s(and)]+(?:(\d+)\s*(?:(day(?:s)?)))/,
+      handler: (match: RegExpMatchArray) => {
+        let result = new Date(now);
+        const weeks = parseInt(match[1]);
+        const days  = parseInt(match[2]);
+        result = addDays(result, weeks * 7);
+        result = addDays(result, days);
+        return result;
+      }
+    },
     { regex: /tomorrow/, handler: () => addDays(now, 1) },
     { regex: /in\s+(\d+)\s+(day|days)/, handler: (m: RegExpMatchArray) => addDays(now, parseInt(m[1])) },
     { regex: /in\s+a\s+week/, handler: () => addWeeks(now, 1) },
