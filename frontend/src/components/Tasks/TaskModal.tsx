@@ -152,13 +152,13 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
         <div className="space-y-5">
           <input
             type="text"
-            placeholder="Tytuł zadania"
+            placeholder={t('taskTitle')}
             value={formData.title}
             onChange={(e) => handleInputChange('title', e.target.value)}
             className="w-full px-4 py-3 border border-[var(--color-secondary)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-hover)] bg-[var(--color-primary)] text-[var(--color-text)]"
           />
           <textarea
-            placeholder="Opis zadania"
+            placeholder={t('taskDescription')}
             value={formData.description}
             onChange={(e) => handleInputChange('description', e.target.value)}
             rows={6}

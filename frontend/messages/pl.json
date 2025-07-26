@@ -100,7 +100,9 @@
     "error": "Wystąpił błąd",
     "success": "Operacja zakończona pomyślnie",
     "main": "Strona główna",
-    "category": "Kategoria"
+    "category": "Kategoria",
+    "taskTitle": "Tytuł",
+    "taskDescription": "Opis, spróbuj wpisać za 3 dni i spójrz na datę "
   },
   "weekdays": {
     "Mon": "Pn",

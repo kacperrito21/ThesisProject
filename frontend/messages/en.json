@@ -100,7 +100,9 @@
     "error": "An error occurred",
     "success": "Operation completed successfully",
     "main": "Main page",
-    "category": "Category"
+    "category": "Category",
+    "taskTitle": "Title",
+    "taskDescription": "Description, try for example in 3 days and look on a date"
   },
   "weekdays": {
     "Mon": "Mo",
