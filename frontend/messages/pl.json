@@ -1,0 +1,130 @@
+{
+  "navigation": {
+    "dashboard": "Strona Główna",
+    "calendar": "Kalendarz",
+    "settings": "Ustawienia",
+    "categories": "Kategorie",
+    "tasks": "Zadania"
+  },
+  "auth": {
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "email": "E-mail",
+    "password": "Hasło",
+    "repeatPassword": "Powtórz hasło",
+    "firstName": "Imię",
+    "noAccount": "Nie masz jeszcze konta?",
+    "hasAccount": "Masz już konto w aplikacji?",
+    "differentPasswords": "Hasła nie są identyczne",
+    "jwtExpired": "Sesja wygasła, zaloguj się ponownie"
+  },
+  "categories": {
+    "searchPlaceholder": "Wyszukaj kategorię",
+    "emptyState": "Nie znaleziono kategorii",
+    "addCategory": "Dodaj kategorię",
+    "editCategory": "Edytuj kategorię",
+    "namePlaceholder": "Nazwa kategorii",
+    "loading": "Ładowanie...",
+    "color": "Kolor: ",
+    "add": "Dodaj",
+    "saveChanges": "Zapisz",
+    "deleteCategory": "Usuń kategorię",
+    "deleteCategoryConfirm": "Czy na pewno chcesz usunąć tę kategorię?",
+    "delete": "Usuń",
+    "cancel": "Anuluj",
+    "addSuccess": "Dodano kategorię!",
+    "deleteSuccess": "Usunięto kategorię!",
+    "editSuccess": "Zmieniono kategorię!"
+  },
+  "tasks": {
+    "title": "Moje zadania",
+    "addTask": "Dodaj zadanie",
+    "editTask": "Edytuj zadanie",
+    "deleteTask": "Usuń zadanie",
+    "delete": "Usuń",
+    "cancel": "Anuluj",
+    "showCompleted": "Pokaż ukończone",
+    "completed": "Ostatnich zadań ukończone!",
+    "priority": {
+      "LOW": "Niski",
+      "MEDIUM": "Średni",
+      "HIGH": "Wysoki"
+    },
+    "status": {
+      "TODO": "Do zrobienia",
+      "OVERDUE": "Spóźnione",
+      "COMPLETED": "Ukończone"
+    },
+    "filters": {
+      "title": "Tytuł",
+      "category": "Kategoria",
+      "priority": "Priorytet",
+      "status": "Status",
+      "description": "Opis",
+      "apply": "Filtruj"
+    },
+    "loading": "Ładowanie",
+    "noTasks": "Brak zadań do wyświetlenia",
+    "dueDate": "Termin",
+    "category": "Kategoria",
+    "taskSaveSuccess": "Zadanie zapisane!",
+    "taskEditedSuccess": "Zadanie edytowane!",
+    "taskDeletedSuccess": "Zadanie usuniętę!",
+    "deleteTaskInfo": "Wciśnięcie przycisku usuń będzie skutkować nieodwracalnym usunięciem zadania, czy na pewno chcesz kontynuować?",
+    "taskError": "Błąd!",
+    "emptyState": "Nie znaleziono zadań",
+    "categoriesError": "Wystąpił błąd przy pobieraniu kategorii"
+  },
+  "calendar": {
+    "tasksFor": "Zadania na",
+    "noTasksForTheDay": "Brak zadań na ten dzień!"
+  },
+  "settings": {
+    "settings": "Ustawienia",
+    "updateSuccess": "Ustawienia zapisane!",
+    "updateError": "Błąd w zapisie ustawień!",
+    "userName": "Imię",
+    "language": "Język",
+    "theme": "Motyw aplikacji",
+    "save": "Zapisz"
+  },
+  "common": {
+    "greetings": "Cześć",
+    "logout": "Wyloguj się",
+    "save": "Zapisz",
+    "saveChanges": "Zapisz zmiany",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd",
+    "success": "Operacja zakończona pomyślnie",
+    "main": "Strona główna",
+    "category": "Kategoria",
+    "taskTitle": "Tytuł",
+    "taskDescription": "Opis, spróbuj wpisać za 3 dni i spójrz na datę "
+  },
+  "weekdays": {
+    "Mon": "Pn",
+    "Tue": "Wt",
+    "Wed": "Śr",
+    "Thu": "Czw",
+    "Fri": "Pt",
+    "Sat": "Sob",
+    "Sun": "Nd"
+  },
+  "months": {
+    "January": "Styczeń",
+    "February": "Luty",
+    "March": "Marzec",
+    "April": "Kwiecień",
+    "May": "Maj",
+    "June": "Czerwiec",
+    "July": "Lipiec",
+    "August": "Sierpień",
+    "September": "Wrzesień",
+    "October": "Październik",
+    "November": "Listopad",
+    "December": "Grudzień"
+  }
+}
