@@ -1,32 +1,9 @@
-'use client'
+import {redirect} from 'next/navigation';
+import {getLocale} from 'next-intl/server';
 
-import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/router'
-import { useLoading } from '@/contexts/LoadingContext'
-import { useEffect } from 'react'
+export const dynamic = 'force-dynamic';
 
-export default function HomePage() {
-  const t = useTranslations('common')
-  const router = useRouter()
-  const { showLoading, hideLoading } = useLoading()
-
-  useEffect(() => {
-    const handleStart = () => showLoading()
-    const handleDone  = () => hideLoading()
-
-    router.events.on('routeChangeStart', handleStart)
-    router.events.on('routeChangeError', handleDone)
-    router.events.on('routeChangeComplete', handleDone)
-
-    return () => {
-      router.events.off('routeChangeStart', handleStart)
-      router.events.off('routeChangeError', handleDone)
-      router.events.off('routeChangeComplete', handleDone)
-    }
-  }, [router.events, showLoading, hideLoading])
-  return (
-    <div>
-      <p>{t('loading')}</p>
-    </div>
-  )
+export default async function RootPage() {
+  const locale = await getLocale().catch(() => 'en'); // fallback
+  redirect(`/${locale}`);
 }
