@@ -18,7 +18,7 @@ export function LanguageSwitch({ value, onChange }: Props) {
 
   return (
     <Listbox value={selected} onChange={(lang) => onChange(lang.value)}>
-      <div className="relative w-full max-w-sm">
+      <div className="relative w-full max-w-sm text-[var(--color-chosen)]">
         <ListboxButton className="flex items-center bg-white border border-[var(--color-chosen)] rounded-xl px-4 py-2 shadow-sm w-full text-sm">
           <LanguageIcon className="fill-[var(--color-chosen)] h-5 w-5 mr-2" />
           {selected.label}
@@ -32,7 +32,7 @@ export function LanguageSwitch({ value, onChange }: Props) {
               className={({ focus, selected }) =>
                 `cursor-pointer px-4 py-2 ${
                   focus ? 'bg-gray-100 rounded-xl' : ''
-                } ${selected ? 'font-medium text-[var(--color-chosen)]' : ''}`
+                } ${selected ? 'font-medium text-[var(--color-chosen)]' : 'text-black'}`
               }
             >
               {lang.label}
