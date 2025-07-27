@@ -52,7 +52,9 @@ export class AuthController {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.SAME_SITE,
+      sameSite: 'lax',
+      domain: '.tackly.org',
+      path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({ success: true });
@@ -97,7 +99,8 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res() res: Response) {
-    res.clearCookie('token');
+    res.clearCookie('token', { domain: 'api.tackly.org', path: '/' });
+    res.clearCookie('token', { domain: '.tackly.org', path: '/' });
     res.status(200).json({ success: true });
   }
 }
