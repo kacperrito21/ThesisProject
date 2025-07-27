@@ -16,7 +16,12 @@
     "noAccount": "Nie masz jeszcze konta?",
     "hasAccount": "Masz już konto w aplikacji?",
     "differentPasswords": "Hasła nie są identyczne",
-    "jwtExpired": "Sesja wygasła, zaloguj się ponownie"
+    "jwtExpired": "Sesja wygasła, zaloguj się ponownie",
+    "gdprTextStart": "Zapoznałem(am) się z Informacją o przetwarzaniu danych osobowych i Polityką prywatności – i je akceptuję.",
+    "gdprLinkText": "Przeczytaj tutaj",
+    "gdprTitle": "Klauzula informacyjna",
+    "close": "Zamknij",
+    "gdprClauseContent": "Administrator danych: Kacper Sobierski, prowadzący aplikację Tackly, kontakt: kacperrito21@wp.pl.\n\nCele przetwarzania:\n\n- tworzenie i utrzymanie konta użytkownika oraz świadczenie funkcjonalności aplikacji;\n- komunikacja dotycząca konta i działania aplikacji.\n\nPodstawa prawna: art. 6 ust. 1 lit. b RODO – przetwarzanie niezbędne do wykonania umowy (regulamin korzystania z aplikacji).\nPrzetwarzane dane: imię, adres e-mail, hasło (przechowywane w formie kryptograficznego skrótu).\nOkres przechowywania: przez czas istnienia konta. Po jego usunięciu – przez okres niezbędny do dochodzenia lub obrony roszczeń (maks. 5 lat) lub tak długo, jak wymagają przepisy prawa.\n\nOdbiorcy danych: dostawcy hostingu/infrastruktury IT – Cloudflare, Inc. (USA), Vercel Inc. (USA) oraz Railway Systems, Inc. (USA) – wyłącznie na podstawie umów powierzenia.\nPrzekazywanie poza EOG: dane mogą być przekazywane do Stanów Zjednoczonych. Odbywa się to w oparciu o Standardowe Klauzule Umowne Komisji Europejskiej oraz dodatkowe zabezpieczenia (np. szyfrowanie).\n\nTwoje prawa: dostępu, sprostowania, usunięcia, ograniczenia, przenoszenia, sprzeciwu oraz prawo wniesienia skargi do organu nadzorczego.\nDobrowolność: podanie danych jest dobrowolne, lecz konieczne do utworzenia konta i korzystania z aplikacji.\nZautomatyzowane decyzje/profilowanie: nie występują."
   },
   "categories": {
     "searchPlaceholder": "Wyszukaj kategorię",

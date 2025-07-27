@@ -16,7 +16,12 @@
     "noAccount": "You don't have an account?",
     "hasAccount": "Already have an account here?",
     "differentPasswords": "Passwords are not identical",
-    "jwtExpired": "Session expired, log in"
+    "jwtExpired": "Session expired, log in",
+    "gdprTextStart": "I have read and accept the Personal Data Processing Notice and the Privacy Policy.",
+    "gdprLinkText": "Read here",
+    "gdprTitle": "Information clause",
+    "close": "Close",
+    "gdprClauseContent": "Data Controller: Kacper Sobierski, operating the Tackly application, contact: kacperrito21@wp.pl.\n\nPurpose of processing:\n- creating and maintaining the user account and providing the app’s features;\n- communication regarding the account and the operation of the app.\n\nLegal basis: Article 6(1)(b) GDPR – processing necessary for the performance of a contract (the app’s terms of use).\nData processed: first name, e-mail address, password (stored as a cryptographic hash).\nRetention period: for as long as the account exists. After deletion – for the period necessary to establish or defend legal claims (max. 5 years) or as required by law.\n\nData recipients: hosting/IT infrastructure providers – Cloudflare, Inc. (USA), Vercel Inc. (USA) and Railway Systems, Inc. (USA) – only under data processing agreements.\nTransfers outside the EEA: data may be transferred to the United States. Such transfers rely on the European Commission’s Standard Contractual Clauses and additional safeguards (e.g., encryption).\n\nYour rights: access, rectification, erasure, restriction, portability, objection, and the right to lodge a complaint with a supervisory authority.\nVoluntary provision: providing data is voluntary but necessary to create an account and use the app.\nAutomated decisions/profiling: none."
   },
   "categories": {
     "searchPlaceholder": "Search category",
