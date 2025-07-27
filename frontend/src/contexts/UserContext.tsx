@@ -26,7 +26,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         method: 'GET',
         credentials: 'include',
       })
-      if (!res.ok) throw new Error('Unauthorized')
+      if (!res.ok) return
       const data = await res.json()
       setUser(data.firstName)
     } catch (err) {

@@ -23,9 +23,9 @@ export default function Page() {
   )
 
 
-  const loadTasks = async (date: Date) => {
+  const loadTasks = async (date: Date, force = false) => {
     const key = `${date.getFullYear()}-${date.getMonth() + 1}`
-    if (tasksCache[key]) return
+    if (!force && tasksCache[key]) return
     const month = date.getMonth() + 1
     const year = date.getFullYear()
     try {
@@ -105,11 +105,11 @@ export default function Page() {
         body: JSON.stringify(formData),
       })
       if (!res.ok) throw new Error('Błąd zapisu zadania')
-      await loadTasks(currentMonth)
       showToast({
         message: taskId ? t('taskEditedSuccess') : t('taskSaveSuccess'),
         type: 'success',
       })
+      await loadTasks(currentMonth, true)
     } catch (err) {
       console.error(err)
       showToast({ message: t('saveError'), type: 'error' })

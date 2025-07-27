@@ -6,10 +6,14 @@ import { UserProvider } from '@/contexts/UserContext';
 import { ToastProvider } from '@/contexts/ToastContext'
 import { LoadingProvider } from '@/contexts/LoadingContext'
 
-export default async function LocaleLayout({ children, params: { locale } }: {
+type Props = {
   children: React.ReactNode;
-  params: { locale: string };
-}) {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function LocaleLayout(props: Props) {
+  const { children } = props;
+  const { locale } = await props.params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
   const messages = await getMessages();

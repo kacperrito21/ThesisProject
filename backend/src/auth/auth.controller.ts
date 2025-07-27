@@ -47,13 +47,14 @@ export class AuthController {
 
     const secret = process.env.JWT_SECRET;
     if (!secret) throw new InternalServerErrorException('Missing JWT secret');
-
+    const isProd = process.env.NODE_ENV === 'production';
+    const domain = isProd ? process.env.DOMAIN : undefined;
     const token = jwt.sign(payload, secret, jwtOptions);
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      domain: '.tackly.org',
+      ...(domain ? { domain } : {}),
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -99,8 +100,13 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res() res: Response) {
-    res.clearCookie('token', { domain: 'api.tackly.org', path: '/' });
-    res.clearCookie('token', { domain: '.tackly.org', path: '/' });
+    const isProd = process.env.NODE_ENV === 'production';
+    const domain = isProd ? process.env.DOMAIN : undefined;
+    res.clearCookie('token', {
+      domain: process.env.DOMAIN ?? 'api.tackly.org',
+      path: '/',
+    });
+    res.clearCookie('token', { ...(domain ? { domain } : {}), path: '/' });
     res.status(200).json({ success: true });
   }
 }

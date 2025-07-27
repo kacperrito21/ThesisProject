@@ -165,7 +165,7 @@ export default function CalendarComponent({
             >
               <span className="text-sm">{day}</span>
               <div className="mt-1 space-y-0.5">
-                {(tasksByDate[dateKey] || []).map((t) => (
+                {(tasksByDate[dateKey] || []).slice(0, 3).map((t) => (
                   <span
                     key={t.id}
                     className={`block w-4 h-0.5 ${priorityColors[t.priority]}`}
