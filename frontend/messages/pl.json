@@ -107,7 +107,7 @@
     "main": "Strona główna",
     "category": "Kategoria",
     "taskTitle": "Tytuł",
-    "taskDescription": "Opis, spróbuj wpisać za 3 dni i spójrz na datę ",
+    "taskDescription": "Opis - opcjonalne (spróbuj wpisać za 3 dni i spójrz na datę)",
     "appDescription": "Twoja aplikacja do zarządzania zadaniami"
   },
   "weekdays": {

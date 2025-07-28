@@ -39,13 +39,9 @@ export default function SettingsPage() {
       })
     }
     if (toastParam) {
-      setTimeout(() => {
-        const cleanUrl = window.location.pathname
-        window.history.replaceState({}, '', cleanUrl)
-      }, 100)
+      router.replace(pathname, undefined)
     }
-  }, [t, showToast])
-
+  }, [])
 
   async function handleSave() {
     try {
@@ -98,17 +94,18 @@ export default function SettingsPage() {
   }
 
   return (
-      <>
-        {loading ? (
-          <div></div>
-        ) :
-          <SettingsComponent
-            userName={localUser}
-            setUser={(userName) => setLocalUser(userName)}
-            locale={locale}
-            setLocale={setLocale}
-            handleSave={handleSave} />
-        }
-      </>
-    )
+    <>
+      {loading ? (
+        <div></div>
+      ) : (
+        <SettingsComponent
+          userName={localUser}
+          setUser={(userName) => setLocalUser(userName)}
+          locale={locale}
+          setLocale={setLocale}
+          handleSave={handleSave}
+        />
+      )}
+    </>
+  )
 }

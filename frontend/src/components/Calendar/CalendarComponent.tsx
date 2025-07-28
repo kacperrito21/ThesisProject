@@ -1,10 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import {
-  startOfMonth,
-  endOfMonth,
-  getDay,
-  format
-} from 'date-fns'
+import { startOfMonth, endOfMonth, getDay, format } from 'date-fns'
 import { Task } from '@/types/Task'
 import TaskCard from '@/components/Tasks/TaskCard'
 import TaskModal from '@/components/Tasks/TaskModal'
@@ -22,9 +17,9 @@ type Props = {
   handleEditTask: (formData: Task, taskId?: string) => void
   handleDeleteTask: (taskId: string) => void
   handleCompletedTask: (task: Task) => void
-  currentMonth: Date,
-  onPrevMonth: () => void,
-  onNextMonth: () => void,
+  currentMonth: Date
+  onPrevMonth: () => void
+  onNextMonth: () => void
 }
 
 const priorityColors: Record<Task['priority'], string> = {
@@ -34,13 +29,15 @@ const priorityColors: Record<Task['priority'], string> = {
 }
 
 export default function CalendarComponent({
-                                            tasks,
-                                            handleEditTask,
-                                            handleDeleteTask,
-                                            handleCompletedTask,
-                                            categories, currentMonth, onPrevMonth, onNextMonth,
-                                          }: Props) {
-
+  tasks,
+  handleEditTask,
+  handleDeleteTask,
+  handleCompletedTask,
+  categories,
+  currentMonth,
+  onPrevMonth,
+  onNextMonth,
+}: Props) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const [taskModalOpen, setTaskModalOpen] = useState(false)
@@ -53,7 +50,6 @@ export default function CalendarComponent({
   const tW = useTranslations('weekdays')
   const tM = useTranslations('months')
   const t = useTranslations('calendar')
-
 
   useEffect(() => {
     if (selectedDate !== null) {
@@ -86,11 +82,7 @@ export default function CalendarComponent({
   ]
 
   const openDayModal = (day: number) => {
-    setSelectedDate(new Date(
-      currentMonth.getFullYear(),
-      currentMonth.getMonth(),
-      day
-    ))
+    setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day))
   }
   const closeDayModal = () => setSelectedDate(null)
 
@@ -108,13 +100,21 @@ export default function CalendarComponent({
     setSelectedTask(undefined)
   }
 
-  const weekdayKeys = [
-    'Mon','Tue','Wed','Thu','Fri','Sat','Sun'
-  ]
+  const weekdayKeys = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
   const monthKeys = [
-    'January','February','March','April','May','June',
-    'July','August','September','October','November','December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ]
 
   return (
@@ -133,27 +133,20 @@ export default function CalendarComponent({
 
       <div className="grid grid-cols-7 gap-3 text-center mb-5">
         {weekdayKeys.map((key) => (
-          <div key={key}>
-            {tW(key)}
-          </div>
+          <div key={key}>{tW(key)}</div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-y-12 gap-3">
+      <div className="grid grid-cols-7 gap-y-12 md:gap-y-7 gap-3 md:gap-2">
         {cells.map((day, idx) => {
           if (day === null) {
             const emptyKey = `empty-${currentMonth.getFullYear()}-${currentMonth.getMonth()}-${idx}`
             return <div key={emptyKey} />
           }
 
-          const date = new Date(
-            currentMonth.getFullYear(),
-            currentMonth.getMonth(),
-            day
-          )
+          const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
           const dateKey = format(date, 'yyyy-MM-dd')
-          const isSelected =
-            selectedDate && format(selectedDate, 'yyyy-MM-dd') === dateKey
+          const isSelected = selectedDate && format(selectedDate, 'yyyy-MM-dd') === dateKey
 
           return (
             <div
@@ -166,10 +159,7 @@ export default function CalendarComponent({
               <span className="text-sm">{day}</span>
               <div className="mt-1 space-y-0.5">
                 {(tasksByDate[dateKey] || []).slice(0, 3).map((t) => (
-                  <span
-                    key={t.id}
-                    className={`block w-4 h-0.5 ${priorityColors[t.priority]}`}
-                  />
+                  <span key={t.id} className={`block w-4 h-0.5 ${priorityColors[t.priority]}`} />
                 ))}
               </div>
             </div>
@@ -221,7 +211,10 @@ export default function CalendarComponent({
         <TaskModal
           isOpen={taskModalOpen}
           onClose={closeAllModals}
-          onSave={(formData, id) => { handleEditTask(formData, id); closeAllModals() }}
+          onSave={(formData, id) => {
+            handleEditTask(formData, id)
+            closeAllModals()
+          }}
           task={selectedTask}
           categories={categories}
         />
@@ -231,7 +224,10 @@ export default function CalendarComponent({
         <DeleteTaskModal
           isOpen={deleteModalOpen}
           onClose={closeAllModals}
-          onDelete={(id) => { handleDeleteTask(id); closeAllModals() }}
+          onDelete={(id) => {
+            handleDeleteTask(id)
+            closeAllModals()
+          }}
           selectedTaskId={selectedTask.id as UUID}
         />
       )}

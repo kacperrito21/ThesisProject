@@ -42,7 +42,9 @@ export default function SettingsComponent({
           </div>
           <div className="flex w-1/2 gap-10 items-center">
             <span className="text-[var(--color-text)] text-md ml-auto">{t('theme')}</span>
-            <ThemeToggle />
+            <div className="w-[90px] h-[40px] flex-none">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
 
@@ -51,7 +53,7 @@ export default function SettingsComponent({
             <label htmlFor="language-switch" className="text-[var(--color-text)] text-sm mb-1">
               {t('language')}
             </label>
-            <LanguageSwitch value={locale} onChange={setLocale} />
+            <LanguageSwitch value={locale} onChangeAction={setLocale} />
           </div>
         </div>
       </div>
