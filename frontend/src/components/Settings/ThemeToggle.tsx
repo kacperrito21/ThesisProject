@@ -3,8 +3,9 @@ import { useTheme } from '@/providers/ThemeProvider'
 import { MoonIcon, SunIcon } from '@heroicons/react/16/solid'
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
-  const isDark = theme === 'dark'
+  const { setTheme, resolveTheme } = useTheme()
+  const isDark = resolveTheme === 'dark'
+  const x = isDark ? 53 : 0
 
   return (
     <button
@@ -14,11 +15,9 @@ export function ThemeToggle() {
       title={isDark ? 'Ciemny motyw' : 'Jasny motyw'}
     >
       <span
-        className={`
-          absolute top-1 left-0.5 w-8 h-8 rounded-full ${isDark ? 'bg-sky-600' : 'bg-amber-500'} shadow-md
-          transition-transform duration-300 ease-in-out
-          ${isDark ? 'translate-x-[53px]' : 'translate-x-0'}
-        `}
+        className={`absolute top-1 left-0.5 w-8 h-8 rounded-full ${isDark ? 'bg-sky-600' : 'bg-amber-500'} shadow-md
+          transition-transform duration-300 ease-in-out`}
+        style={{ transform: `translateX(${x}px)` }}
       />
       <SunIcon className="w-5 h-5 text-white z-10" />
       <MoonIcon className="w-5 h-5 text-white z-10" />

@@ -56,15 +56,16 @@ export default function CategoryModal({ isOpen, mode, initial, onClose, onSave }
         transition-opacity duration-500
         ${isAnimating ? 'opacity-100' : 'opacity-0'}
       `}
-      onClick={handleClose}
     >
       <div
         className={`
           bg-[var(--color-background)] rounded-2xl p-6 w-full max-w-sm mx-4
           transition-all duration-500 ease-out
-          ${isAnimating
-          ? 'translate-y-0 opacity-100 scale-100'
-          : '-translate-y-8 opacity-0 scale-95'}
+          ${
+            isAnimating
+              ? 'translate-y-0 opacity-100 scale-100'
+              : '-translate-y-8 opacity-0 scale-95'
+          }
         `}
         onClick={(e) => e.stopPropagation()}
       >

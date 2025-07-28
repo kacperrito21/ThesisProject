@@ -107,7 +107,7 @@
     "main": "Main page",
     "category": "Category",
     "taskTitle": "Title",
-    "taskDescription": "Description, try for example in 3 days and look on a date",
+    "taskDescription": "Description - optional (try for example in 3 days and look on a date)",
     "appDescription": "Your app for managing tasks"
   },
   "weekdays": {

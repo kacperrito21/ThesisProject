@@ -1,23 +1,23 @@
-'use client';
+'use client'
 
-import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/react';
-import { LanguageIcon } from '@heroicons/react/16/solid';
+import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/react'
+import { LanguageIcon } from '@heroicons/react/16/solid'
 
 const languages = [
   { value: 'en', label: '🇬🇧 English' },
   { value: 'pl', label: '🇵🇱 Polski' },
-];
+]
 
 type Props = {
-  value: string;
-  onChange: (val: string) => void;
-};
+  value: string
+  onChangeAction: (val: string) => void
+}
 
-export function LanguageSwitch({ value, onChange }: Props) {
-  const selected = languages.find((lang) => lang.value === value) ?? languages[0];
+export function LanguageSwitch({ value, onChangeAction }: Props) {
+  const selected = languages.find((lang) => lang.value === value) ?? languages[0]
 
   return (
-    <Listbox value={selected} onChange={(lang) => onChange(lang.value)}>
+    <Listbox value={selected} onChange={(lang) => onChangeAction(lang.value)}>
       <div className="relative w-full max-w-sm text-[var(--color-chosen)]">
         <ListboxButton className="flex items-center bg-white border border-[var(--color-chosen)] rounded-xl px-4 py-2 shadow-sm w-full text-sm">
           <LanguageIcon className="fill-[var(--color-chosen)] h-5 w-5 mr-2" />
@@ -41,5 +41,5 @@ export function LanguageSwitch({ value, onChange }: Props) {
         </ListboxOptions>
       </div>
     </Listbox>
-  );
+  )
 }

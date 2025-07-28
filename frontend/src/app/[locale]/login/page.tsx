@@ -5,6 +5,7 @@ import { LoginComponent } from '@/components/Login/LoginComponent'
 import { useTranslations } from 'next-intl'
 import ToastMessage from '@/components/ToasMessage'
 import { useLoading } from '@/contexts/LoadingContext'
+import { useUser } from '@/contexts/UserContext'
 
 export default function LoginPage() {
   const [error, setError] = useState('')
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [searchError, setSearchError] = useState<string | null>(errorParam)
   const [, setVisible] = useState(false)
   const { showLoading, hideLoading } = useLoading()
+  const { setUser } = useUser()
 
   useEffect(() => {
     if (errorParam === 'session-expired') {
@@ -43,6 +45,8 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       })
       if (response.ok) {
+        const user = await response.json()
+        setUser(user.firstName)
         router.push('/dashboard')
       } else {
         const data = await response.json()

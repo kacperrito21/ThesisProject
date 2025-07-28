@@ -8,7 +8,6 @@ import parseDateFromText from '@/helpers/parseDateFromText'
 import { useTranslations } from 'next-intl'
 import { Category } from '@/app/[locale]/(with-sidebar)/categories/page'
 
-
 type TaskModalProps = {
   isOpen: boolean
   onClose: () => void
@@ -50,8 +49,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
   const [shouldRender, setShouldRender] = useState(false)
   const t = useTranslations('common')
   const tTasks = useTranslations('tasks')
-  const selected = categories.find(c => c.id === formData.categoryId)
-
+  const selected = categories.find((c) => c.id === formData.categoryId)
 
   useEffect(() => {
     if (isOpen) {
@@ -129,8 +127,6 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
       className={`fixed inset-0 bg bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-500 ${
         isAnimating ? 'opacity-100' : 'opacity-50'
       }`}
-      // nie wiem czy userzy chcą żeby modal się zamykał gdy się kliknie poza nim
-      // onClick={handleClose}
     >
       <div
         className={`bg-[var(--color-background)] rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl transition-all duration-500 ease-out ${
@@ -142,10 +138,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
           <h2 className="text-2xl font-semibold text-[var(--color-text)]">
             {isEditMode ? tTasks('editTask') : tTasks('addTask')}
           </h2>
-          <button
-            onClick={handleClose}
-            className="p-2 rounded-full transition-colors"
-          >
+          <button onClick={handleClose} className="p-2 rounded-full transition-colors">
             <XMarkIcon className="w-6 h-6 text-[var(--color-text)] hover:text-[var(--color-chosen)]" />
           </button>
         </div>
@@ -174,7 +167,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
                   <span
                     className="w-4 h-4 rounded-full mr-3"
                     style={{
-                      backgroundColor: selected?.color ?? 'rgba(128,128,128,0.5)'
+                      backgroundColor: selected?.color ?? 'rgba(128,128,128,0.5)',
                     }}
                   />
                   <span>{selected?.name ?? t('category')}</span>
@@ -183,7 +176,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
               </button>
               {activeDropdown === 'category' && (
                 <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10 animate-in slide-in-from-top-2 duration-200">
-                  {categories.map(category => (
+                  {categories.map((category) => (
                     <button
                       key={category.id}
                       onClick={() => {

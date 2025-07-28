@@ -34,6 +34,7 @@ export default function Page() {
         credentials: 'include',
       })
       router.push('/login')
+      sessionStorage.clear()
     } catch (error) {
       console.error('Błąd wylogowywania', error)
     } finally {
