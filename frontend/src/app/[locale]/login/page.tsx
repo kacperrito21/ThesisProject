@@ -2,8 +2,6 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { LoginComponent } from '@/components/Login/LoginComponent'
-import { useTranslations } from 'next-intl'
-import ToastMessage from '@/components/ToasMessage'
 import { useLoading } from '@/contexts/LoadingContext'
 import { useUser } from '@/contexts/UserContext'
 
@@ -12,8 +10,7 @@ export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const errorParam = searchParams.get('error')
-  const t = useTranslations('auth')
-  const [searchError, setSearchError] = useState<string | null>(errorParam)
+  const [, setSearchError] = useState<string | null>(errorParam)
   const [, setVisible] = useState(false)
   const { showLoading, hideLoading } = useLoading()
   const { setUser } = useUser()
@@ -61,7 +58,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      {searchError === 'session-expired' && <ToastMessage message={t('jwtExpired')} type="error" />}
       <LoginComponent handleLogin={handleLogin} error={error} />
     </div>
   )

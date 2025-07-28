@@ -79,8 +79,7 @@ export default function SettingsPage() {
       setUser(user)
       if (locale !== currentLocale) {
         const segments = pathname.split('/')
-        segments[1] = locale
-        router.push(`${segments.join('/')}?toast=error`)
+        router.push(`/${locale}/${segments[2]}`)
       } else {
         showToast({
           message: t('updateError'),

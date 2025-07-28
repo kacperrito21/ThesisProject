@@ -28,12 +28,6 @@ type TaskModalProps = {
 
 type DropdownType = 'date' | 'priority' | 'category' | null
 
-const priorities = {
-  LOW: 'Niski',
-  MEDIUM: 'Średni',
-  HIGH: 'Wysoki',
-}
-
 function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps) {
   const [formData, setFormData] = useState({
     title: '',
@@ -50,6 +44,12 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
   const t = useTranslations('common')
   const tTasks = useTranslations('tasks')
   const selected = categories.find((c) => c.id === formData.categoryId)
+
+  const priorities = {
+    LOW: tTasks('priority.LOW'),
+    MEDIUM: tTasks('priority.MEDIUM'),
+    HIGH: tTasks('priority.HIGH'),
+  }
 
   useEffect(() => {
     if (isOpen) {
@@ -175,7 +175,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
                 <ChevronDownIcon className="w-5 h-5 text-[var(--color-text)]" />
               </button>
               {activeDropdown === 'category' && (
-                <div className="absolute w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10 animate-in slide-in-from-top-2 duration-200">
+                <div className="absolute overflow-y-auto max-h-60 w-full mt-2 bg-[var(--color-primary)] border border-[var(--color-secondary)] rounded-xl shadow-lg z-10 animate-in slide-in-from-top-2 duration-200">
                   {categories.map((category) => (
                     <button
                       key={category.id}
