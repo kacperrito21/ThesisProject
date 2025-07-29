@@ -14,14 +14,13 @@ export default function Page() {
   const [categories, setCategories] = useState<Category[]>([])
   const { showToast } = useToast()
   const t = useTranslations('tasks')
-  const { showLoading, hideLoading, isLoading } = useLoading()
+  const { showLoading, hideLoading } = useLoading()
   const [currentMonth, setCurrentMonth] = useState(new Date())
 
   const monthKey = useMemo(
     () => `${currentMonth.getFullYear()}-${currentMonth.getMonth() + 1}`,
     [currentMonth]
   )
-
 
   const loadTasks = async (date: Date, force = false) => {
     const key = `${date.getFullYear()}-${date.getMonth() + 1}`
@@ -36,7 +35,7 @@ export default function Page() {
       )
       if (!res.ok) throw new Error('Błąd pobierania zadań')
       const data: Task[] = await res.json()
-      setTasksCache(prev => ({ ...prev, [key]: data }))
+      setTasksCache((prev) => ({ ...prev, [key]: data }))
     } catch (err) {
       console.error(err)
       showToast({ message: 'Nie udało się pobrać zadań', type: 'error' })
@@ -48,10 +47,9 @@ export default function Page() {
   const fetchCategories = async () => {
     try {
       showLoading()
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/categories`,
-        { credentials: 'include' }
-      )
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+        credentials: 'include',
+      })
       if (!res.ok) throw new Error('Błąd pobierania kategorii')
       const data: Category[] = await res.json()
       setCategories(data)
@@ -121,13 +119,10 @@ export default function Page() {
   const handleDeleteTask = async (taskId: string) => {
     try {
       showLoading()
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`,
-        {
-          method: 'DELETE',
-          credentials: 'include',
-        }
-      )
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
       if (!res.ok) throw new Error('Błąd usuwania zadania')
       await loadTasks(currentMonth)
       showToast({ message: t('taskDeletedSuccess'), type: 'success' })
@@ -139,18 +134,7 @@ export default function Page() {
     }
   }
 
-  const tasksForMonth = useMemo(
-    () => tasksCache[monthKey] ?? [],
-    [tasksCache, monthKey]
-  )
-
-  if (isLoading) {
-    return (
-      <div className="bg-[var(--color-primary)] w-full h-full rounded-r-lg">
-        <p>Ładowanie kalendarza…</p>
-      </div>
-    )
-  }
+  const tasksForMonth = useMemo(() => tasksCache[monthKey] ?? [], [tasksCache, monthKey])
 
   return (
     <div className="bg-[var(--color-primary)] w-full h-full rounded-r-lg py-20 px-10">

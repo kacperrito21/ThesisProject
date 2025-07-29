@@ -19,7 +19,9 @@ export function LanguageSwitch({ value, onChangeAction }: Props) {
   return (
     <Listbox value={selected} onChange={(lang) => onChangeAction(lang.value)}>
       <div className="relative w-full max-w-sm text-[var(--color-chosen)]">
-        <ListboxButton className="flex items-center bg-white border border-[var(--color-chosen)] rounded-xl px-4 py-2 shadow-sm w-full text-sm">
+        <ListboxButton
+            id="language-switch"
+            className="flex items-center bg-white border border-[var(--color-chosen)] rounded-xl px-4 py-2 shadow-sm w-full text-sm">
           <LanguageIcon className="fill-[var(--color-chosen)] h-5 w-5 mr-2" />
           {selected.label}
         </ListboxButton>

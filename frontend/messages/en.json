@@ -39,7 +39,8 @@
     "cancel": "Cancel",
     "addSuccess": "Category has been added!",
     "deleteSuccess": "Category has been deleted!",
-    "editSuccess": "Category has been changed!"
+    "editSuccess": "Category has been changed!",
+    "saveError": "Error while saving category, try to refresh"
   },
   "tasks": {
     "title": "My tasks",
@@ -68,7 +69,7 @@
       "description": "Description",
       "apply": "Filter"
     },
-    "loading": "Loading",
+    "loading": "Loading tasks",
     "noTasks": "No tasks to display",
     "dueDate": "Due date",
     "category": "Category",
@@ -78,7 +79,8 @@
     "deleteTaskInfo": "Pressing the button delete will result in irreversible disposal of a task, are you sure you want to continue?",
     "taskError": "Error occurred",
     "emptyState": "No tasks found",
-    "categoriesError": "Error occured while fetching categories"
+    "categoriesError": "Error occured while fetching categories",
+    "calendarLoading": "Loading the calendar..."
   },
   "calendar": {
     "tasksFor": "Tasks for",

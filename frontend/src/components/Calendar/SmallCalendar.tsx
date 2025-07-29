@@ -1,6 +1,7 @@
 import { startOfMonth, endOfMonth, getDay, format } from 'date-fns'
 import { Task } from '@/types/Task'
 import { JSX } from 'react'
+import { useTranslations } from 'next-intl'
 
 type CalendarProps = {
   tasks: Task[]
@@ -40,7 +41,7 @@ export default function SmallCalendar({ tasks }: CalendarProps) {
   const monthEnd = endOfMonth(today)
   const startWeekDay = (getDay(monthStart) + 6) % 7
   const totalDays = monthEnd.getDate()
-
+  const t = useTranslations('navigation')
   const groupedTasks = groupTasksByDate(tasks)
 
   const days: JSX.Element[] = []
@@ -69,7 +70,7 @@ export default function SmallCalendar({ tasks }: CalendarProps) {
 
   return (
     <div className="w-full p-2 border border-gray-300 rounded-xl">
-      <p className="text-lg font-semibold mb-2 mx-2">Kalendarz</p>
+      <p className="text-lg font-semibold mb-2 mx-2">{t('calendar')}</p>
       <div className="grid grid-cols-7 gap-1 text-sm text-center text-gray-700 mb-1">
         {['Pn', 'Wt', 'Śr', 'Czw', 'Pt', 'So', 'Nd'].map((d) => (
           <div key={d} className="w-12 h-12 flex items-center justify-center">

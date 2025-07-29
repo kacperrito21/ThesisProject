@@ -39,7 +39,8 @@
     "cancel": "Anuluj",
     "addSuccess": "Dodano kategorię!",
     "deleteSuccess": "Usunięto kategorię!",
-    "editSuccess": "Zmieniono kategorię!"
+    "editSuccess": "Zmieniono kategorię!",
+    "saveError": "Błąd przy zapisie kategorii, spróbuj odświeżyć"
   },
   "tasks": {
     "title": "Moje zadania",
@@ -68,7 +69,7 @@
       "description": "Opis",
       "apply": "Filtruj"
     },
-    "loading": "Ładowanie",
+    "loading": "Ładowanie zadań",
     "noTasks": "Brak zadań do wyświetlenia",
     "dueDate": "Termin",
     "category": "Kategoria",
@@ -78,7 +79,8 @@
     "deleteTaskInfo": "Wciśnięcie przycisku usuń będzie skutkować nieodwracalnym usunięciem zadania, czy na pewno chcesz kontynuować?",
     "taskError": "Błąd!",
     "emptyState": "Nie znaleziono zadań",
-    "categoriesError": "Wystąpił błąd przy pobieraniu kategorii"
+    "categoriesError": "Wystąpił błąd przy pobieraniu kategorii",
+    "calendarLoading": "Ładowanie kalendarza..."
   },
   "calendar": {
     "tasksFor": "Zadania na",

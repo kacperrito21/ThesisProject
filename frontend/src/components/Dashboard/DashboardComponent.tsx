@@ -132,11 +132,11 @@ export default function DashboardComponent({
         <p className="pl-3">{taskTranslation('showCompleted')}</p>
       </div>
       <div className="flex flex-row w-full py-5">
-        <div className="w-3/5 max-h-[70vh] overflow-y-auto pr-3">
+        <div className="w-3/5 md:w-55/100 max-h-[70vh] overflow-y-auto pr-3">
           {loading ? (
-            <p className="text-gray-500">Ładowanie zadań...</p>
+            <p className="text-gray-500">{taskTranslation('loading')}</p>
           ) : tasks.length === 0 ? (
-            <p className="text-gray-500">Brak zadań do wyświetlenia</p>
+            <p className="text-gray-500">{taskTranslation('noTasks')}</p>
           ) : (
             tasks.map((task) => (
               <TaskCard
@@ -149,7 +149,7 @@ export default function DashboardComponent({
             ))
           )}
         </div>
-        <div className="w-1/3 pr-10 ml-auto">
+        <div className="w-1/3 md:w-45/100 pr-10 ml-auto">
           <SmallCalendar tasks={tasks} />
         </div>
       </div>

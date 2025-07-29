@@ -23,7 +23,7 @@ export function RegisterComponent({ handleRegister, error }: RegisterComponentPr
     setLocale(lang)
     const segments = pathname.split('/')
     segments[1] = lang
-    router.push(segments.join('/'))
+      router.push(`${segments.join('/')}?toast=success`)
   }
 
   return (
