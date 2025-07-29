@@ -38,7 +38,7 @@ export default function SettingsPage() {
       showToast({ message: t('updateError'), type: 'error' })
     }
     if (toast) {
-      const params = new URLSearchParams(searchParams as any)
+      const params = new URLSearchParams(searchParams.toString())
       params.delete('toast')
       const q = params.toString()
       router.replace(`${pathname}${q ? `?${q}` : ''}`)
@@ -52,7 +52,8 @@ export default function SettingsPage() {
         const segments = pathname.split('/')
         segments[1] = locale
         const newPath = segments.join('/') || '/'
-        const q = (searchParams as any).toString()
+        const params = new URLSearchParams(searchParams.toString())
+        const q = params.toString()
         const href = q ? `${newPath}?${q}` : newPath
         router.push(href)
       }
