@@ -1,114 +1,90 @@
 'use client'
 
-import SettingsComponent from '@/components/Settings/SettingsComponent'
 import { useEffect, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
 import { useUser } from '@/contexts/UserContext'
-import { useLocale } from 'use-intl'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useToast } from '@/contexts/ToastContext'
 import { useLoading } from '@/contexts/LoadingContext'
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
+import SettingsComponent from '@/components/Settings/SettingsComponent'
 
 export default function SettingsPage() {
   const { user, setUser, loading } = useUser()
-  const [localUser, setLocalUser] = useState<string>(user)
+  const [localUser, setLocalUser] = useState('')
+
+  useEffect(() => {
+    if (user) {
+      setLocalUser(user)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]) // tylko na pierwsze pojawienie się user
+
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
+
   const currentLocale = useLocale()
   const [locale, setLocale] = useState(currentLocale)
+
   const t = useTranslations('settings')
   const { showToast } = useToast()
   const { showLoading, hideLoading } = useLoading()
 
   useEffect(() => {
-    setLocalUser(user)
-  }, [user])
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const toastParam = urlParams.get('toast')
-    if (toastParam === 'success') {
-      showToast({
-        message: t('updateSuccess'),
-        type: 'success',
-      })
-    } else if (toastParam === 'error') {
-      showToast({
-        message: t('updateError'),
-        type: 'error',
-      })
+    const toast = searchParams.get('toast')
+    if (toast === 'success') {
+      showToast({ message: t('updateSuccess'), type: 'success' })
+    } else if (toast === 'error') {
+      showToast({ message: t('updateError'), type: 'error' })
     }
-    if (toastParam) {
-      router.replace(pathname, undefined)
+    if (toast) {
+      const params = new URLSearchParams(searchParams as any)
+      params.delete('toast')
+      const q = params.toString()
+      router.replace(`${pathname}${q ? `?${q}` : ''}`)
     }
-  }, [])
+  }, [searchParams, pathname, router, showToast, t])
 
   async function handleSave() {
+    showLoading()
     try {
-      showLoading()
       if (locale !== currentLocale) {
         const segments = pathname.split('/')
         segments[1] = locale
-        router.push(`${segments.join('/')}?toast=success`)
-      } else {
-        showToast({
-          message: t('updateSuccess'),
-          type: 'success',
-        })
+        const newPath = segments.join('/') || '/'
+        const q = (searchParams as any).toString()
+        const href = q ? `${newPath}?${q}` : newPath
+        router.push(href)
       }
-      if (user !== localUser) {
+
+      if (localUser !== user) {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
           method: 'PATCH',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ firstName: localUser }),
         })
+        if (!res.ok) throw new Error(await res.text())
+        setUser(localUser)
+      }
 
-        if (!res.ok) {
-          const error = await res.text()
-          throw new Error(error)
-        }
-      } else {
-        showToast({
-          message: t('updateSuccess'),
-          type: 'success',
-        })
-      }
-      setUser(localUser)
-    } catch (error: unknown) {
-      setUser(user)
-      if (locale !== currentLocale) {
-        const url = new URL(window.location.href)
-        url.pathname = url.pathname.replace(/^\/(en|pl)/, '')
-        url.pathname = `/${locale}${url.pathname}`
-        url.searchParams.set('toast', 'success')
-        window.location.assign(url.toString())
-        return
-      } else {
-        showToast({
-          message: t('updateError'),
-          type: 'error',
-        })
-        console.error(error)
-      }
+      showToast({ message: t('updateSuccess'), type: 'success' })
+    } catch (err) {
+      console.error(err)
+      showToast({ message: t('updateError'), type: 'error' })
     } finally {
       hideLoading()
     }
   }
 
+  if (loading) return null
   return (
-    <>
-      {loading ? (
-        <div></div>
-      ) : (
-        <SettingsComponent
+      <SettingsComponent
           userName={localUser}
-          setUser={(userName) => setLocalUser(userName)}
+          setUser={(u) => setLocalUser(u)}
           locale={locale}
           setLocale={setLocale}
           handleSave={handleSave}
-        />
-      )}
-    </>
+      />
   )
 }
