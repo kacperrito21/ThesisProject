@@ -78,9 +78,12 @@ export default function SettingsPage() {
     } catch (error: unknown) {
       setUser(user)
       if (locale !== currentLocale) {
-        const segments = pathname.split('/')
-        segments[1] = locale
-        router.push(`${segments.join('/')}?toast=success`)
+        const url = new URL(window.location.href)
+        url.pathname = url.pathname.replace(/^\/(en|pl)/, '')
+        url.pathname = `/${locale}${url.pathname}`
+        url.searchParams.set('toast', 'success')
+        window.location.assign(url.toString())
+        return
       } else {
         showToast({
           message: t('updateError'),
