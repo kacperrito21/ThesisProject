@@ -4,7 +4,6 @@ import { RegisterForm } from './RegisterForm'
 import { useLocale, useTranslations } from 'next-intl'
 import Brand from '@/components/Brand'
 import { useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
 import { LanguageSwitch } from '../LanguageSwitch'
 
 interface RegisterComponentProps {
@@ -16,15 +15,15 @@ export function RegisterComponent({ handleRegister, error }: RegisterComponentPr
   const t = useTranslations('auth')
   const currentLocale = useLocale()
   const [locale, setLocale] = useState(currentLocale)
-  const router = useRouter()
-  const pathname = usePathname()
 
-  const changeLocale = (lang: string) => {
-    setLocale(lang)
-    const segments = pathname.split('/')
-    segments[1] = lang
-      router.push(`${segments.join('/')}?toast=success`)
-  }
+    const changeLocale = (lang: string) => {
+        setLocale(lang)
+        const url = new URL(window.location.href)
+        url.pathname = url.pathname.replace(/^\/(en|pl)/, '')
+        url.pathname = `/${lang}${url.pathname}`
+        url.searchParams.set('toast', 'success')
+        window.location.assign(url.toString())
+    }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[var(--color-background)] text-[var(--color-text)]">
