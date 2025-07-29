@@ -20,7 +20,8 @@ export function LoginComponent({ handleLogin, error }: LoginComponentProps) {
   const changeLocale = (lang: string) => {
     setLocale(lang)
     const segments = pathname.split('/')
-    router.push(`/${lang}/${segments[2]}`)
+    segments[1] = lang
+    router.push(`${segments.join('/')}?toast=success`)
   }
   return (
     <div className="min-h-screen flex flex-col items-center justify-start px-4 bg-[var(--color-background)] text-[var(--color-text)]">

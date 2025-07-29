@@ -22,7 +22,8 @@ export function RegisterComponent({ handleRegister, error }: RegisterComponentPr
   const changeLocale = (lang: string) => {
     setLocale(lang)
     const segments = pathname.split('/')
-    router.push(`/${lang}/${segments[2]}`)
+    segments[1] = lang
+      router.push(`${segments.join('/')}?toast=success`)
   }
 
   return (
