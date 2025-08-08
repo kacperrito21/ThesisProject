@@ -12,7 +12,6 @@ import { UUID } from 'node:crypto'
 import { useLoading } from '@/contexts/LoadingContext'
 import { Category } from '@/app/[locale]/(with-sidebar)/categories/page'
 
-
 export default function Page() {
   const t = useTranslations('tasks')
   const { showToast } = useToast()
@@ -29,14 +28,12 @@ export default function Page() {
     description: '',
   })
 
-  async function fetchTasksWithFilters(
-    filters: TaskFilters,
-  ): Promise<Task[]> {
+  async function fetchTasksWithFilters(filters: TaskFilters): Promise<Task[]> {
     const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/tasks`)
-    if (filters.title)       url.searchParams.set('title', filters.title)
-    if (filters.categoryId)  url.searchParams.set('categoryId', filters.categoryId)
-    if (filters.priority)    url.searchParams.set('priority', filters.priority)
-    if (filters.status)      url.searchParams.set('status', filters.status)
+    if (filters.title) url.searchParams.set('title', filters.title)
+    if (filters.categoryId) url.searchParams.set('categoryId', filters.categoryId)
+    if (filters.priority) url.searchParams.set('priority', filters.priority)
+    if (filters.status) url.searchParams.set('status', filters.status)
     if (filters.description) url.searchParams.set('description', filters.description)
 
     const res = await fetch(url.toString(), {
@@ -53,10 +50,9 @@ export default function Page() {
   const fetchCategories = async () => {
     try {
       showLoading()
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/categories`,
-        { credentials: 'include' }
-      )
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+        credentials: 'include',
+      })
       if (!res.ok) throw new Error('Błąd pobierania kategorii')
       const data: Category[] = await res.json()
       setCategories(data)
@@ -143,16 +139,17 @@ export default function Page() {
   const handleDeleteTask = async (taskId: string) => {
     try {
       showLoading()
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`,
-        {
-          method: 'DELETE',
-          credentials: 'include',
-        }
-      )
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
       if (!res.ok) throw new Error('Błąd usuwania zadania')
-      await loadTasks()
-      showToast({ message: t('taskDeletedSuccess'), type: 'success' })
+      const data = await res.json()
+      if (data === true) {
+        await loadTasks()
+
+        showToast({ message: t('taskDeletedSuccess'), type: 'success' })
+      }
     } catch (err) {
       console.error(err)
       showToast({ message: t('taskError'), type: 'error' })

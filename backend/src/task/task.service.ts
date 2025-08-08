@@ -20,11 +20,13 @@ export class TaskService {
       : { not: 'COMPLETED' as Task['status'] };
     const startOfTomorrow = new Date();
     startOfTomorrow.setHours(24, 0, 0, 0);
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
     const items = await this.prisma.task.findMany({
       where: {
         userId,
         status: statusFilter,
-        dueDate: { lt: startOfTomorrow },
+        dueDate: { gte: startOfToday, lt: startOfTomorrow },
       },
       orderBy: { createdAt: 'desc' },
       take: parseInt(limit),
@@ -51,8 +53,8 @@ export class TaskService {
     const monthDue = await this.prisma.task.findMany({
       where: {
         userId,
-        status: statusFilter,
         dueDate: { gte: startOfMonth, lt: startOfNextMonth },
+        status: { not: 'COMPLETED' as Task['status'] },
       },
       select: { dueDate: true, priority: true },
       orderBy: { dueDate: 'asc' },
@@ -162,14 +164,15 @@ export class TaskService {
     });
   }
 
-  async delete(taskId: string, userId: string): Promise<Task> {
+  async delete(taskId: string, userId: string): Promise<boolean> {
     const existingTask = await this.userTask(taskId, userId);
     if (!existingTask) {
       throw new NotFoundException('Task not found or access denied');
     }
-    return this.prisma.task.delete({
+    await this.prisma.task.delete({
       where: { id: taskId },
     });
+    return true;
   }
 
   async userTask(taskId: string, userId: string): Promise<Task | null> {
