@@ -14,6 +14,7 @@ export default function Page() {
   const router = useRouter()
   const { user } = useUser()
   const [tasks, setTasks] = useState<Task[]>([])
+  const [monthDues, setMonthDues] = useState<{ dueDate: Date; priority: Task['priority'] }[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [showCompleted, setShowCompleted] = useState(true)
   const t = useTranslations('tasks')
@@ -60,7 +61,9 @@ export default function Page() {
       }
       if (!res.ok) throw new Error('Błąd pobierania zadań')
       const data = await res.json()
-      setTasks(data)
+      console.log(data)
+      setTasks(data.items)
+      setMonthDues(data.monthDue)
     } catch (err) {
       console.error('Błąd zadań:', err)
     } finally {
@@ -173,6 +176,7 @@ export default function Page() {
       showCompleted={showCompleted}
       handleChangeShowCompleted={handleChangeShowCompleted}
       userCategories={categories}
+      monthDues={monthDues}
     />
   )
 }

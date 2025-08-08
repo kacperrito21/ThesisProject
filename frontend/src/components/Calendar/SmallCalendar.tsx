@@ -4,10 +4,10 @@ import { JSX } from 'react'
 import { useTranslations } from 'next-intl'
 
 type CalendarProps = {
-  tasks: Task[]
+  tasks: { dueDate: Date; priority: Task['priority'] }[]
 }
 
-const getPriorityColor = (tasks: Task[]): string => {
+const getPriorityColor = (tasks: CalendarProps['tasks']): string => {
   const order = ['HIGH', 'MEDIUM', 'LOW']
   const colors: Record<string, string> = {
     HIGH: 'bg-red-500',
@@ -24,8 +24,8 @@ const getPriorityColor = (tasks: Task[]): string => {
   return ''
 }
 
-const groupTasksByDate = (tasks: Task[]) => {
-  const grouped: Record<string, Task[]> = {}
+const groupTasksByDate = (tasks: CalendarProps['tasks']) => {
+  const grouped: Record<string, CalendarProps['tasks']> = {}
   for (const task of tasks) {
     if (!task.dueDate) continue
     const dateKey = format(new Date(task.dueDate), 'yyyy-MM-dd')
