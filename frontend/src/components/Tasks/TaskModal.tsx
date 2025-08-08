@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { XMarkIcon, CalendarIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import { Task } from '@/types/Task'
 import { UUID } from 'node:crypto'
@@ -29,6 +29,7 @@ type TaskModalProps = {
 type DropdownType = 'date' | 'priority' | 'category' | null
 
 function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps) {
+  const titleInputRef = useRef<HTMLInputElement>(null)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -64,11 +65,44 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
         categoryId: task?.categoryId || null,
         status: task?.status || 'TODO',
       })
+
+      const id = setTimeout(() => {
+        titleInputRef.current?.focus()
+        titleInputRef.current?.select()
+      }, 0)
+
+      return () => clearTimeout(id)
     } else {
       setIsAnimating(false)
       setTimeout(() => setShouldRender(false), 500)
     }
   }, [isOpen, task])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && e.shiftKey) {
+        return
+      }
+      if (e.key === 'Enter' && !e.shiftKey) {
+        if (!formData.title.trim()) {
+          e.preventDefault()
+          return
+        }
+        e.preventDefault()
+        handleSave()
+        return
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        handleClose()
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isOpen, formData])
 
   const handleInputChange = <T extends keyof typeof formData>(
     field: T,
@@ -144,6 +178,7 @@ function TaskModal({ isOpen, onClose, onSave, task, categories }: TaskModalProps
         </div>
         <div className="space-y-5">
           <input
+            ref={titleInputRef}
             type="text"
             placeholder={t('taskTitle')}
             value={formData.title}

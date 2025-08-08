@@ -5,7 +5,7 @@ import TaskCard from '@/components/Tasks/TaskCard'
 import TaskModal from '@/components/Tasks/TaskModal'
 import DeleteTaskModal from '@/components/Tasks/DeleteTaskModal'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/16/solid'
+import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from '@heroicons/react/16/solid'
 import { UUID } from 'node:crypto'
 import { useTranslations } from 'next-intl'
 import { Category } from '@/app/[locale]/(with-sidebar)/categories/page'
@@ -26,6 +26,19 @@ const priorityColors: Record<Task['priority'], string> = {
   HIGH: 'bg-red-500',
   MEDIUM: 'bg-yellow-500',
   LOW: 'bg-green-500',
+}
+
+const isEditableTarget = (el: EventTarget | null) => {
+  if (!(el instanceof HTMLElement)) return false
+  const tag = el.tagName.toLowerCase()
+  const editable = el.getAttribute('contenteditable')
+  return (
+    tag === 'input' ||
+    tag === 'textarea' ||
+    tag === 'select' ||
+    editable === '' ||
+    editable === 'true'
+  )
 }
 
 export default function CalendarComponent({
@@ -60,6 +73,26 @@ export default function CalendarComponent({
       setTimeout(() => setShouldRenderDayModal(false), 500)
     }
   }, [selectedDate])
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (isEditableTarget(e.target)) return
+      if (taskModalOpen || deleteModalOpen || shouldRenderDayModal) return
+
+      if (e.key === 'ArrowLeft') {
+        if (e.repeat) return
+        e.preventDefault()
+        onPrevMonth()
+      } else if (e.key === 'ArrowRight') {
+        if (e.repeat) return
+        e.preventDefault()
+        onNextMonth()
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [onPrevMonth, onNextMonth, taskModalOpen, deleteModalOpen, shouldRenderDayModal])
 
   const tasksByDate = useMemo(() => {
     const map: Record<string, Task[]> = {}
@@ -116,6 +149,15 @@ export default function CalendarComponent({
     'November',
     'December',
   ]
+
+  const openAddTaskForSelectedDay = () => {
+    const emptyTask = {
+      dueDate: format(selectedDate ?? new Date(), 'yyyy-MM-dd'),
+    } as Task
+
+    setSelectedTask(emptyTask)
+    setTaskModalOpen(true)
+  }
 
   return (
     <div className="bg-[var(--color-background)] rounded-2xl h-full p-10 shadow-sm text-[var(--color-text)]">
@@ -186,6 +228,9 @@ export default function CalendarComponent({
               <h3 className="text-lg font-semibold">
                 {t('tasksFor')} {format(selectedDate!, 'dd/MM/yyyy')}
               </h3>
+              <IconButton onClick={openAddTaskForSelectedDay}>
+                <PlusIcon className="w-6 h-6" />
+              </IconButton>
               <IconButton onClick={closeDayModal}>
                 <XMarkIcon className="w-6 h-6" />
               </IconButton>
@@ -207,7 +252,7 @@ export default function CalendarComponent({
         </div>
       )}
 
-      {taskModalOpen && selectedTask && (
+      {taskModalOpen && (
         <TaskModal
           isOpen={taskModalOpen}
           onClose={closeAllModals}
