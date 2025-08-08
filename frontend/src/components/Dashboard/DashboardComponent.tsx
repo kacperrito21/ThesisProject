@@ -21,6 +21,19 @@ type DashboardProps = {
   userCategories: Category[] | []
 }
 
+const isEditableTarget = (el: EventTarget | null) => {
+  if (!(el instanceof HTMLElement)) return false
+  const tag = el.tagName.toLowerCase()
+  const editable = el.getAttribute('contenteditable')
+  return (
+    tag === 'input' ||
+    tag === 'textarea' ||
+    tag === 'select' ||
+    editable === '' ||
+    editable === 'true'
+  )
+}
+
 export default function DashboardComponent({
   user,
   handleLogout,
@@ -90,6 +103,28 @@ export default function DashboardComponent({
     const updatedTask = { ...task, status: updatedStatus, finishedDate: finishedDate }
     onSaveTask(updatedTask, task.id)
   }
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (isEditableTarget(e.target)) return
+      if (!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'n' || e.key === 'N')) {
+        if (e.repeat) return
+        e.preventDefault()
+        if (!taskModalOpen) {
+          setSelectedTask(undefined)
+          setTaskModalOpen(true)
+        }
+        return
+      }
+
+      if (e.key === 'Escape') {
+        if (taskModalOpen) setTaskModalOpen(false)
+        if (deleteModalOpen) setDeleteModalOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [taskModalOpen, deleteModalOpen])
 
   return (
     <div className="container flex-col pl-10 py-10 bg-[var(--color-primary)] text-[var(--color-text)] w-full h-full rounded-r-lg overflow-hidden">
@@ -103,7 +138,7 @@ export default function DashboardComponent({
         </div>
         <div className="flex ml-auto px-10">
           <Button
-            title={taskTranslation('addTask')}
+            title={`${taskTranslation('addTask')} (N)`}
             onClick={handleAddTask}
             variant="primary"
             icon={<PlusIcon className="w-6 h-6" />}
