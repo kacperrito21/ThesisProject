@@ -15,8 +15,14 @@ export class TaskService {
     const statusFilter = includeCompleted
       ? undefined
       : { not: 'COMPLETED' as Task['status'] };
+    const startOfTomorrow = new Date();
+    startOfTomorrow.setHours(24, 0, 0, 0);
     return this.prisma.task.findMany({
-      where: { userId, status: statusFilter },
+      where: {
+        userId,
+        status: statusFilter,
+        dueDate: { lt: startOfTomorrow },
+      },
       orderBy: { createdAt: 'desc' },
       take: parseInt(limit),
     });
