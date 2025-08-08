@@ -19,6 +19,7 @@ type DashboardProps = {
   showCompleted: boolean
   handleChangeShowCompleted: () => void
   userCategories: Category[] | []
+  monthDues: { dueDate: Date; priority: Task['priority'] }[]
 }
 
 const isEditableTarget = (el: EventTarget | null) => {
@@ -44,6 +45,7 @@ export default function DashboardComponent({
   showCompleted,
   handleChangeShowCompleted,
   userCategories,
+  monthDues,
 }: DashboardProps) {
   const t = useTranslations('common')
   const [taskModalOpen, setTaskModalOpen] = useState(false)
@@ -185,7 +187,7 @@ export default function DashboardComponent({
           )}
         </div>
         <div className="w-1/3 md:w-45/100 pr-10 ml-auto">
-          <SmallCalendar tasks={tasks} />
+          <SmallCalendar tasks={monthDues} />
         </div>
       </div>
       {taskModalOpen && (

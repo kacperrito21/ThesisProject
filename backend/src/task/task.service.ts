@@ -11,13 +11,16 @@ export class TaskService {
     userId: string,
     limit: string,
     includeCompleted?: boolean,
-  ): Promise<Task[]> {
+  ): Promise<{
+    items: Task[];
+    monthDue: { dueDate: Date | null; priority: TaskPriority }[];
+  }> {
     const statusFilter = includeCompleted
       ? undefined
       : { not: 'COMPLETED' as Task['status'] };
     const startOfTomorrow = new Date();
     startOfTomorrow.setHours(24, 0, 0, 0);
-    return this.prisma.task.findMany({
+    const items = await this.prisma.task.findMany({
       where: {
         userId,
         status: statusFilter,
@@ -26,6 +29,35 @@ export class TaskService {
       orderBy: { createdAt: 'desc' },
       take: parseInt(limit),
     });
+    const now = new Date();
+    const startOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+      0,
+      0,
+      0,
+      0,
+    );
+    const startOfNextMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      1,
+      0,
+      0,
+      0,
+      0,
+    );
+    const monthDue = await this.prisma.task.findMany({
+      where: {
+        userId,
+        status: statusFilter,
+        dueDate: { gte: startOfMonth, lt: startOfNextMonth },
+      },
+      select: { dueDate: true, priority: true },
+      orderBy: { dueDate: 'asc' },
+    });
+    return { items, monthDue };
   }
 
   async findAll(userId: string, filters: FindTasksDto): Promise<Task[]> {
