@@ -124,8 +124,12 @@ export default function Page() {
         credentials: 'include',
       })
       if (!res.ok) throw new Error('Błąd usuwania zadania')
-      await loadTasks(currentMonth, true)
-      showToast({ message: t('taskDeletedSuccess'), type: 'success' })
+      const data = await res.json()
+      if (data === true) {
+        await loadTasks(currentMonth, true)
+
+        showToast({ message: t('taskDeletedSuccess'), type: 'success' })
+      }
     } catch (err) {
       console.error(err)
       showToast({ message: t('taskError'), type: 'error' })

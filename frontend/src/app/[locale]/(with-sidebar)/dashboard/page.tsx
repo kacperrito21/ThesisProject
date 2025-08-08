@@ -61,7 +61,6 @@ export default function Page() {
       }
       if (!res.ok) throw new Error('Błąd pobierania zadań')
       const data = await res.json()
-      console.log(data)
       setTasks(data.items)
       setMonthDues(data.monthDue)
     } catch (err) {
@@ -121,13 +120,15 @@ export default function Page() {
         const error = await res.text()
         throw new Error(error)
       }
+      const data = await res.json()
+      if (data === true) {
+        await fetchRecentTasks()
 
-      await fetchRecentTasks()
-
-      showToast({
-        message: t('taskDeletedSuccess'),
-        type: 'success',
-      })
+        showToast({
+          message: t('taskDeletedSuccess'),
+          type: 'success',
+        })
+      }
     } catch (err) {
       console.error('Błąd usuwania zadania:', err)
       showToast({
