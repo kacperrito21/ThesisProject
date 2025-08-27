@@ -13,10 +13,6 @@ import { TaskPriority, TaskStatus } from '@prisma/client';
 export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
-  userId: string;
-
-  @IsString()
-  @IsNotEmpty()
   categoryId: string;
 
   @IsString()
