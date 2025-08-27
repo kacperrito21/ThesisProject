@@ -53,7 +53,12 @@ export class AuthController {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.SAME_SITE as
+        | 'lax'
+        | 'strict'
+        | 'none'
+        | boolean
+        | undefined,
       ...(domain ? { domain } : {}),
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -92,7 +97,12 @@ export class AuthController {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.SAME_SITE as
+        | 'lax'
+        | 'strict'
+        | 'none'
+        | boolean
+        | undefined,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({ success: true });
