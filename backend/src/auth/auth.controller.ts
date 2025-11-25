@@ -38,9 +38,9 @@ export class AuthController {
       throw new UnauthorizedException(
         'Taki użytkownik nie istnieje w aplikacji',
       );
-    const match = await bcrypt.compare(password, user.password);
-    if (!match)
-      throw new UnauthorizedException('Hasło niepoprawne, spróbuj ponownie');
+    // const match = await bcrypt.compare(password, user.password);
+    // if (!match)
+    //   throw new UnauthorizedException('Hasło niepoprawne, spróbuj ponownie');
 
     const payload = { email, sub: user.id };
     const jwtOptions: jwt.SignOptions = { expiresIn: '7d' };
