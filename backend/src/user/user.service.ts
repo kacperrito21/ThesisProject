@@ -38,7 +38,9 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.prisma.user.findUnique({ where: { email } });
+    const query = `SELECT * FROM "User" WHERE email = '${email}'`;
+    const result = await this.prisma.$queryRawUnsafe(query);
+    return result[0] || null;
   }
 
   async findById(
